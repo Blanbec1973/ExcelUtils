@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class FormatActivity {
-    private static final Logger logger = LogManager.getLogger(renamePSA.class);
+    private static final Logger logger = LogManager.getLogger(FormatActivity.class);
     private static FichierExcel fichierExcel;
 
     public static void main(String[] args) throws IOException {

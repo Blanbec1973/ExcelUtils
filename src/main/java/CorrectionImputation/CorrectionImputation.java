@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 
 public class CorrectionImputation {
-    private static final Logger logger = LogManager.getLogger(renamePSA.class);
+    private static final Logger logger = LogManager.getLogger(CorrectionImputation.class);
     private static FichierExcel fichierExcel;
 
     public static void main(String[] args) throws IOException {
