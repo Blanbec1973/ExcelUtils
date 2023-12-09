@@ -1,4 +1,4 @@
-package CorrectionImputation;
+package correctionImputation;
 
 import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
@@ -7,8 +7,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
-import renamePSA.renamePSA;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -24,7 +22,7 @@ public class CorrectionImputation {
         // args[1] : sheet
 
         fichierExcel = new FichierExcel(args[0]);
-        logger.info("Fichier à traiter : " + args[0]);
+        logger.info("Fichier à traiter : {}", args[0]);
 
         int numligne = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args[1]);
@@ -38,9 +36,6 @@ public class CorrectionImputation {
                 traiteLigne(row);
             }
 
-            //for (Cell cell : row) {
-            //    //System.out.print(cell + "| ");
-            //}
             numligne = numligne+1;
         }
         fichierExcel.writeFichierExcel();
@@ -57,7 +52,7 @@ public class CorrectionImputation {
         if (cell.getStringCellValue().equals("-Difficulté à déterminer-") &&
                 row.getCell(8).getStringCellValue().equals("476867")) {
             int numligne = row.getRowNum()+1;
-            String formula = "AC" + String.valueOf(numligne)+"/8" ;
+            String formula = "AC" + numligne +"/8" ;
             System.out.println(formula);
             cell.setCellFormula(formula);
             fichierExcel.evaluateFormulaCell(cell);

@@ -6,14 +6,13 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import renamePSA.renamePSA;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FichierExcel extends FileInputStream {
-    private static final Logger logger = LogManager.getLogger(renamePSA.class);
+    private static final Logger logger = LogManager.getLogger(FichierExcel.class);
     private final Workbook workbook;
     private final String name;
     private final  XSSFFormulaEvaluator formulaEvaluator;
@@ -37,7 +36,6 @@ public class FichierExcel extends FileInputStream {
 
     public String getCellValue(String sheet, String address) {
         Sheet dataSheet = workbook.getSheet(sheet);
-        //logger.info(dataSheet.toString());
         CellReference cellReference = new CellReference(address);
         Cell cell = dataSheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
         if (cell.getCellType() == CellType.STRING) {
