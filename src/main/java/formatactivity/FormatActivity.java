@@ -1,14 +1,14 @@
-package FormatActivity;
+package formatactivity;
 
 import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-import renamePSA.renamePSA;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class FormatActivity {
     private static final Logger logger = LogManager.getLogger(FormatActivity.class);
@@ -16,11 +16,15 @@ public class FormatActivity {
 
     public static void main(String[] args) throws IOException {
         fichierExcel = new FichierExcel(args[0]);
-        logger.info("Fichier à traiter : " + args[0]);
+        logger.info("Fichier à traiter : {}", args[0]);
 
+        formatActivity();
+        fichierExcel.writeFichierExcel();
+    }
+
+    private static void formatActivity() {
         Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
         dataSheet.getRow(0).setZeroHeight(true);
-
 
         dataSheet.setColumnHidden(0, true);
         dataSheet.setColumnHidden(1, true);
@@ -42,26 +46,22 @@ public class FormatActivity {
         dataSheet.setColumnHidden(25, true);
         dataSheet.setColumnHidden(26, true);
 
-        Iterator<Row> rowIterator = dataSheet.iterator();
         for (Row row : dataSheet) {
             if (row.getRowNum() == 1) {
                 row.createCell(27).setCellValue("Montant HT");
-                CellStyle newCellStyle = fichierExcel.getWorkBook().createCellStyle();
-                newCellStyle = row.getCell(26).getCellStyle();
+                CellStyle newCellStyle = row.getCell(26).getCellStyle();
                 row.getCell(27).setCellStyle(newCellStyle);
 
             }
             if (row.getRowNum() > 1) {
                 int numligne = row.getRowNum()+1;
-                String formula = "S" + String.valueOf(numligne)+"/1.2" ;
-                //System.out.println(formula);
+                String formula = "S" + numligne+"/1.2" ;
                 row.createCell(27).setCellFormula(formula);
                 fichierExcel.evaluateFormulaCell(row.getCell(27));
             }
 
         }
         dataSheet.setAutoFilter(new CellRangeAddress(1,1,0,27));
-        fichierExcel.writeFichierExcel();
     }
 
 }

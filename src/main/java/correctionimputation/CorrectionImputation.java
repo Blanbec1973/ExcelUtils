@@ -1,4 +1,4 @@
-package correctionImputation;
+package correctionimputation;
 
 import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +9,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 
 public class CorrectionImputation {
@@ -21,19 +20,22 @@ public class CorrectionImputation {
         // args[0] : parsing file
         // args[1] : sheet
 
+        correctionImputation(args);
+    }
+
+    static void correctionImputation(String[] args) throws IOException {
         fichierExcel = new FichierExcel(args[0]);
         logger.info("Fichier à traiter : {}", args[0]);
 
         int numligne = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args[1]);
         fichierExcel.getWorkBook().setMissingCellPolicy(Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-        //Get iterator to all the rows in current sheet
-        Iterator<Row> rowIterator = dataSheet.iterator();
+        //Get iterator to all the rows in current sheet Iterator<Row> rowIterator = dataSheet.iterator()
         for (Row row : dataSheet) {
            Cell cell = row.getCell(56);
            if (cell != null && cell.getCellType() == CellType.STRING) {
-                System.out.println("numligne " + numligne + " Valeur : "+ cell.getStringCellValue());
-                traiteLigne(row);
+               logger.info("numligne {} Valeur : {}",numligne,cell.getStringCellValue());
+               traiteLigne(row);
             }
 
             numligne = numligne+1;
@@ -46,17 +48,16 @@ public class CorrectionImputation {
         //9 : nom    POMMERET
         Cell cell = row.getCell(56);
 
-        System.out.println("traiteLigne *"+cell.getStringCellValue()+"*");
-        System.out.println("traiteLigne *"+row.getCell(8).getStringCellValue()+"*");
+        logger.info("traiteLigne *{}*", cell.getStringCellValue());
+        logger.info("traiteLigne *{}*",row.getCell(8).getStringCellValue());
 
-        if (cell.getStringCellValue().equals("-Difficulté à déterminer-") &&
+            if (cell.getStringCellValue().equals("-Difficulté à déterminer-") &&
                 row.getCell(8).getStringCellValue().equals("476867")) {
             int numligne = row.getRowNum()+1;
             String formula = "AC" + numligne +"/8" ;
-            System.out.println(formula);
             cell.setCellFormula(formula);
             fichierExcel.evaluateFormulaCell(cell);
-
+            logger.info("Inserted forumla {}",formula);
         }
 
 

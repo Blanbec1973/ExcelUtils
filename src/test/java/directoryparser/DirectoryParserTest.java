@@ -1,7 +1,8 @@
-package directoryParser;
+package directoryparser;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,16 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DirectoryParserTest {
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @BeforeAll
+    static void beforeAll() throws IOException {
         Path path = Paths.get("target/temp");
         if (Files.exists(path))
             FileUtils.cleanDirectory(new File("target/temp"));
         FileUtils.copyDirectory(new File ("src/test/resources/temp/"), new File("target/temp/"));
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
@@ -39,8 +36,8 @@ class DirectoryParserTest {
     }
     @Test
     void testDirectoryParser2() throws IOException {
-        FileUtils.cleanDirectory(new File("target/temp"));
-        DirectoryParser d1 = new DirectoryParser("target/temp/");
+        new File("target/tempvide").mkdir();
+        DirectoryParser d1 = new DirectoryParser("target/tempvide/");
         assertTrue(d1.isListFilesEmpty());
     }
 }

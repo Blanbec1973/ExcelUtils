@@ -1,5 +1,6 @@
 package commun;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,11 @@ class FichierExcelTest {
     @BeforeAll
     static void beforeAll() throws IOException {
         fichierExcel = new FichierExcel("src/test/resources/ClasseurTest.xlsx");
+    }
+
+    @AfterAll
+    static void afterAll() throws IOException {
+        fichierExcel.close();
     }
 
     @Test

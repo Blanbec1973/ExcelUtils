@@ -1,6 +1,7 @@
-package directoryParser;
+package directoryparser;
 
-import FormatActivity.FormatActivity;
+import correctionimputation.CorrectionImputation;
+import formatactivity.FormatActivity;
 import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 public class DirectoryParser {
     private static final Logger logger = LogManager.getLogger(DirectoryParser.class);
+    public static final String SHEET_1 = "sheet1";
     private final File[] listFiles;
 
     public static void main(String[] args) throws IOException {
@@ -28,7 +30,7 @@ public class DirectoryParser {
 
     public DirectoryParser(String directory) {
         File myDirectory = new File(directory);
-        FileFilter filter = (file) -> file.getName().toLowerCase().endsWith(".xlsx");
+        FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");
         listFiles = myDirectory.listFiles(filter);
     }
 
@@ -42,6 +44,8 @@ public class DirectoryParser {
             if (file.toString().matches(".*AR_ITEM_ACTIVITY.*"))
                 processActivityRename(file);
             if (file.toString().matches(".*UC_PCB_PROJ_TRX.*"))
+                processCorrectionImputation(file);
+            if (file.toString().matches(".*UC_PCB_PROJ_TRX.*"))
                 processTrxRename(file);
         }
 
@@ -53,15 +57,19 @@ public class DirectoryParser {
         FormatActivity.main(activityFile);
     }
     public void processActivityRename(File file) throws IOException {
-        logger.info("Process renameACtivity file : {}", file);
-        renamePSA(file,"sheet1", "G3");
+        logger.info("Process rename activity file : {}", file);
+        renamePSA(file, SHEET_1, "G3");
     }
 
     public void processTrxRename(File file) throws IOException {
         logger.info("Process renameTRX file : {}", file);
-        renamePSA(file, "sheet1", "B3");
+        renamePSA(file, SHEET_1, "B3");
     }
-
+    public void processCorrectionImputation(File file) throws IOException {
+        logger.info("Process correction imputationTRX file : {}", file);
+        String [] trxFile = { file.toString(),SHEET_1};
+        CorrectionImputation.main(trxFile);
+    }
     public void renamePSA (File file, String sheet, String cell) throws IOException {
         FichierExcel fichierExcel = new FichierExcel(file.toString());
         String prefix = fichierExcel.getCellValue(sheet,cell);
