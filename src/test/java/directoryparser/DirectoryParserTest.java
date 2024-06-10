@@ -1,27 +1,22 @@
 package directoryparser;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterEach;
+import commun.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DirectoryParserTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        Path path = Paths.get("target/temp");
-        if (Files.exists(path))
-            FileUtils.cleanDirectory(new File("target/temp"));
-        FileUtils.copyDirectory(new File ("src/test/resources/temp/"), new File("target/temp/"));
+        new TestInitializerFactory();
     }
 
     @Test

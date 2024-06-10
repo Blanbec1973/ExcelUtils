@@ -13,7 +13,8 @@ class FichierExcelTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        fichierExcel = new FichierExcel("src/test/resources/ClasseurTest.xlsx");
+        new TestInitializerFactory();
+        fichierExcel = new FichierExcel("target/temp/ClasseurTest.xlsx");
     }
 
     @AfterAll
