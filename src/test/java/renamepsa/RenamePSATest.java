@@ -3,15 +3,13 @@ package renamepsa;
 import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import com.ginsberg.junit.exit.SystemExitPreventedException;
 import commun.TestInitializerFactory;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RenamePSATest {
 
     @BeforeEach
@@ -19,11 +17,11 @@ class RenamePSATest {
         new TestInitializerFactory();
     }
 
-    @Test
+    @Test @Order(1)
     void testRenamePSA() throws IOException {
         File dossier = new File("target/temp/");
         File [] files =  dossier.listFiles();
-        assertEquals(4,files.length);
+        assertEquals(5,files.length);
         assertEquals("target\\temp\\UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx", files[3].toString());
         assertEquals("target\\temp\\UC_PCB_PROJ_TRX_03_1265199083.xlsx", files[4].toString());
 
@@ -35,7 +33,7 @@ class RenamePSATest {
         assertEquals("target\\temp\\300000000073327-UC_PCB_PROJ_TRX_03_1265199083.xlsx", files[1].toString());
     }
 
-    @Test
+    @Test @Order(2)
     @ExpectSystemExitWithStatus(0)
     void testMainDossierVide() throws IOException {
         new File("target/temp/dossierVide").mkdir();
@@ -43,6 +41,7 @@ class RenamePSATest {
         SystemExitPreventedException thrown = Assertions.assertThrows(SystemExitPreventedException.class, () -> {
             RenamePSA.main(new String[]{"target/temp/dossierVide", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
         });
+        new File("target/temp/dossierVide").delete();
     }
 
 
