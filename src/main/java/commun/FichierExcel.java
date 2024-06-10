@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
@@ -55,5 +56,30 @@ public class FichierExcel extends FileInputStream {
 
     public Workbook getWorkBook() {
         return workbook;
+    }
+
+    public void deleteFirstLineContaining(String sheet, String string) {
+        if (string.equals(this.getCellValue(sheet,0,0))) {
+            removeRow((XSSFSheet) workbook.getSheet(sheet),0);
+            logger.info("First line is deleted");
+        }
+        else {
+            logger.info("First cell {} <> {} ==> skipping delete first line",
+                               this.getCellValue(sheet,0,0),
+                               string);
+        }
+
+    }
+    public static void removeRow(XSSFSheet sheet, int rowIndex) {
+        int lastRowNum = sheet.getLastRowNum();
+        if (rowIndex >= 0 && rowIndex < lastRowNum) {
+            sheet.shiftRows(rowIndex + 1, lastRowNum, -1);
+        }
+        if (rowIndex == lastRowNum) {
+            Row removingRow = sheet.getRow(rowIndex);
+            if (removingRow != null) {
+                sheet.removeRow(removingRow);
+            }
+        }
     }
 }
