@@ -1,5 +1,6 @@
 package directoryparser;
 
+import commun.ProgramId;
 import correctionimputation.CorrectionImputation;
 import formatactivity.FormatActivity;
 import commun.FichierExcel;
@@ -17,6 +18,7 @@ public class DirectoryParser {
     private final File[] listFiles;
 
     public static void main(String[] args) throws IOException {
+        logger.info("Beginning :{} version:{}", ProgramId.NAME, ProgramId.VERSION);
 
         String directoryToProcess = (args.length == 0) ? System.getProperty("user.dir")+"\\" : args[0];
         DirectoryParser directoryParser = new DirectoryParser(directoryToProcess);
