@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FormatActivity {
@@ -19,7 +20,14 @@ public class FormatActivity {
         logger.info("Fichier à traiter : {}", args[0]);
 
         formatActivity();
-        fichierExcel.writeFichierExcel();
+        fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
+
+        try {
+            fichierExcel.writeFichierExcel();
+        } catch (FileNotFoundException e) {
+            logger.error("Error during writing file : {}",e.getMessage());
+            System.exit(-1);
+        }
     }
 
     private static void formatActivity() {
