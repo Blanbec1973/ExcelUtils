@@ -11,26 +11,29 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RenamePSATest {
+    private final TestInitializerFactory tif = new TestInitializerFactory(this.getClass().getSimpleName());
+    private final String fileName1 = "target\\temp-"+this.getClass().getSimpleName()+"\\UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx";
+    private final String fileName2 = "target\\temp-"+this.getClass().getSimpleName()+"\\UC_PCB_PROJ_TRX_03_1265199083.xlsx";
 
-    @BeforeEach
-    void setUp() throws IOException {
-        new TestInitializerFactory();
+    RenamePSATest() throws IOException {
     }
 
     @Test @Order(1)
     void testRenamePSA() throws IOException {
-        File dossier = new File("target/temp/");
+        File dossier = new File(tif.getPathTest() + "/");
         File [] files =  dossier.listFiles();
         assertEquals(5,files.length);
-        assertEquals("target\\temp\\UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx", files[3].toString());
-        assertEquals("target\\temp\\UC_PCB_PROJ_TRX_03_1265199083.xlsx", files[4].toString());
+        assertEquals(fileName1, files[3].toString());
+        assertEquals(fileName2, files[4].toString());
 
         RenamePSA renamePSA = new RenamePSA();
-        renamePSA.renamePSA(new String[]{"target/temp/", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
-        renamePSA.renamePSA(new String[]{"target/temp/", "UC_AR_ITEM_ACTIVITY", "sheet1", "G3"});
+        renamePSA.renamePSA(new String[]{tif.getPathTest()+"/", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
+        renamePSA.renamePSA(new String[]{tif.getPathTest()+"/", "UC_AR_ITEM_ACTIVITY", "sheet1", "G3"});
         files = dossier.listFiles();
-        assertEquals("target\\temp\\300000000073327-UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx", files[0].toString());
-        assertEquals("target\\temp\\300000000073327-UC_PCB_PROJ_TRX_03_1265199083.xlsx", files[1].toString());
+        assertEquals("target\\temp-RenamePSATest\\300000000073327-UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx",
+                              files[0].toString());
+        assertEquals("target\\temp-RenamePSATest\\300000000073327-UC_PCB_PROJ_TRX_03_1265199083.xlsx",
+                              files[1].toString());
     }
 
     @Test @Order(2)

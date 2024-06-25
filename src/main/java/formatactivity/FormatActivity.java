@@ -17,7 +17,7 @@ public class FormatActivity {
 
     public static void main(String[] args) throws IOException {
         fichierExcel = new FichierExcel(args[0]);
-        logger.info("Fichier à traiter : {}", args[0]);
+        logger.info("File to process : {}", args[0]);
 
         formatActivity();
         fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
@@ -56,14 +56,14 @@ public class FormatActivity {
 
         for (Row row : dataSheet) {
             if (row.getRowNum() == 1) {
-                row.createCell(27).setCellValue("Montant HT");
+                row.createCell(27).setCellValue("Mt HT");
                 CellStyle newCellStyle = row.getCell(26).getCellStyle();
                 row.getCell(27).setCellStyle(newCellStyle);
 
             }
             if (row.getRowNum() > 1) {
-                int numligne = row.getRowNum()+1;
-                String formula = "S" + numligne+"/1.2" ;
+                int rowNum = row.getRowNum()+1;
+                String formula = "S" + rowNum+"/1.2" ;
                 row.createCell(27).setCellFormula(formula);
                 fichierExcel.evaluateFormulaCell(row.getCell(27));
             }

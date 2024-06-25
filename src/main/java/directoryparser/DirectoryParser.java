@@ -2,6 +2,7 @@ package directoryparser;
 
 import commun.ProgramId;
 import correctionimputation.CorrectionImputation;
+import format_trx.FormatTRX;
 import formatactivity.FormatActivity;
 import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +16,8 @@ import java.util.Objects;
 public class DirectoryParser {
     private static final Logger logger = LogManager.getLogger(DirectoryParser.class);
     public static final String SHEET_1 = "sheet1";
+    public static final String UC_PCB_PROJ_TRX = ".*UC_PCB_PROJ_TRX.*";
+    public static final String AR_ITEM_ACTIVITY = ".*AR_ITEM_ACTIVITY.*";
     private final File[] listFiles;
 
     public static void main(String[] args) throws IOException {
@@ -41,18 +44,24 @@ public class DirectoryParser {
     public void processList() throws IOException {
         for (File file : Objects.requireNonNull(listFiles)) {
             logger.info("ProcessList file : {}", file);
-            if (file.toString().matches(".*AR_ITEM_ACTIVITY.*"))
+            if (file.toString().matches(AR_ITEM_ACTIVITY))
                 processActivity(file);
-            if (file.toString().matches(".*AR_ITEM_ACTIVITY.*"))
+            if (file.toString().matches(AR_ITEM_ACTIVITY))
                 processActivityRename(file);
-            if (file.toString().matches(".*UC_PCB_PROJ_TRX.*"))
+            if (file.toString().matches(UC_PCB_PROJ_TRX))
                 processCorrectionImputation(file);
-            if (file.toString().matches(".*UC_PCB_PROJ_TRX.*"))
+            if (file.toString().matches(UC_PCB_PROJ_TRX))
+                processFormatTRX(file);
+            if (file.toString().matches(UC_PCB_PROJ_TRX))
                 processTrxRename(file);
         }
-
     }
 
+    public void processFormatTRX(File file) throws IOException {
+        logger.info("Process FormatTRX file : {}", file);
+        String [] trxFile = { file.toString()};
+        FormatTRX.main(trxFile);
+    }
     public void processActivity(File file) throws IOException {
         logger.info("Process activity file : {}", file);
         String [] activityFile = { file.toString()};

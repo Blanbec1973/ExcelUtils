@@ -45,9 +45,9 @@ public class FichierExcel extends FileInputStream {
         return cell.getStringCellValue();
     }
 
-    public String getCellValue(String sheet, int numCol, int numLigne) {
+    public String getCellValue(String sheet, int numCol, int rowNum) {
         Sheet dataSheet = workbook.getSheet(sheet);
-        Cell cell = dataSheet.getRow(numLigne).getCell(numCol, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+        Cell cell = dataSheet.getRow(rowNum).getCell(numCol, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
         if (cell.getCellType() == CellType.STRING) {
             logger.info(cell.getStringCellValue());
         }
@@ -64,8 +64,9 @@ public class FichierExcel extends FileInputStream {
             logger.info("First line is deleted");
         }
         else {
+            Object cellValue = this.getCellValue(sheet,0,0);
             logger.info("First cell {} <> {} ==> skipping delete first line",
-                               this.getCellValue(sheet,0,0),
+                               cellValue,
                                string);
         }
 

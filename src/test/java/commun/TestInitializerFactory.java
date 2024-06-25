@@ -10,11 +10,16 @@ import java.nio.file.Paths;
 
 public class TestInitializerFactory {
 
-    public TestInitializerFactory() throws IOException {
-        Path path = Paths.get("target/temp");
+    private String pathTest;
+    public String getPathTest() {return pathTest;}
+
+    public TestInitializerFactory(String suffix) throws IOException {
+        pathTest = "target/temp-"+suffix;
+        Path path = Paths.get(pathTest);
         if (Files.exists(path))
-            FileUtils.cleanDirectory(new File("target/temp"));
-        FileUtils.copyDirectory(new File ("src/test/resources/temp/"), new File("target/temp/"));
+            FileUtils.cleanDirectory(new File(pathTest));
+        FileUtils.copyDirectory(new File ("src/test/resources/temp/"),
+                                new File(pathTest+"/"));
     }
 
 }

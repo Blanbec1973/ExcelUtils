@@ -21,14 +21,19 @@ public class RenamePSA {
     }
 
     static void renamePSA(String[] args) throws IOException {
-        logger.info("Démarrage RenamePSA");
+        logger.info("Beginning RenamePSA");
         File dossier = new File(args[0]);
         FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx") &&
                                     file.getName().startsWith(args[1]);
         File[] listeFichiers = dossier.listFiles(filter);
-        if (listeFichiers.length == 0) {
-            logger.info("No file {} to process in {}", args[1], args[0]);
-            System.exit(0);
+
+        try {
+            if (listeFichiers.length == 0) {
+                logger.info("No file {} to process in {}", args[1], args[0]);
+                System.exit(0);
+            }
+        } catch (NullPointerException e) {
+            logger.error(e.getMessage());
         }
 
         for (File fichier : Objects.requireNonNull(listeFichiers)) {
