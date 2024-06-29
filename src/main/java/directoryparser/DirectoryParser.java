@@ -7,6 +7,7 @@ import formatactivity.FormatActivity;
 import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import renamepsa.RenamePSA;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -18,12 +19,13 @@ public class DirectoryParser {
     public static final String SHEET_1 = "sheet1";
     public static final String UC_PCB_PROJ_TRX = ".*UC_PCB_PROJ_TRX.*";
     public static final String AR_ITEM_ACTIVITY = ".*AR_ITEM_ACTIVITY.*";
+    private static String directoryToProcess;
     private final File[] listFiles;
 
     public static void main(String[] args) throws IOException {
         logger.info("Beginning :{} version:{}", ProgramId.NAME, ProgramId.VERSION);
 
-        String directoryToProcess = (args.length == 0) ? System.getProperty("user.dir")+"\\" : args[0];
+        directoryToProcess = (args.length == 0) ? System.getProperty("user.dir")+"\\" : args[0];
         DirectoryParser directoryParser = new DirectoryParser(directoryToProcess);
 
         if (directoryParser.isListFilesEmpty()) {
@@ -34,6 +36,7 @@ public class DirectoryParser {
     }
 
     public DirectoryParser(String directory) {
+        if (directoryToProcess == null) directoryToProcess = directory;
         File myDirectory = new File(directory);
         FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");
         listFiles = myDirectory.listFiles(filter);
@@ -69,12 +72,14 @@ public class DirectoryParser {
     }
     public void processActivityRename(File file) throws IOException {
         logger.info("Process rename activity file : {}", file);
-        renamePSA(file, SHEET_1, "G3");
+        if (RenamePSA.checkAbsenceOfPrefix(file))
+            renamePSA(file,SHEET_1,"G3");
     }
 
     public void processTrxRename(File file) throws IOException {
         logger.info("Process renameTRX file : {}", file);
-        renamePSA(file, SHEET_1, "B3");
+        if (RenamePSA.checkAbsenceOfPrefix(file))
+            renamePSA(file,SHEET_1,"B3");
     }
     public void processCorrectionImputation(File file) throws IOException {
         logger.info("Process correction imputationTRX file : {}", file);

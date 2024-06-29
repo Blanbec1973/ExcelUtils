@@ -21,7 +21,7 @@ public class RenamePSA {
     }
 
     static void renamePSA(String[] args) throws IOException {
-        logger.info("Beginning RenamePSA");
+        logger.info("Beginning RenamePSA : {}",args[0]);
         File dossier = new File(args[0]);
         FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx") &&
                                     file.getName().startsWith(args[1]);
@@ -38,12 +38,33 @@ public class RenamePSA {
 
         for (File fichier : Objects.requireNonNull(listeFichiers)) {
             logger.info("Fichier : {}", fichier);
-            FichierExcel fichierExcel = new FichierExcel(fichier.toString());
-            String prefix = fichierExcel.getCellValue(args[2], args[3]);
-            fichierExcel.close();
-            String newName = args[0] + "\\"+ prefix + "-"+fichier.getName();
-            File dest = new File(newName);
-            if (fichier.renameTo(dest)) logger.info("Nouveau nom : {}",newName);
+            if (checkAbsenceOfPrefix(fichier)) {
+                String prefix = retrievePrefix(args, fichier);
+                String newName = args[0] + "\\"+ prefix + "-"+fichier.getName();
+                renameFile(fichier, newName);
+            }
+            else {
+                logger.info("Existing prefix in file name ==> No action.");
+            }
         }
+    }
+
+    public static boolean checkAbsenceOfPrefix(File fichier) {
+        String fileName = fichier.getName();
+        if (fileName.length()<15) return true;
+        String prefix = fileName.substring(0,15);
+        return (!prefix.matches("\\d+")) ;
+    }
+
+    private static void renameFile(File fichier, String newName) {
+        File dest = new File(newName);
+        if (fichier.renameTo(dest)) logger.info("Nouveau nom : {}", newName);
+    }
+
+    private static String retrievePrefix(String[] args, File fichier) throws IOException {
+        FichierExcel fichierExcel = new FichierExcel(fichier.toString());
+        String prefix = fichierExcel.getCellValue(args[2], args[3]);
+        fichierExcel.close();
+        return prefix;
     }
 }
