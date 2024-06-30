@@ -24,9 +24,8 @@ class CorrectionImputationTest {
     }
 
     @Test
-    void testCorrectionImputation() throws IOException, InterruptedException {
-        CorrectionImputation c = new CorrectionImputation();
-        c.correctionImputation(new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", "sheet1"});
+    void testCorrectionImputation() throws IOException {
+        new CorrectionImputation(new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", "sheet1"});
 
         FichierExcel fichierExcel = new FichierExcel("target/test/correctionImputation/TrxToCorrect.xlsx");
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet("sheet1");

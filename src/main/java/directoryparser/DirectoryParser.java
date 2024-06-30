@@ -60,7 +60,7 @@ public class DirectoryParser {
         }
     }
 
-    public void processFormatTRX(File file) throws IOException {
+    public void processFormatTRX(File file) {
         logger.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};
         FormatTRX.main(trxFile);

@@ -16,34 +16,34 @@ public class CorrectionImputation {
     private static FichierExcel fichierExcel;
 
     public static void main(String[] args) throws IOException {
-        logger.info("Démarrage CorrectionImputation");
+        logger.info("Beginning Timesheet correction");
         // args[0] : parsing file
         // args[1] : sheet
 
-        correctionImputation(args);
+        new CorrectionImputation(args);
     }
 
-    static void correctionImputation(String[] args) throws IOException {
+    public CorrectionImputation(String[] args) throws IOException {
         fichierExcel = new FichierExcel(args[0]);
         logger.info("Fichier à traiter : {}", args[0]);
 
-        int numligne = 0;
+        int rowNum = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args[1]);
         fichierExcel.getWorkBook().setMissingCellPolicy(Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
         //Get iterator to all the rows in current sheet Iterator<Row> rowIterator = dataSheet.iterator()
         for (Row row : dataSheet) {
            Cell cell = row.getCell(56);
            if (cell != null && cell.getCellType() == CellType.STRING) {
-               logger.info("numligne {} Valeur : {}",numligne,cell.getStringCellValue());
-               traiteLigne(row);
+               logger.info("rowNum {} value : {}",rowNum,cell.getStringCellValue());
+               processRow(row);
             }
 
-            numligne = numligne+1;
+            rowNum = rowNum+1;
         }
         fichierExcel.writeFichierExcel();
     }
 
-    private static void traiteLigne(Row row) {
+    private void processRow(Row row) {
         //8 : code   476867
         //9 : nom    POMMERET
         Cell cell = row.getCell(56);

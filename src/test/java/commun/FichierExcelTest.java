@@ -2,25 +2,29 @@ package commun;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FichierExcelTest {
-    private TestInitializerFactory tif = new TestInitializerFactory(this.getClass().getSimpleName());
-    private String fileName1 = "target/temp-"+this.getClass().getSimpleName()+"/ClasseurTest.xlsx";
-    private String fileName2 = "target/temp-"+this.getClass().getSimpleName()+"/SuppressionLigne.xlsx";
+    private final String fileName1 = "target/temp-"+this.getClass().getSimpleName()+"/ClasseurTest.xlsx";
+    private final String fileName2 = "target/temp-"+this.getClass().getSimpleName()+"/SuppressionLigne.xlsx";
 
-    FichierExcelTest() throws IOException {
+    @BeforeAll
+    void beforeAll() throws IOException {
+        TestInitializerFactory.action(this.getClass().getSimpleName());
     }
 
     @Test
-    void testGetCellValue() throws IOException {
-        FichierExcel fichierExcel = new FichierExcel(fileName1);
-        assertEquals("15", fichierExcel.getCellValue("Feuil1","A1"));
-        assertEquals("20", fichierExcel.getCellValue("Feuil1","D5"));
-        fichierExcel.close();
+    void testGetCellValue()  {
+        try (FichierExcel fichierExcel = new FichierExcel(fileName1)) {
+            assertEquals("15", fichierExcel.getCellValue("Feuil1","A1"));
+            assertEquals("20", fichierExcel.getCellValue("Feuil1","D5"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test

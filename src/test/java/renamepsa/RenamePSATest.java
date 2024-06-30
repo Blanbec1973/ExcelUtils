@@ -10,26 +10,29 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RenamePSATest {
-    private final TestInitializerFactory tif = new TestInitializerFactory(this.getClass().getSimpleName());
     private final String fileName1 = "target\\temp-"+this.getClass().getSimpleName()+"\\UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx";
     private final String fileName2 = "target\\temp-"+this.getClass().getSimpleName()+"\\UC_PCB_PROJ_TRX_03_1265199083.xlsx";
 
-    RenamePSATest() throws IOException {
+    @BeforeAll
+    void beforeAll() throws IOException {
+        TestInitializerFactory.action(this.getClass().getSimpleName());
     }
 
     @Test @Order(1)
     void testRenamePSA() throws IOException {
-        File dossier = new File(tif.getPathTest() + "/");
+        File dossier = new File(TestInitializerFactory.getPathTest() + "/");
         File [] files =  dossier.listFiles();
+        assert files != null;
         assertEquals(5,files.length);
         assertEquals(fileName1, files[3].toString());
         assertEquals(fileName2, files[4].toString());
 
-        RenamePSA renamePSA = new RenamePSA();
-        renamePSA.renamePSA(new String[]{tif.getPathTest()+"/", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
-        renamePSA.renamePSA(new String[]{tif.getPathTest()+"/", "UC_AR_ITEM_ACTIVITY", "sheet1", "G3"});
+        RenamePSA.action(new String[]{TestInitializerFactory.getPathTest()+"/", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
+        RenamePSA.action(new String[]{TestInitializerFactory.getPathTest()+"/", "UC_AR_ITEM_ACTIVITY", "sheet1", "G3"});
         files = dossier.listFiles();
+        assert files != null;
         assertEquals("target\\temp-RenamePSATest\\300000000073327-UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx",
                               files[0].toString());
         assertEquals("target\\temp-RenamePSATest\\300000000073327-UC_PCB_PROJ_TRX_03_1265199083.xlsx",
@@ -38,12 +41,10 @@ class RenamePSATest {
 
     @Test @Order(2)
     @ExpectSystemExitWithStatus(0)
-    void testMainDossierVide() throws IOException {
+    void testMainDossierVide() {
         new File("target/temp/dossierVide").mkdir();
 
-        SystemExitPreventedException thrown = Assertions.assertThrows(SystemExitPreventedException.class, () -> {
-            RenamePSA.main(new String[]{"target/temp/dossierVide", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
-        });
+        Assertions.assertThrows(SystemExitPreventedException.class, () -> RenamePSA.action(new String[]{"target/temp/dossierVide", "UC_PCB_PROJ_TRX", "sheet1", "B3"}));
         new File("target/temp/dossierVide").delete();
     }
 

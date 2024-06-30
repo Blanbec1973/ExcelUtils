@@ -10,10 +10,10 @@ import java.nio.file.Paths;
 
 public class TestInitializerFactory {
 
-    private String pathTest;
-    public String getPathTest() {return pathTest;}
+    private static String pathTest= "em";
+    public static String getPathTest() {return pathTest;}
 
-    public TestInitializerFactory(String suffix) throws IOException {
+    public static void action(String suffix) throws IOException {
         pathTest = "target/temp-"+suffix;
         Path path = Paths.get(pathTest);
         if (Files.exists(path))

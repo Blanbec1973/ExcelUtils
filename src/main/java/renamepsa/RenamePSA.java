@@ -17,10 +17,10 @@ public class RenamePSA {
         // args[1] : start file name
         // args[2] & args[3] : sheet & cell for getting prefix
 
-        renamePSA(args);
+        RenamePSA.action(args);
     }
 
-    static void renamePSA(String[] args) throws IOException {
+    public static void action(String[] args) throws IOException {
         logger.info("Beginning RenamePSA : {}",args[0]);
         File dossier = new File(args[0]);
         FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx") &&
@@ -28,11 +28,12 @@ public class RenamePSA {
         File[] listeFichiers = dossier.listFiles(filter);
 
         try {
+            assert listeFichiers != null;
             if (listeFichiers.length == 0) {
                 logger.info("No file {} to process in {}", args[1], args[0]);
                 System.exit(0);
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | AssertionError e) {
             logger.error(e.getMessage());
         }
 
