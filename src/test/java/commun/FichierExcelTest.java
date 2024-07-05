@@ -18,13 +18,10 @@ class FichierExcelTest {
     }
 
     @Test
-    void testGetCellValue()  {
-        try (FichierExcel fichierExcel = new FichierExcel(fileName1)) {
-            assertEquals("15", fichierExcel.getCellValue("Feuil1","A1"));
-            assertEquals("20", fichierExcel.getCellValue("Feuil1","D5"));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+    void testGetCellValue() throws IOException {
+        FichierExcel fichierExcel = new FichierExcel(fileName1);
+        assertEquals("15", fichierExcel.getCellValue("Feuil1","A1"));
+        assertEquals("20", fichierExcel.getCellValue("Feuil1","D5"));
     }
 
     @Test

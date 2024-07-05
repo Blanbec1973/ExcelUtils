@@ -25,9 +25,9 @@ class RenamePSATest {
         File dossier = new File(TestInitializerFactory.getPathTest() + "/");
         File [] files =  dossier.listFiles();
         assert files != null;
-        assertEquals(5,files.length);
-        assertEquals(fileName1, files[3].toString());
-        assertEquals(fileName2, files[4].toString());
+        assertEquals(6,files.length);
+        assertEquals(fileName1, files[4].toString());
+        assertEquals(fileName2, files[5].toString());
 
         RenamePSA.action(new String[]{TestInitializerFactory.getPathTest()+"/", "UC_PCB_PROJ_TRX", "sheet1", "B3"});
         RenamePSA.action(new String[]{TestInitializerFactory.getPathTest()+"/", "UC_AR_ITEM_ACTIVITY", "sheet1", "G3"});

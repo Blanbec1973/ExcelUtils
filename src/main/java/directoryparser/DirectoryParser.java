@@ -19,34 +19,33 @@ public class DirectoryParser {
     public static final String SHEET_1 = "sheet1";
     public static final String UC_PCB_PROJ_TRX = ".*UC_PCB_PROJ_TRX.*";
     public static final String AR_ITEM_ACTIVITY = ".*AR_ITEM_ACTIVITY.*";
-    private static String directoryToProcess;
     private final File[] listFiles;
 
     public static void main(String[] args) throws IOException {
         logger.info("Beginning :{} version:{}", ProgramId.NAME, ProgramId.VERSION);
 
-        directoryToProcess = (args.length == 0) ? System.getProperty("user.dir")+"\\" : args[0];
-        DirectoryParser directoryParser = new DirectoryParser(directoryToProcess);
+        String directory = (args.length == 0) ? System.getProperty("user.dir")+"\\" : args[0];
+        new DirectoryParser(directory);
+    }
 
-        if (directoryParser.isListFilesEmpty()) {
+    public DirectoryParser(String directoryToProcess) throws IOException {
+        logger.info("Processing {}",directoryToProcess);
+        File myDirectory = new File(directoryToProcess);
+        FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");
+        listFiles = myDirectory.listFiles(filter);
+
+        if (isListFilesEmpty()) {
             logger.info("No file to process in {}", directoryToProcess);
             System.exit(0);
         }
-        directoryParser.processList();
-    }
-
-    public DirectoryParser(String directory) {
-        if (directoryToProcess == null) directoryToProcess = directory;
-        File myDirectory = new File(directory);
-        FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");
-        listFiles = myDirectory.listFiles(filter);
+        processList();
     }
 
     public boolean isListFilesEmpty() { return (listFiles.length == 0);}
 
     public void processList() throws IOException {
         for (File file : Objects.requireNonNull(listFiles)) {
-            logger.info("ProcessList file : {}", file);
+            logger.info("ProcessList file : {}", file.getName());
             if (file.toString().matches(AR_ITEM_ACTIVITY))
                 processActivity(file);
             if (file.toString().matches(AR_ITEM_ACTIVITY))
@@ -60,7 +59,7 @@ public class DirectoryParser {
         }
     }
 
-    public void processFormatTRX(File file) {
+    public void processFormatTRX(File file) throws IOException {
         logger.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};
         FormatTRX.main(trxFile);
@@ -91,8 +90,8 @@ public class DirectoryParser {
         String prefix = fichierExcel.getCellValue(sheet,cell);
         fichierExcel.close();
         String newName = file.getParent() + "\\"+ prefix + "-"+file.getName();
-        logger.info("Nouveau nom : {}", newName);
+        logger.info("Nouveau nom1 : {}", newName);
         File dest = new File(newName);
-        if (file.renameTo(dest)) logger.info("Nouveau nom : {}", newName);
+        if (file.renameTo(dest)) logger.info("Nouveau nom2 : {}", newName);
     }
 }

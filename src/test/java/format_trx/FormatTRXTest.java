@@ -19,16 +19,11 @@ class FormatTRXTest {
     }
 
     @Test
-    void testFormatTrxMain() {
+    void testFormatTrxMain() throws IOException {
         FormatTRX.action(new String[]{fileName});
 
-        try (FichierExcel fichierExcel = new FichierExcel(fileName)) {
-            assertEquals("Business Unit",fichierExcel.getCellValue("sheet1",0,0));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-
+        FichierExcel fichierExcel = new FichierExcel(fileName);
+        assertEquals("Business Unit",fichierExcel.getCellValue("sheet1",0,0));
     }
 
 

@@ -1,5 +1,6 @@
 package directoryparser;
 
+import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import commun.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,14 +27,14 @@ class DirectoryParserTest {
     void testDirectoryParser() throws IOException {
         DirectoryParser d1 = new DirectoryParser(TestInitializerFactory.getPathTest()+"/");
         assertFalse(d1.isListFilesEmpty());
-        d1.processList();
 
         assertTrue(Files.exists(Paths.get(fileName1)));
         assertTrue(Files.exists(Paths.get(fileName2)));
 
     }
     @Test
-    void testDirectoryParser2() {
+    @ExpectSystemExitWithStatus(0)
+    void testDirectoryParser2() throws IOException {
         new File("target/tempvide").mkdir();
         DirectoryParser d1 = new DirectoryParser("target/tempvide/");
         assertTrue(d1.isListFilesEmpty());

@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class CorrectionImputation {
     private static final Logger logger = LogManager.getLogger(CorrectionImputation.class);
-    private static FichierExcel fichierExcel;
+    private final FichierExcel fichierExcel;
 
     public static void main(String[] args) throws IOException {
         logger.info("Beginning Timesheet correction");

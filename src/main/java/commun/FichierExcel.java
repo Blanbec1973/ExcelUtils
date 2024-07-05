@@ -10,33 +10,45 @@ import org.apache.poi.xssf.usermodel.XSSFRangeCopier;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class FichierExcel extends FileInputStream {
+public class FichierExcel {
     private static final Logger logger = LogManager.getLogger(FichierExcel.class);
     private final Workbook workbook;
     private final String name;
-    private final  XSSFFormulaEvaluator formulaEvaluator;
+    private final XSSFFormulaEvaluator formulaEvaluator;
 
     private CellRangeAddress tileRange;
 
     public FichierExcel(String name) throws IOException {
-        super(name);
         this.name = name;
-        workbook = new XSSFWorkbook(this);
+        if (new File(name).exists()) {
+            logger.info("Opening existing file {}",name);
+            try(FileInputStream fileInputStream = new FileInputStream(name)) {
+                workbook = new XSSFWorkbook(fileInputStream);
+            }
+        } else {
+            logger.info("Opening new file {}",name);
+            workbook = new XSSFWorkbook();
+        }
         formulaEvaluator = (XSSFFormulaEvaluator) workbook.getCreationHelper().createFormulaEvaluator();
     }
 
     public void evaluateFormulaCell(Cell cell) {
         formulaEvaluator.evaluateFormulaCell(cell);
     }
-    public void writeFichierExcel() throws IOException {
-        FileOutputStream outputStream = new FileOutputStream(this.name);
-        workbook.write(outputStream);
-        workbook.close();
-        outputStream.close();
+    public void writeFichierExcel() {
+        try(FileOutputStream outputStream = new FileOutputStream(this.name)) {
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            System.exit(-1);
+        }
+        logger.info("Saving OK for {}",this.name);
+
     }
 
     public String getCellValue(String sheet, String address) {
@@ -110,5 +122,44 @@ public class FichierExcel extends FileInputStream {
         }
         logger.info("Number of effective row with data : {}",rowNum);
         return rowNum;
+    }
+
+    public void close() throws IOException {
+        workbook.close();
+    }
+
+    public Sheet createSheet(String sheetName) {
+        return workbook.createSheet(sheetName);
+    }
+
+
+    public Integer copySheet(Sheet sheetIn, Sheet sheetOut, boolean ignoreFirstLine, int rowOffset) {
+        logger.info("Beginning transfer sheet : {}",sheetIn.getSheetName());
+        int rowNum = rowOffset;
+        for (Row sourceRow : sheetIn) {
+            if ((sourceRow.getRowNum()==0 && !ignoreFirstLine) || sourceRow.getRowNum() != 0) {
+                logger.debug("Création line {}",rowNum);
+                Row destRow = sheetOut.createRow(rowNum++);
+                copyRow(sourceRow, destRow);
+            }
+        }
+        return rowNum;
+    }
+
+    private void copyRow(Row sourceRow, Row destRow) {
+        for (Cell sourceCell : sourceRow) {
+            Cell destCell = destRow.createCell(sourceCell.getColumnIndex());
+            copyCell(sourceCell,destCell);
+        }
+    }
+
+    private void copyCell(Cell sourceCell, Cell destCell) {
+        CellType cellType = sourceCell.getCellType();
+
+        if (cellType == CellType.NUMERIC) {
+            destCell.setCellValue(sourceCell.getNumericCellValue());
+        } else {
+            destCell.setCellValue(sourceCell.getStringCellValue());
+        }
     }
 }
