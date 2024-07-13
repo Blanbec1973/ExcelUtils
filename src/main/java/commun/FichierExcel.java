@@ -138,7 +138,7 @@ public class FichierExcel {
         int rowNum = rowOffset;
         for (Row sourceRow : sheetIn) {
             if ((sourceRow.getRowNum()==0 && !ignoreFirstLine) || sourceRow.getRowNum() != 0) {
-                logger.debug("Création line {}",rowNum);
+                logger.debug("Creation line {}",rowNum);
                 Row destRow = sheetOut.createRow(rowNum++);
                 copyRow(sourceRow, destRow);
             }

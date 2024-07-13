@@ -25,7 +25,7 @@ public class CorrectionImputation {
 
     public CorrectionImputation(String[] args) throws IOException {
         fichierExcel = new FichierExcel(args[0]);
-        logger.info("Fichier à traiter : {}", args[0]);
+        logger.info("File to proceed : {}", args[0]);
 
         int rowNum = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args[1]);
@@ -48,16 +48,16 @@ public class CorrectionImputation {
         //9 : nom    POMMERET
         Cell cell = row.getCell(56);
 
-        logger.info("traiteLigne *{}*", cell.getStringCellValue());
-        logger.info("traiteLigne *{}*",row.getCell(8).getStringCellValue());
+        logger.info("Line *{}*", cell.getStringCellValue());
+        logger.info("Line *{}*",row.getCell(8).getStringCellValue());
 
             if (cell.getStringCellValue().equals("-Difficulté à déterminer-") &&
                 row.getCell(8).getStringCellValue().equals("476867")) {
-            int numligne = row.getRowNum()+1;
-            String formula = "AC" + numligne +"/8" ;
+            int rowNum = row.getRowNum()+1;
+            String formula = "AC" + rowNum +"/8" ;
             cell.setCellFormula(formula);
             fichierExcel.evaluateFormulaCell(cell);
-            logger.info("Inserted forumla {}",formula);
+            logger.info("Inserted formula {}",formula);
         }
 
 
