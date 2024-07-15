@@ -35,8 +35,8 @@ class DirectoryParserTest {
     @Test
     @ExpectSystemExitWithStatus(0)
     void testDirectoryParser2() throws IOException {
-        new File("target/tempvide").mkdir();
-        DirectoryParser d1 = new DirectoryParser("target/tempvide/");
+        new File("target/empty").mkdir();
+        DirectoryParser d1 = new DirectoryParser("target/empty/");
         assertTrue(d1.isListFilesEmpty());
     }
 }

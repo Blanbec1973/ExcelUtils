@@ -42,10 +42,10 @@ class RenamePSATest {
     @Test @Order(2)
     @ExpectSystemExitWithStatus(0)
     void testMainDossierVide() {
-        new File("target/temp/dossierVide").mkdir();
+        new File("target/empty").mkdir();
 
-        Assertions.assertThrows(SystemExitPreventedException.class, () -> RenamePSA.action(new String[]{"target/temp/dossierVide", "UC_PCB_PROJ_TRX", "sheet1", "B3"}));
-        new File("target/temp/dossierVide").delete();
+        Assertions.assertThrows(SystemExitPreventedException.class, () -> RenamePSA.action(new String[]{"target/empty", "UC_PCB_PROJ_TRX", "sheet1", "B3"}));
+        new File("target/empty").delete();
     }
 
 

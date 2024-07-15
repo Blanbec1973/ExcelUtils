@@ -1,12 +1,12 @@
 package directoryparser;
 
-import commun.ProgramId;
+import commun.FichierExcel;
 import correctionimputation.CorrectionImputation;
 import format_trx.FormatTRX;
 import formatactivity.FormatActivity;
-import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import parameter.Parameter;
 import renamepsa.RenamePSA;
 
 import java.io.File;
@@ -16,19 +16,25 @@ import java.util.Objects;
 
 public class DirectoryParser {
     private static final Logger logger = LogManager.getLogger(DirectoryParser.class);
+    private final Parameter param = new Parameter("config.properties");
     public static final String SHEET_1 = "sheet1";
     public static final String UC_PCB_PROJ_TRX = ".*UC_PCB_PROJ_TRX.*";
     public static final String AR_ITEM_ACTIVITY = ".*AR_ITEM_ACTIVITY.*";
     private final File[] listFiles;
 
     public static void main(String[] args) throws IOException {
-        logger.info("Beginning :{} version:{}", ProgramId.NAME, ProgramId.VERSION);
 
         String directory = (args.length == 0) ? System.getProperty("user.dir")+"\\" : args[0];
         new DirectoryParser(directory);
     }
 
     public DirectoryParser(String directoryToProcess) throws IOException {
+        String projectName = param.getProperty("projectName");
+        String version = param.getProperty("version");
+        logger.info("Beginning : {} version {} function {}",
+                projectName,
+                version,
+                this.getClass().getSimpleName());
         logger.info("Processing {}",directoryToProcess);
         File myDirectory = new File(directoryToProcess);
         FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");

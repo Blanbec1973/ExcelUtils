@@ -1,6 +1,6 @@
-Configuration:
+configuration:
   status: warn
-  Appenders:
+  appenders:
     Console:
       name: ConsoleAppender
       target: SYSTEM_OUT
@@ -11,8 +11,8 @@ Configuration:
       fileName: logs/ExcelUtils.log
       PatternLayout:
         pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
-  Loggers:
-    Root:
+  loggers:
+    root:
       level: info
       AppenderRef:
         - ref: ConsoleAppender
