@@ -24,7 +24,7 @@ class FusionTRXTest {
 
     @Test
     void testFusionTRX() throws IOException {
-        new FusionTRX(new String[] {"target/temp-FusionTRXTest/fusion/",
+        new FusionTRX(new String[] {"FUSION_TRX", "target/temp-FusionTRXTest/fusion/",
                                                         "target/temp-FusionTRXTest/fusion/"});
 
         FichierExcel fichierExcel = new FichierExcel("target/temp-FusionTRXTest/fusion/fusionTRX.xlsx");

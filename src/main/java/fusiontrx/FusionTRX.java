@@ -18,21 +18,11 @@ public class FusionTRX {
     }
 
     public FusionTRX(String [] args) throws IOException {
-        String projectName = param.getProperty("projectName");
-        String version = param.getProperty("version");
-        logger.info("Beginning : {} version {} function {}",
-                            projectName,
-                            version,
-                            this.getClass().getSimpleName());
 
-        if (args.length != 2) {
-            logger.error("Need two arguments, found {}",args.length);
-            System.exit(-1);
-        }
-
-        String directoryToProcess = (args[0].equals("")) ? System.getProperty("user.dir")+"\\" : args[0];
-        String pathFusion = args[1];
+        String directoryToProcess = (args[1].equals("")) ? System.getProperty("user.dir")+"\\" : args[1];
+        String pathFusion = args[2];
         logger.info("Parsing directory : {}",directoryToProcess);
+        logger.info("Path for fusion : {}",pathFusion);
 
         File myDirectory = new File(directoryToProcess);
         FileFilter filter = file -> file.getName().contains("TRX") && file.getName().toLowerCase().endsWith(".xlsx");
@@ -47,7 +37,7 @@ public class FusionTRX {
     }
 
     private void processList(File[] listFiles, String pathFusion) throws IOException {
-        FichierExcel fusion = new FichierExcel(pathFusion+"FusionTRX.xlsx");
+        FichierExcel fusion = new FichierExcel(pathFusion + "FusionTRX.xlsx");
         Sheet sheetFusion = fusion.createSheet("Fusion");
         Integer rowOffset = 0;
         boolean ignoreFirstLine = false;
