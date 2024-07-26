@@ -4,7 +4,6 @@ import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Sheet;
-import parameter.Parameter;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -12,7 +11,6 @@ import java.io.IOException;
 
 public class FusionTRX {
     private static final Logger logger = LogManager.getLogger(FusionTRX.class);
-    private final Parameter param = new Parameter("config.properties");
     public static void main(String[] args) throws IOException {
         new FusionTRX(args);
     }

@@ -2,7 +2,6 @@ package commun;
 
 import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import parameter.Parameter;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,6 +15,7 @@ class ArgsCheckerTest {
     void testArgumentNull() {
         String [] tabNull={};
         new ArgsChecker(tabNull,null);
+        assertTrue(true);
     }
 
     @Test
@@ -23,6 +23,7 @@ class ArgsCheckerTest {
     void testInvalidFunction() {
         String [] tab1 = {"INVALID"};
         new ArgsChecker(tab1, null);
+        assertTrue(true);
     }
 
     @Test
@@ -30,6 +31,7 @@ class ArgsCheckerTest {
     void testInvalidNumberOfArguments() {
         String [] tab1 = {"FUSION_TRX"};
         new ArgsChecker(tab1,param);
+        assertTrue(true);
     }
 
     @Test

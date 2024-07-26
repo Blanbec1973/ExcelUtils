@@ -16,7 +16,6 @@ import java.util.Objects;
 
 public class DirectoryParser {
     private static final Logger logger = LogManager.getLogger(DirectoryParser.class);
-    private final Parameter param = new Parameter("config.properties");
     public static final String SHEET_1 = "sheet1";
     public static final String UC_PCB_PROJ_TRX = ".*UC_PCB_PROJ_TRX.*";
     public static final String AR_ITEM_ACTIVITY = ".*AR_ITEM_ACTIVITY.*";
@@ -29,6 +28,7 @@ public class DirectoryParser {
     }
 
     public DirectoryParser(String directoryToProcess) throws IOException {
+        Parameter param = new Parameter("config.properties");
         String projectName = param.getProperty("projectName");
         String version = param.getProperty("version");
         logger.info("Beginning : {} version {} function {}",
@@ -68,12 +68,12 @@ public class DirectoryParser {
     public void processFormatTRX(File file) throws IOException {
         logger.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};
-        FormatTRX.main(trxFile);
+        FormatTRX.applyFormatTRX(trxFile);
     }
     public void processActivity(File file) throws IOException {
         logger.info("Process activity file : {}", file);
         String [] activityFile = { file.toString()};
-        FormatActivity.main(activityFile);
+        new FormatActivity(activityFile);
     }
     public void processActivityRename(File file) throws IOException {
         logger.info("Process rename activity file : {}", file);

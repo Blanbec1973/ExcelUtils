@@ -12,19 +12,24 @@ import java.io.IOException;
 
 public class FormatActivity {
     private static final Logger logger = LogManager.getLogger(FormatActivity.class);
-    private static FichierExcel fichierExcel;
+    private final FichierExcel fichierExcel;
 
-    public static void main(String[] args) throws IOException {
+    public FormatActivity(String[] args) throws IOException {
         fichierExcel = new FichierExcel(args[0]);
         logger.info("File to process : {}", args[0]);
 
-        formatActivity();
+        Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
+        hideUnusefulColumns(dataSheet);
+
+        createColumnNoTax(dataSheet);
+
+        dataSheet.setAutoFilter(new CellRangeAddress(1,1,0,27));
+
         fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
         fichierExcel.writeFichierExcel();
     }
 
-    private static void formatActivity() {
-        Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
+    private void hideUnusefulColumns(Sheet dataSheet) {
         dataSheet.getRow(0).setZeroHeight(true);
 
         dataSheet.setColumnHidden(0, true);
@@ -46,7 +51,9 @@ public class FormatActivity {
         dataSheet.setColumnHidden(24, true);
         dataSheet.setColumnHidden(25, true);
         dataSheet.setColumnHidden(26, true);
+    }
 
+    private void createColumnNoTax(Sheet dataSheet) {
         for (Row row : dataSheet) {
             if (row.getRowNum() == 1) {
                 row.createCell(27).setCellValue("Mt HT");
@@ -62,7 +69,6 @@ public class FormatActivity {
             }
 
         }
-        dataSheet.setAutoFilter(new CellRangeAddress(1,1,0,27));
     }
 
 }

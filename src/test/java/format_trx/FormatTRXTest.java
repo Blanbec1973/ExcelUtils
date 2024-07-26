@@ -20,7 +20,7 @@ class FormatTRXTest {
 
     @Test
     void testFormatTrxMain() throws IOException {
-        FormatTRX.action(new String[]{fileName});
+        FormatTRX.applyFormatTRX(new String[]{fileName});
 
         FichierExcel fichierExcel = new FichierExcel(fileName);
         assertEquals("Business Unit",fichierExcel.getCellValue("sheet1",0,0));
