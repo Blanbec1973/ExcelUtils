@@ -34,7 +34,12 @@ class FichierExcelTest {
         FichierExcel fichierExcel1 = new FichierExcel(fileName2);
         assertEquals("From Date", fichierExcel1.getCellValue("sheet1",0,0));
         fichierExcel1.close();
+    }
 
+    @Test
+    void testRoxCount() throws IOException {
+        FichierExcel fichierExcel = new FichierExcel(fileName1);
+        assertEquals(5,fichierExcel.rowCount("Feuil1",3));
     }
 
 
