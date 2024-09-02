@@ -1,6 +1,7 @@
 package commun;
 
 import analyzetrx.AnalyzeTRX;
+import directoryparser.DirectoryParser;
 import format_trx.FormatTRX;
 import formatactivity.FormatActivity;
 import fusiontrx.FusionTRX;
@@ -35,6 +36,7 @@ public class ExcelUtils {
             case ANALYZE_TRX -> new AnalyzeTRX(args);
             case FORMAT_TRX -> FormatTRX.applyFormatTRX(args);
             case FORMAT_ACTIVITY -> new FormatActivity(new String[]{args[1]});
+            case DIRECTORY_PARSER -> new DirectoryParser(args[1]);
             default -> logger.error("Function not encoded {}",function);
         }
     }
