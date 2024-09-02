@@ -23,7 +23,7 @@ public class FormatActivity {
 
         createColumnNoTax(dataSheet);
 
-        dataSheet.setAutoFilter(new CellRangeAddress(1,1,0,27));
+        dataSheet.setAutoFilter(new CellRangeAddress(0,0,0,27));
 
         fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
         fichierExcel.writeFichierExcel();

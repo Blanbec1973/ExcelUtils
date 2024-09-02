@@ -34,7 +34,7 @@ public class ExcelUtils {
             case FUSION_TRX -> new FusionTRX(args);
             case ANALYZE_TRX -> new AnalyzeTRX(args);
             case FORMAT_TRX -> FormatTRX.applyFormatTRX(args);
-            case FORMAT_ACTIVITY -> new FormatActivity(args);
+            case FORMAT_ACTIVITY -> new FormatActivity(new String[]{args[1]});
             default -> logger.error("Function not encoded {}",function);
         }
     }
