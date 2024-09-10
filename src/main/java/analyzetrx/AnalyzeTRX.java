@@ -30,10 +30,10 @@ public class AnalyzeTRX {
 
     public AnalyzeTRX(String [] args) throws IOException {
         long start = System.currentTimeMillis();
-        logger.info("Beginning Analyze TRX : {}",args[0]);
+        logger.info("Beginning {}",args[0]);
         cloneModel();
 
-        transferData(args[0]);
+        transferData(args[1]);
 
         checkFormula(pathResultFile);
 

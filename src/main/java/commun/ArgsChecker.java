@@ -28,7 +28,13 @@ public class ArgsChecker {
     }
 
     private void controlNumberOfArgument(String [] args, Parameter param) {
-        int expected = Integer.parseInt(param.getProperty(args[0]+".numberOfArgument"));
+        int expected = 0;
+        try {
+            expected = Integer.parseInt(param.getProperty(args[0]+".numberOfArgument"));
+        } catch (NumberFormatException e) {
+            logger.error("Unable to parse number of arguments of : {}", param.getProperty(args[0]+".numberOfArgument"));
+            System.exit(-1);
+        }
 
         if ( args.length != expected) {
             logger.error("Invalid number of arguments, expected : {}, actual : {}", expected, args.length);
