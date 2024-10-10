@@ -4,11 +4,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import parameter.Parameter;
 
+import java.util.Arrays;
+
 public class ArgsChecker {
     private static final Logger logger = LogManager.getLogger(ArgsChecker.class);
     private final boolean valid;
     
     public ArgsChecker(String [] args, Parameter param) {
+
+        logger.info("Arguments : {}", Arrays.toString(args));
         //Check argument present :
         if (args.length == 0) {
             logger.error("No argument, end of program.");

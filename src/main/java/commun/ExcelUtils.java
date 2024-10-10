@@ -11,11 +11,13 @@ import org.apache.poi.openxml4j.util.ZipSecureFile;
 import parameter.Parameter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ExcelUtils {
     private static final Logger logger = LogManager.getLogger(ExcelUtils.class);
 
     public static void main(String[] args) throws IOException {
+        logger.debug("Main begins with arguments : {}", Arrays.toString(args));
         new ExcelUtils(args);
     }
 
