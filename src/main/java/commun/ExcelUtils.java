@@ -17,7 +17,9 @@ public class ExcelUtils {
     private static final Logger logger = LogManager.getLogger(ExcelUtils.class);
 
     public static void main(String[] args) throws IOException {
-        logger.debug("Main begins with arguments : {}", Arrays.toString(args));
+        if (logger.isDebugEnabled())
+            logger.debug("Main begins with arguments : {}", Arrays.toString(args));
+
         new ExcelUtils(args);
     }
 

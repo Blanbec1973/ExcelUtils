@@ -12,7 +12,9 @@ public class ArgsChecker {
     
     public ArgsChecker(String [] args, Parameter param) {
 
-        logger.info("Arguments : {}", Arrays.toString(args));
+        if (logger.isInfoEnabled())
+            logger.info("Arguments : {}", Arrays.toString(args));
+
         //Check argument present :
         if (args.length == 0) {
             logger.error("No argument, end of program.");
