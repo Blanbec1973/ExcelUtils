@@ -1,19 +1,20 @@
 package correctionimputation;
 
-import commun.FichierExcel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.heyner.common.ExcelFile;
 
 import java.io.IOException;
 
 
 public class CorrectionImputation {
     private static final Logger logger = LogManager.getLogger(CorrectionImputation.class);
-    private final FichierExcel fichierExcel;
+    private final ExcelFile fichierExcel;
 
     public static void main(String[] args) throws IOException {
         logger.info("Beginning Timesheet correction");
@@ -24,7 +25,7 @@ public class CorrectionImputation {
     }
 
     public CorrectionImputation(String[] args) throws IOException {
-        fichierExcel = new FichierExcel(args[0]);
+        fichierExcel = new ExcelFile(args[0]);
         logger.info("File to proceed : {}", args[0]);
 
         int rowNum = 0;

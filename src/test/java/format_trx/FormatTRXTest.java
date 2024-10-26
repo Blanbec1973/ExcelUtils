@@ -1,7 +1,7 @@
 package format_trx;
 
-import commun.FichierExcel;
 import commun.TestInitializerFactory;
+import org.heyner.common.ExcelFile;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,7 +22,7 @@ class FormatTRXTest {
     void testFormatTrxMain() throws IOException {
         FormatTRX.applyFormatTRX(new String[]{fileName});
 
-        FichierExcel fichierExcel = new FichierExcel(fileName);
+        ExcelFile fichierExcel = new ExcelFile(fileName);
         assertEquals("Business Unit",fichierExcel.getCellValue("sheet1",0,0));
     }
 

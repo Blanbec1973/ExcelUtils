@@ -1,8 +1,8 @@
 package correctionimputation;
 
-import commun.FichierExcel;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.heyner.common.ExcelFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ class CorrectionImputationTest {
     void testCorrectionImputation() throws IOException {
         new CorrectionImputation(new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", "sheet1"});
 
-        FichierExcel fichierExcel = new FichierExcel("target/test/correctionImputation/TrxToCorrect.xlsx");
+        ExcelFile fichierExcel = new ExcelFile("target/test/correctionImputation/TrxToCorrect.xlsx");
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet("sheet1");
         String formula = dataSheet.getRow(10).getCell(56).getCellFormula();
         assertEquals("AC11/8", formula);

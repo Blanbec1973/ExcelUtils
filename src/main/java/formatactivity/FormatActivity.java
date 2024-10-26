@@ -1,21 +1,22 @@
 package formatactivity;
 
-import commun.FichierExcel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.heyner.common.ExcelFile;
 
 import java.io.IOException;
 
 public class FormatActivity {
     private static final Logger logger = LogManager.getLogger(FormatActivity.class);
-    private final FichierExcel fichierExcel;
+    private final ExcelFile fichierExcel;
 
     public FormatActivity(String[] args) throws IOException {
-        fichierExcel = new FichierExcel(args[0]);
+        fichierExcel = new ExcelFile(args[0]);
         logger.info("File to process : {}", args[0]);
 
         Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);

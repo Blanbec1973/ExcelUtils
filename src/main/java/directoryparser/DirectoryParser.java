@@ -1,12 +1,13 @@
 package directoryparser;
 
-import commun.FichierExcel;
+
 import correctionimputation.CorrectionImputation;
 import format_trx.FormatTRX;
 import formatactivity.FormatActivity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import parameter.Parameter;
+import org.heyner.common.ExcelFile;
+import org.heyner.common.Parameter;
 import renamepsa.RenamePSA;
 
 import java.io.File;
@@ -92,7 +93,7 @@ public class DirectoryParser {
         CorrectionImputation.main(trxFile);
     }
     public void renamePSA (File file, String sheet, String cell) throws IOException {
-        FichierExcel fichierExcel = new FichierExcel(file.toString());
+        ExcelFile fichierExcel = new ExcelFile(file.toString());
         String prefix = fichierExcel.getCellValue(sheet,cell);
         fichierExcel.close();
         String newName = file.getParent() + "\\"+ prefix + "-"+file.getName();

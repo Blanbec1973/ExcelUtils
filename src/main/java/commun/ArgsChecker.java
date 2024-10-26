@@ -2,7 +2,8 @@ package commun;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import parameter.Parameter;
+import org.heyner.common.Parameter;
+
 
 import java.util.Arrays;
 

@@ -1,8 +1,8 @@
 package renamepsa;
 
-import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.heyner.common.ExcelFile;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -63,7 +63,7 @@ public class RenamePSA {
     }
 
     private static String retrievePrefix(String[] args, File fichier) throws IOException {
-        FichierExcel fichierExcel = new FichierExcel(fichier.toString());
+        ExcelFile fichierExcel = new ExcelFile(fichier.toString());
         String prefix = fichierExcel.getCellValue(args[2], args[3]);
         fichierExcel.close();
         return prefix;

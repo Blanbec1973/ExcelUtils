@@ -1,12 +1,13 @@
 package analyzetrx;
 
-import commun.FichierExcel;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
-import parameter.Parameter;
+import org.heyner.common.ExcelFile;
+import org.heyner.common.Parameter;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class AnalyzeTRX {
     }
 
     private void checkFormula(String fileName) throws IOException {
-        FichierExcel excelFile = new FichierExcel(fileName);
+         ExcelFile excelFile = new ExcelFile(fileName);
         for (Row row : excelFile.getWorkBook().getSheet(sheetOut)) {
                 excelFile.evaluateFormulaCell(row.getCell(54));
                 excelFile.evaluateFormulaCell(row.getCell(55));
@@ -52,8 +53,8 @@ public class AnalyzeTRX {
 
     private void transferData(String fileName) throws IOException {
 
-        FichierExcel excelIn = new FichierExcel(fileName);
-        FichierExcel excelOut = new FichierExcel(System.getProperty("user.dir") + "/Analyze TRX.xlsx");
+        ExcelFile excelIn = new ExcelFile(fileName);
+        ExcelFile excelOut = new ExcelFile(System.getProperty("user.dir") + "/Analyze TRX.xlsx");
         Integer rowCount = excelIn.rowCount(sheetIn, 0);
 
         // Creating Range A2:BB3000)

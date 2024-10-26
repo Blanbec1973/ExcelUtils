@@ -1,8 +1,8 @@
 package format_trx;
 
-import commun.FichierExcel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.heyner.common.ExcelFile;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ public class FormatTRX {
     }
 
     public static void applyFormatTRX(String[] args) throws IOException {
-        FichierExcel fichierExcel = new FichierExcel(args[0]);
+        ExcelFile fichierExcel = new ExcelFile(args[0]);
         logger.info("File to process : {}", args[0]);
         fichierExcel.deleteFirstLineContaining("sheet1","Transaction analysis");
         fichierExcel.writeFichierExcel();

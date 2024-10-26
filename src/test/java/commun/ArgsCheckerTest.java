@@ -1,8 +1,8 @@
 package commun;
 
 import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
+import org.heyner.common.Parameter;
 import org.junit.jupiter.api.Test;
-import parameter.Parameter;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

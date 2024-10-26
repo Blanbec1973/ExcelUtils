@@ -1,9 +1,10 @@
 package fusiontrx;
 
-import commun.FichierExcel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.heyner.common.ExcelFile;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -35,13 +36,13 @@ public class FusionTRX {
     }
 
     private void processList(File[] listFiles, String pathFusion) throws IOException {
-        FichierExcel fusion = new FichierExcel(pathFusion + "FusionTRX.xlsx");
+        ExcelFile fusion = new ExcelFile(pathFusion + "FusionTRX.xlsx");
         Sheet sheetFusion = fusion.createSheet("Fusion");
         Integer rowOffset = 0;
         boolean ignoreFirstLine = false;
 
         for (File file : listFiles) {
-            FichierExcel excelIn = new FichierExcel(file.getAbsolutePath());
+            ExcelFile excelIn = new ExcelFile(file.getAbsolutePath());
             logger.info("File {} opened.",file.getName());
             Sheet sheetIn = excelIn.getWorkBook().getSheet("sheet1");
             rowOffset=excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);

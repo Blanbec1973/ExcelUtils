@@ -8,7 +8,7 @@ import fusiontrx.FusionTRX;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
-import parameter.Parameter;
+import org.heyner.common.Parameter;
 
 import java.io.IOException;
 import java.util.Arrays;
