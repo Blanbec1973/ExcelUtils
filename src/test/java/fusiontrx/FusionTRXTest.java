@@ -1,7 +1,7 @@
 package fusiontrx;
 
 
-import commun.TestInitializerFactory;
+import main.TestInitializerFactory;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;

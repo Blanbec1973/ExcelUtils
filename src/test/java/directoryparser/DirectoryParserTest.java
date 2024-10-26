@@ -1,7 +1,7 @@
 package directoryparser;
 
 import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
-import commun.TestInitializerFactory;
+import main.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

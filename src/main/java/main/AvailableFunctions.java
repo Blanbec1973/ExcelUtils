@@ -1,4 +1,4 @@
-package commun;
+package main;
 
 public enum AvailableFunctions {
     ANALYZE_TRX,

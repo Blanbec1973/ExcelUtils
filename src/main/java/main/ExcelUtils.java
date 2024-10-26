@@ -1,4 +1,4 @@
-package commun;
+package main;
 
 import analyzetrx.AnalyzeTRX;
 import directoryparser.DirectoryParser;

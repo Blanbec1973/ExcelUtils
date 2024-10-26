@@ -31,7 +31,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>commun.ExcelUtils</mainClass>
+                            <mainClass>main.ExcelUtils</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -73,7 +73,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>commun.ExcelUtils</mainClass>
+                            <mainClass>main.ExcelUtils</mainClass>
                         </manifest>
                     </archive>
                     <finalName>ExcelUtils</finalName>

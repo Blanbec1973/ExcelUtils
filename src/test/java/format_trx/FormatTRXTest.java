@@ -1,6 +1,6 @@
 package format_trx;
 
-import commun.TestInitializerFactory;
+import main.TestInitializerFactory;
 import org.heyner.common.ExcelFile;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package commun;
+package main;
 
 import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import org.heyner.common.Parameter;

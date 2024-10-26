@@ -1,4 +1,4 @@
-package commun;
+package main;
 
 import org.apache.commons.io.FileUtils;
 

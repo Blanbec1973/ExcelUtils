@@ -2,7 +2,7 @@ package renamepsa;
 
 import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
 import com.ginsberg.junit.exit.SystemExitPreventedException;
-import commun.TestInitializerFactory;
+import main.TestInitializerFactory;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
