@@ -39,7 +39,7 @@ public class ArgsChecker {
         try {
             expected = Integer.parseInt(param.getProperty(args[0]+".numberOfArgument"));
         } catch (NumberFormatException e) {
-            logger.error("Unable to parse number of arguments of : {}", param.getProperty(args[0]+".numberOfArgument"));
+            logger.error("Unable to parse number of arguments of : {}", args[0]+".numberOfArgument");
             System.exit(-1);
         }
 
