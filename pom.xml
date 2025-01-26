@@ -22,6 +22,12 @@
             <url>file:///C:/Users/heynerr/Downloads\PsaFiles</url>
         </repository>
     </distributionManagement>
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/blanbec1973/common</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
