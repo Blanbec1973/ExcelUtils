@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.common.ExcelFile;
 import org.heyner.common.Parameter;
-import renamepsa.RenamePSA;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -78,13 +77,13 @@ public class DirectoryParser {
     }
     public void processActivityRename(File file) throws IOException {
         logger.info("Process rename activity file : {}", file);
-        if (RenamePSA.checkAbsenceOfPrefix(file))
+        if (checkAbsenceOfPrefix(file))
             renamePSA(file,SHEET_1,"G3");
     }
 
     public void processTrxRename(File file) throws IOException {
         logger.info("Process renameTRX file : {}", file);
-        if (RenamePSA.checkAbsenceOfPrefix(file))
+        if (checkAbsenceOfPrefix(file))
             renamePSA(file,SHEET_1,"B3");
     }
     public void processCorrectionImputation(File file) throws IOException {
@@ -96,9 +95,15 @@ public class DirectoryParser {
         ExcelFile fichierExcel = new ExcelFile(file.toString());
         String prefix = fichierExcel.getCellValue(sheet,cell);
         fichierExcel.close();
-        String newName = file.getParent() + "\\"+ prefix + "-"+file.getName();
-        logger.info("Nouveau nom1 : {}", newName);
+        String newName = file.getParent() + "/"+ prefix + "-"+file.getName();
         File dest = new File(newName);
-        if (file.renameTo(dest)) logger.info("Nouveau nom2 : {}", newName);
+        if (file.renameTo(dest)) logger.info("Nouveau nom : {}", newName);
+    }
+
+    private boolean checkAbsenceOfPrefix(File fichier) {
+        String fileName = fichier.getName();
+        if (fileName.length()<15) return true;
+        String prefix = fileName.substring(0,15);
+        return (!prefix.matches("\\d+")) ;
     }
 }

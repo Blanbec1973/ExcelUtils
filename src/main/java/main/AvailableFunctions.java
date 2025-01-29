@@ -6,6 +6,5 @@ public enum AvailableFunctions {
     DIRECTORY_PARSER,
     FORMAT_TRX,
     FORMAT_ACTIVITY,
-    FUSION_TRX,
-    RENAME_PSA
+    FUSION_TRX
 }

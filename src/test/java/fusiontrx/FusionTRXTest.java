@@ -18,7 +18,7 @@ class FusionTRXTest {
     @BeforeEach
     void setUp() throws IOException {
         TestInitializerFactory.action(this.getClass().getSimpleName());
-        File f = new File ("target/temp-FusionTRXTest/fusion/fusionTRX.xlsx");
+        File f = new File ("target/temp-FusionTRXTest/fusion/FusionTRX.xlsx");
         if (f.exists())
             f.delete();
     }
@@ -28,7 +28,7 @@ class FusionTRXTest {
         new FusionTRX(new String[] {"FUSION_TRX", "target/temp-FusionTRXTest/fusion/",
                                                         "target/temp-FusionTRXTest/fusion/"});
 
-        ExcelFile fichierExcel = new ExcelFile("target/temp-FusionTRXTest/fusion/fusionTRX.xlsx");
+        ExcelFile fichierExcel = new ExcelFile("target/temp-FusionTRXTest/fusion/FusionTRX.xlsx");
         int rowNum = 0;
         float foreignAmountCum = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet("Fusion");
