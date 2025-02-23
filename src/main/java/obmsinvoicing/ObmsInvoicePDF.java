@@ -39,6 +39,8 @@ public class ObmsInvoicePDF {
         obmsInvoice.setTechnicalContact(findTechnicalContact());
         obmsInvoice.setNumberOfDays(findNumberOfDays());
         obmsInvoice.setPricePerDay(findPricePerDay());
+        obmsInvoice.check();
+        obmsInvoice.buildInvoiceDescription();
     }
 
     private String findProjectReference() {

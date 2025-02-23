@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class ObmsInvoice {
     private static final Logger logger = LogManager.getLogger(ObmsInvoice.class);
@@ -96,5 +98,28 @@ public class ObmsInvoice {
     }
 
 
+    public void check() {
+        float result = numberOfDays * pricePerDay ;
+        if (result != totalAmount) {
+            logger.error("Integrity control KO : nbj * PVJ <> totalAmount.");
+            logger.error("nbj = {}, PVJ = {}, totalAmount = {}", numberOfDays, pricePerDay, totalAmount);
+        }
+    }
 
+    public String buildInvoiceDescription() {
+        StringBuilder invoiceDescription = new StringBuilder();
+        invoiceDescription.append("Projet : ");
+        invoiceDescription.append(projectRefence);
+        invoiceDescription.append(", commande : ");
+        invoiceDescription.append(orderReference);
+        invoiceDescription.append(", ");
+        invoiceDescription.append(buildMonthLabel(dateFrom));
+        return invoiceDescription.toString();
+    }
+
+    private String buildMonthLabel(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.FRANCE);
+        String nomMois = date.format(formatter);
+        return nomMois.substring(0,1).toUpperCase()+nomMois.substring(1);
+    }
 }
