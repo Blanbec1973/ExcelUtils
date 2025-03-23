@@ -13,11 +13,15 @@ public class FormatTRX {
 
     }
 
-    public static void applyFormatTRX(String[] args) throws IOException {
-        ExcelFile fichierExcel = new ExcelFile(args[0]);
+    public static void applyFormatTRX(String[] args) {
         logger.info("File to process : {}", args[0]);
-        fichierExcel.deleteFirstLineContaining("sheet1","Transaction analysis");
-        fichierExcel.writeFichierExcel();
+        try (ExcelFile fichierExcel = new ExcelFile(args[0])) {
+            fichierExcel.deleteFirstLineContaining("sheet1","Transaction analysis");
+            fichierExcel.writeFichierExcel();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+
     }
 
 
