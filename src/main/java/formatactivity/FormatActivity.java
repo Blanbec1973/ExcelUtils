@@ -13,21 +13,24 @@ import java.io.IOException;
 
 public class FormatActivity {
     private static final Logger logger = LogManager.getLogger(FormatActivity.class);
-    private final ExcelFile fichierExcel;
 
-    public FormatActivity(String[] args) throws IOException {
-        fichierExcel = new ExcelFile(args[0]);
-        logger.info("File to process : {}", args[0]);
+    public FormatActivity(String[] args) {
+        try(ExcelFile fichierExcel = new ExcelFile(args[0])) {
+            logger.info("File to process : {}", args[0]);
 
-        Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
-        hideUnusefulColumns(dataSheet);
+            Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
+            hideUnusefulColumns(dataSheet);
 
-        createColumnNoTax(dataSheet);
+            createColumnNoTax(fichierExcel, dataSheet);
 
-        dataSheet.setAutoFilter(new CellRangeAddress(0,0,0,27));
+            dataSheet.setAutoFilter(new CellRangeAddress(0,0,0,27));
 
-        fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
-        fichierExcel.writeFichierExcel();
+            fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
+            fichierExcel.writeFichierExcel();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+
     }
 
     private void hideUnusefulColumns(Sheet dataSheet) {
@@ -54,7 +57,7 @@ public class FormatActivity {
         dataSheet.setColumnHidden(26, true);
     }
 
-    private void createColumnNoTax(Sheet dataSheet) {
+    private void createColumnNoTax(ExcelFile excelFile, Sheet dataSheet) {
         for (Row row : dataSheet) {
             if (row.getRowNum() == 1) {
                 row.createCell(27).setCellValue("Mt HT");
@@ -66,7 +69,7 @@ public class FormatActivity {
                 int rowNum = row.getRowNum()+1;
                 String formula = "S" + rowNum+"/1.2" ;
                 row.createCell(27).setCellFormula(formula);
-                fichierExcel.evaluateFormulaCell(row.getCell(27));
+                excelFile.evaluateFormulaCell(row.getCell(27));
             }
 
         }

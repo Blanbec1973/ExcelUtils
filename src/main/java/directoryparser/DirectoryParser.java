@@ -65,12 +65,12 @@ public class DirectoryParser {
         }
     }
 
-    public void processFormatTRX(File file) throws IOException {
+    public void processFormatTRX(File file) {
         logger.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};
         FormatTRX.applyFormatTRX(trxFile);
     }
-    public void processActivity(File file) throws IOException {
+    public void processActivity(File file) {
         logger.info("Process activity file : {}", file);
         String [] activityFile = { file.toString()};
         new FormatActivity(activityFile);
