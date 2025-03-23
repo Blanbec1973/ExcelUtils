@@ -12,11 +12,11 @@ import java.io.IOException;
 
 public class FusionTRX {
     private static final Logger logger = LogManager.getLogger(FusionTRX.class);
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new FusionTRX(args);
     }
 
-    public FusionTRX(String [] args) throws IOException {
+    public FusionTRX(String [] args) {
 
         String directoryToProcess = (args[1].equals("")) ? System.getProperty("user.dir")+"\\" : args[1];
         String pathFusion = args[2];
@@ -35,21 +35,33 @@ public class FusionTRX {
         logger.info("Program ends normally.");
     }
 
-    private void processList(File[] listFiles, String pathFusion) throws IOException {
-        ExcelFile fusion = new ExcelFile(pathFusion + "FusionTRX.xlsx");
-        Sheet sheetFusion = fusion.createSheet("Fusion");
-        Integer rowOffset = 0;
-        boolean ignoreFirstLine = false;
+    private void processList(File[] listFiles, String pathFusion) {
+        try (ExcelFile fusion = new ExcelFile(pathFusion + "FusionTRX.xlsx")) {
+            Sheet sheetFusion = fusion.createSheet("Fusion");
+            int rowOffset = 0;
+            boolean ignoreFirstLine = false;
 
-        for (File file : listFiles) {
-            ExcelFile excelIn = new ExcelFile(file.getAbsolutePath());
-            logger.info("File {} opened.",file.getName());
-            Sheet sheetIn = excelIn.getWorkBook().getSheet("sheet1");
-            rowOffset=excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
-            ignoreFirstLine = true;
+            for (File file : listFiles) {
+                rowOffset = mergeFile(file, sheetFusion, ignoreFirstLine, rowOffset);
+                ignoreFirstLine = true;
+            }
+            fusion.writeFichierExcel();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            System.exit(-1);
         }
-        fusion.writeFichierExcel();
     }
 
+    private int mergeFile(File file, Sheet sheetFusion, boolean ignoreFirstLine, int rowOffset) {
+        try (ExcelFile excelIn = new ExcelFile(file.getAbsolutePath())) {
+            logger.info("File {} opened.",file.getName());
+            Sheet sheetIn = excelIn.getWorkBook().getSheet("sheet1");
+            return excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            System.exit(-1);
+        }
+        return 0;
+    }
 
 }
