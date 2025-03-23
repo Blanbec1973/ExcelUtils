@@ -21,7 +21,7 @@ public class AnalyzeTRX {
     private final String sheetIn= param.getProperty("AnalyzeTRX.sheetIn");
     private final String sheetOut= param.getProperty("AnalyzeTRX.sheetOut");
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (args.length == 0) {
             logger.error("No argument, end of program.");
             System.exit(-1);
@@ -29,7 +29,7 @@ public class AnalyzeTRX {
         new AnalyzeTRX(args);
     }
 
-    public AnalyzeTRX(String [] args) throws IOException {
+    public AnalyzeTRX(String [] args) {
         long start = System.currentTimeMillis();
         logger.info("Beginning {}",args[0]);
         cloneModel();
@@ -41,33 +41,39 @@ public class AnalyzeTRX {
         logger.info("Program ends normally in {} ms.", System.currentTimeMillis()-start);
     }
 
-    private void checkFormula(String fileName) throws IOException {
-         ExcelFile excelFile = new ExcelFile(fileName);
-        for (Row row : excelFile.getWorkBook().getSheet(sheetOut)) {
+    private void checkFormula(String fileName) {
+        try (ExcelFile excelFile = new ExcelFile(fileName)) {
+            for (Row row : excelFile.getWorkBook().getSheet(sheetOut)) {
                 excelFile.evaluateFormulaCell(row.getCell(54));
                 excelFile.evaluateFormulaCell(row.getCell(55));
             }
-        excelFile.writeFichierExcel();
+            excelFile.writeFichierExcel();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+
 
     }
 
-    private void transferData(String fileName) throws IOException {
+    private void transferData(String fileName) {
+        try (ExcelFile excelIn = new ExcelFile(fileName);
+        ExcelFile excelOut = new ExcelFile(System.getProperty("user.dir") + "/Analyze TRX.xlsx")) {
+            Integer rowCount = excelIn.rowCount(sheetIn, 0);
 
-        ExcelFile excelIn = new ExcelFile(fileName);
-        ExcelFile excelOut = new ExcelFile(System.getProperty("user.dir") + "/Analyze TRX.xlsx");
-        Integer rowCount = excelIn.rowCount(sheetIn, 0);
+            // Creating Range A2:BB3000)
+            excelIn.setTileRange(new CellRangeAddress(1, rowCount - 1, 0, 53));
+            excelOut.setTileRange(new CellRangeAddress(1, rowCount - 1, 0, 53));
+            excelIn.copyRange(excelOut, sheetIn, sheetOut);
 
-        // Creating Range A2:BB3000)
-        excelIn.setTileRange(new CellRangeAddress(1, rowCount - 1, 0, 53));
-        excelOut.setTileRange(new CellRangeAddress(1, rowCount - 1, 0, 53));
-        excelIn.copyRange(excelOut, sheetIn, sheetOut);
+            // Creating Range A2:BB3000)
+            excelIn.setTileRange(new CellRangeAddress(1, rowCount - 1, 56, 56));
+            excelOut.setTileRange(new CellRangeAddress(1, rowCount - 1, 56, 56));
+            excelIn.copyRange(excelOut, sheetIn, sheetOut);
 
-        // Creating Range A2:BB3000)
-        excelIn.setTileRange(new CellRangeAddress(1, rowCount - 1, 56, 56));
-        excelOut.setTileRange(new CellRangeAddress(1, rowCount - 1, 56, 56));
-        excelIn.copyRange(excelOut, sheetIn, sheetOut);
-
-        excelOut.writeFichierExcel();
+            excelOut.writeFichierExcel();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private void cloneModel() {
