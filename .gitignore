@@ -42,3 +42,5 @@ build/
 /.idea/
 /logs/
 /out/
+/.env
+/run-sonar.ps1
