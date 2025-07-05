@@ -47,7 +47,11 @@ class DirectoryParserTest {
     }
     @Test
     void testDirectoryParser2() {
-        new File("target/empty").mkdir();
+        File dir = new File("target/empty");
+        if (!dir.exists() && !dir.mkdir()) {
+            throw new RuntimeException("Impossible de créer le dossier : " + dir.getAbsolutePath());
+        }
+
         DirectoryParser d1 = new DirectoryParser(correctionImputation, formatActivity);
         assertThrows(GracefulExitException.class,
                 () -> d1.execute("directory_parser", "target/empty/")

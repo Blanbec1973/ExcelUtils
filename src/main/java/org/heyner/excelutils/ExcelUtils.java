@@ -1,8 +1,6 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.openxml4j.util.ZipSecureFile;
-import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -52,8 +50,6 @@ public class ExcelUtils implements CommandLineRunner {
     public ExcelUtils(ApplicationProperties applicationProperties, List<CommandService> services, ArgsChecker argsChecker) {
         this.applicationProperties = applicationProperties;
         this.argsChecker = argsChecker;
-        ZipSecureFile.setMinInflateRatio(0.001);
-        IOUtils.setByteArrayMaxOverride(200000000);
 
         this.commandMap = services.stream()
                 .collect(Collectors.toMap(CommandService::getCommandName, s -> s));
@@ -74,6 +70,9 @@ public class ExcelUtils implements CommandLineRunner {
         String command = args[0].toLowerCase();
         log.info("Command : *{}*",command);
         CommandService service = commandMap.get(command);
+        if (service == null) {
+            throw new FatalApplicationException("Unknown command: " + command, 2);
+        }
         service.execute(args);
     }
 }
