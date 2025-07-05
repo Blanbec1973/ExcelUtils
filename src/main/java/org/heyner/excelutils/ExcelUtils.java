@@ -38,11 +38,15 @@ public class ExcelUtils implements CommandLineRunner {
         } catch (FatalApplicationException e) {
             log.error("Fatal Error : {}", e.getMessage());
             exitCode = e.getExitCode();
+        } catch (GracefulExitException e) {
+            log.info("Program ends normally : {}", e.getMessage());
+            exitCode = e.getExitCode();
         } finally {
             if (context != null) {
                 context.close();
             }
         }
+        System.exit(exitCode);
     }
     @Autowired
     public ExcelUtils(ApplicationProperties applicationProperties, List<CommandService> services, ArgsChecker argsChecker) {
