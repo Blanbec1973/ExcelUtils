@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Arrays;
@@ -29,10 +30,18 @@ public class ExcelUtils implements CommandLineRunner {
         if (log.isInfoEnabled())
             log.info("Main begins with arguments : {}", Arrays.toString(args));
 
-        SpringApplication.run(ExcelUtils.class,args);
+        ConfigurableApplicationContext context = null;
+        int exitCode = 0;
 
-        if (args.length == 0) {
-            log.info("Aucun argument fourni. Lancement en mode test ou défaut.");
+        try {
+            SpringApplication.run(ExcelUtils.class, args);
+        } catch (FatalApplicationException e) {
+            log.error("Fatal Error : {}", e.getMessage());
+            exitCode = e.getExitCode();
+        } finally {
+            if (context != null) {
+                context.close();
+            }
         }
     }
     @Autowired
