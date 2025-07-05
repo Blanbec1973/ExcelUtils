@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -50,7 +48,6 @@ class ArgsCheckerTest {
     void shouldThrowExceptionWhenNumberOfArgumentsIsInvalid() {
         String[] args = {"directoryparser", "arg1"};
 
-        //expected = commandProperties.getCommands().get(args[0]).getCounterarguments();
         CommandProperties.CommandConfig mockConfig = mock(CommandProperties.CommandConfig.class);
         when(mockConfig.getCounterarguments()).thenReturn(3);
 
@@ -62,11 +59,11 @@ class ArgsCheckerTest {
         when(commandProperties.getCommands()).thenReturn(mockMap);
 
         // Instancier ArgsChecker avec le mock
-        ArgsChecker argsChecker = new ArgsChecker(commandProperties);
+        ArgsChecker argsChecker2 = new ArgsChecker(commandProperties);
 
         FatalApplicationException exception = assertThrows(
                 FatalApplicationException.class,
-                () -> argsChecker.validate(args)
+                () -> argsChecker2.validate(args)
         );
         System.out.println("Message : "+exception.getMessage());
         assertTrue(exception.getMessage().contains("Invalid number of arguments"));
@@ -88,36 +85,13 @@ class ArgsCheckerTest {
         when(commandProperties.getCommands()).thenReturn(mockMap);
 
         // Instancier ArgsChecker avec le mock
-        ArgsChecker argsChecker = new ArgsChecker(commandProperties);
+        ArgsChecker argsChecker3 = new ArgsChecker(commandProperties);
 
         // Appel réel
-        boolean result = argsChecker.validate(args);
+        boolean result = argsChecker3.validate(args);
 
         // Vérification
         assertTrue(result);
     }
-
 }
 
-/*
-package org.heyner.excelutils;
-
-        import org.junit.jupiter.api.Test;
-        import org.springframework.boot.test.context.SpringBootTest;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
-class ArgsCheckerTest {
-
-    @Autowired
-    private ArgsChecker argsChecker;
-
-
-
-
-
-
-
-    // Tu peux aussi ajouter un test de succès si tu veux tester un cas valide
-} */

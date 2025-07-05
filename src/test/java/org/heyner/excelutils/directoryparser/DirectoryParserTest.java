@@ -44,14 +44,12 @@ class DirectoryParserTest {
 
         assertTrue(Files.exists(Paths.get(fileName1)));
         assertTrue(Files.exists(Paths.get(fileName2)));
-
     }
     @Test
     void testDirectoryParser2() {
         new File("target/empty").mkdir();
         DirectoryParser d1 = new DirectoryParser(correctionImputation, formatActivity);
-        GracefulExitException exception = assertThrows(
-                GracefulExitException.class,
+        assertThrows(GracefulExitException.class,
                 () -> d1.execute("directory_parser", "target/empty/")
         );
     }
