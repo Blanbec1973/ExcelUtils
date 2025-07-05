@@ -22,14 +22,12 @@ public class ArgsChecker {
 
         //Check argument present :
         if (args.length == 0) {
-            log.error("No argument, end of program.");
-            System.exit(-1);
+            throw new FatalApplicationException("No argument, end of program.", -1);
         }
 
         // Check function (first argument) :
         if (!AvailableFunctions.isFunctionValid(args[0])) {
-            log.error("Invalid function : {}", args[0]);
-            System.exit(-1);
+            throw new FatalApplicationException("Invalid function: " + args[0], -1);
         }
 
         //Check number of argument for thr function :
@@ -39,18 +37,17 @@ public class ArgsChecker {
     }
 
     private void controlNumberOfArgument(String [] args) {
-        int expected = 0;
+        int expected;
         try {
             log.info("Config : {}",commandProperties.getCommands().toString());
             expected = commandProperties.getCommands().get(args[0]).getCounterarguments();
-        } catch (NumberFormatException e) {
-            log.error("Unable to parse number of arguments of : {}", args[0]+".numberOfArgument");
-            System.exit(-1);
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new FatalApplicationException("Unable to parse number of arguments for function: " + args[0], -1);
         }
 
         if ( args.length != expected) {
-            log.error("Invalid number of arguments, expected : {}, actual : {}", expected, args.length);
-            System.exit(-1);
+            throw new FatalApplicationException("Invalid number of arguments, expected: " + expected +
+                                                ", actual: " + args.length, -1);
         }
 
     }

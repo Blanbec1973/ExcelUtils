@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.GracefulExitException;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
 import org.heyner.excelutils.formatactivity.FormatActivity;
@@ -48,8 +49,7 @@ public class DirectoryParser implements CommandService {
         listFiles = myDirectory.listFiles(filter);
 
         if (isListFilesEmpty()) {
-            log.info("No file to process in {}", directoryToProcess);
-            System.exit(0);
+            throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
         }
         processList();
     }

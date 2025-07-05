@@ -1,6 +1,6 @@
 package org.heyner.excelutils.directoryparser;
 
-import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
+import org.heyner.excelutils.GracefulExitException;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.formatactivity.FormatActivity;
@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
@@ -45,14 +44,13 @@ class DirectoryParserTest {
 
         assertTrue(Files.exists(Paths.get(fileName1)));
         assertTrue(Files.exists(Paths.get(fileName2)));
-
     }
     @Test
-    @ExpectSystemExitWithStatus(0)
-    void testDirectoryParser2() throws IOException {
+    void testDirectoryParser2() {
         new File("target/empty").mkdir();
         DirectoryParser d1 = new DirectoryParser(correctionImputation, formatActivity);
-        d1.execute("directory_parser", "target/empty/");
-        assertTrue(d1.isListFilesEmpty());
+        assertThrows(GracefulExitException.class,
+                () -> d1.execute("directory_parser", "target/empty/")
+        );
     }
 }

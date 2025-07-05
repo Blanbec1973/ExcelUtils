@@ -4,6 +4,8 @@ package org.heyner.excelutils.fusiontrx;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
+import org.heyner.excelutils.FatalApplicationException;
+import org.heyner.excelutils.GracefulExitException;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -26,8 +28,7 @@ public class FusionTRX {
         File[] listFiles = myDirectory.listFiles(filter);
         assert listFiles != null;
         if (listFiles.length == 0) {
-            log.info("No file to process in {}", directoryToProcess);
-            System.exit(0);
+            throw new GracefulExitException("No file to process in {}"+ directoryToProcess,0);
         }
         this.processList(listFiles, pathFusion);
         log.info("Program ends normally.");
@@ -45,8 +46,7 @@ public class FusionTRX {
             }
             fusion.writeFichierExcel();
         } catch (IOException e) {
-            log.error(e.getMessage());
-            System.exit(-1);
+            throw new FatalApplicationException(e.getMessage(),-1);
         }
     }
 
@@ -56,10 +56,7 @@ public class FusionTRX {
             Sheet sheetIn = excelIn.getWorkBook().getSheet("sheet1");
             return excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
         } catch (IOException e) {
-            log.error(e.getMessage());
-            System.exit(-1);
+            throw new FatalApplicationException(e.getMessage(),-1);
         }
-        return 0;
     }
-
 }

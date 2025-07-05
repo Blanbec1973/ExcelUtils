@@ -1,53 +1,97 @@
 package org.heyner.excelutils;
 
-import com.ginsberg.junit.exit.ExpectSystemExitWithStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.HashMap;
+import java.util.Map;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {ArgsChecker.class,CommandProperties.class})
-@EnableConfigurationProperties(CommandProperties.class)
-@TestPropertySource("classpath:application.properties")
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+
+@ExtendWith(MockitoExtension.class)
 class ArgsCheckerTest {
-
     @Autowired
     private ArgsChecker argsChecker;
-
-    @Test
-    @ExpectSystemExitWithStatus(-1)
-    void testArgumentNull() {
-        String [] tabNull={};
-        argsChecker.validate(tabNull);
-        assertTrue(true);
+    @Mock
+    private CommandProperties commandProperties;
+    @BeforeEach
+    void setUp() {
+        argsChecker = new ArgsChecker(commandProperties);
     }
-
     @Test
-    @ExpectSystemExitWithStatus(-1)
-    void testInvalidFunction() {
-        String [] tab1 = {"INVALID"};
-        argsChecker.validate(tab1);
-        assertTrue(true);
+    void shouldThrowExceptionWhenNoArguments() {
+        FatalApplicationException exception = assertThrows(
+                FatalApplicationException.class,
+                () -> argsChecker.validate(new String[]{})
+        );
+        assertEquals("No argument, end of program.", exception.getMessage());
+        assertEquals(-1, exception.getExitCode());
     }
-
     @Test
-    @ExpectSystemExitWithStatus(-1)
-    void testInvalidNumberOfArguments() {
-        String [] tab1 = {"fusiontrx"};
-        assertFalse(argsChecker.validate(tab1));
+    void shouldThrowExceptionWhenFunctionIsInvalid() {
+        String[] args = {"invalidFunction"};
+        FatalApplicationException exception = assertThrows(
+                FatalApplicationException.class,
+                () -> argsChecker.validate(args)
+        );
+        assertTrue(exception.getMessage().contains("Invalid function"));
+        assertEquals(-1, exception.getExitCode());
     }
-
     @Test
-    void testValidArgument() {
-        String [] tab1 = {"fusiontrx", "1"};
-        assertTrue( argsChecker.validate(tab1));
-    }
+    void shouldThrowExceptionWhenNumberOfArgumentsIsInvalid() {
+        String[] args = {"directoryparser", "arg1"};
 
+        CommandProperties.CommandConfig mockConfig = mock(CommandProperties.CommandConfig.class);
+        when(mockConfig.getCounterarguments()).thenReturn(3);
+
+        // Créer une map contenant la fonction "validFunction"
+        Map<String, CommandProperties.CommandConfig> mockMap = new HashMap<>();
+        mockMap.put("directoryparser", mockConfig);
+
+        // Configurer le mock de commandProperties
+        when(commandProperties.getCommands()).thenReturn(mockMap);
+
+        // Instancier ArgsChecker avec le mock
+        ArgsChecker argsChecker2 = new ArgsChecker(commandProperties);
+
+        FatalApplicationException exception = assertThrows(
+                FatalApplicationException.class,
+                () -> argsChecker2.validate(args)
+        );
+        System.out.println("Message : "+exception.getMessage());
+        assertTrue(exception.getMessage().contains("Invalid number of arguments"));
+        assertEquals(-1, exception.getExitCode());
+    }
+    @Test
+    void shouldPassValidationWithValidArguments() {
+        String[] args = {"directoryparser", "arg1", "arg2"};
+
+        // Mock de la config de la commande
+        CommandProperties.CommandConfig mockConfig = mock(CommandProperties.CommandConfig.class);
+        when(mockConfig.getCounterarguments()).thenReturn(3);
+
+        // Mock de la map des commandes
+        Map<String, CommandProperties.CommandConfig> mockMap = Map.of("directoryparser", mockConfig);
+        when(commandProperties.getCommands()).thenReturn(mockMap);
+
+        // Configurer le mock de commandProperties
+        when(commandProperties.getCommands()).thenReturn(mockMap);
+
+        // Instancier ArgsChecker avec le mock
+        ArgsChecker argsChecker3 = new ArgsChecker(commandProperties);
+
+        // Appel réel
+        boolean result = argsChecker3.validate(args);
+
+        // Vérification
+        assertTrue(result);
+    }
 }
+

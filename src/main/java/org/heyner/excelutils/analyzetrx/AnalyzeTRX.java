@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.FatalApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ public class AnalyzeTRX implements CommandService {
             }
             excelFile.writeFichierExcel();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            throw new FatalApplicationException(e.getMessage(),-1);
         }
 
 
@@ -79,7 +80,7 @@ public class AnalyzeTRX implements CommandService {
 
             excelOut.writeFichierExcel();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            throw new FatalApplicationException(e.getMessage(),-1);
         }
     }
 
@@ -90,8 +91,7 @@ public class AnalyzeTRX implements CommandService {
         try {
             FileUtils.copyFile(in, out);
         } catch (IOException e) {
-            log.error(e.getMessage());
-            System.exit(-1);
+            throw new FatalApplicationException(e.getMessage(),-1);
         }
     }
 
