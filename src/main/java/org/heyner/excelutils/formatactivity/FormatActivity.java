@@ -32,7 +32,6 @@ public class FormatActivity implements CommandService {
     }
 
     private void hideUnusefulColumns(Sheet dataSheet) {
-        dataSheet.getRow(0).setZeroHeight(true);
 
         dataSheet.setColumnHidden(0, true);
         dataSheet.setColumnHidden(1, true);
