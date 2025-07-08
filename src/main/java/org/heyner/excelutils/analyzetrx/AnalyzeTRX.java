@@ -1,7 +1,6 @@
 package org.heyner.excelutils.analyzetrx;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.ExcelFile;
@@ -10,8 +9,10 @@ import org.heyner.excelutils.FatalApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @Slf4j
@@ -35,14 +36,14 @@ public class AnalyzeTRX implements CommandService {
     @Override
     public void execute(String... args) {
         long start = System.currentTimeMillis();
-        String currentPath = System.getProperty("user.dir");
-        pathModel = currentPath+analyzeTRXConfig.getPathModel();
-        pathResultFile=currentPath+analyzeTRXConfig.getPathResultFile();
+        String pathInput = args[1];
+        pathModel = analyzeTRXConfig.getPathModel();
+        pathResultFile=analyzeTRXConfig.getPathResultFile();
         sheetIn= analyzeTRXConfig.getSheetIn();
         sheetOut= analyzeTRXConfig.getSheetOut();
         log.info("Beginning {}",args[0]);
         cloneModel();
-        transferData(args[1]);
+        transferData(pathInput);
         checkFormula(pathResultFile);
 
         log.info("Program ends normally in {} ms.", System.currentTimeMillis()-start);
@@ -59,13 +60,11 @@ public class AnalyzeTRX implements CommandService {
         } catch (IOException e) {
             throw new FatalApplicationException(e.getMessage(),-1);
         }
-
-
     }
 
-    private void transferData(String fileName) {
-        try (ExcelFile excelIn = new ExcelFile(fileName);
-        ExcelFile excelOut = new ExcelFile(System.getProperty("user.dir") + "/Analyze TRX.xlsx")) {
+    private void transferData(String inputFileName) {
+        try (ExcelFile excelIn = new ExcelFile(inputFileName);
+        ExcelFile excelOut = new ExcelFile(pathResultFile)) {
             Integer rowCount = excelIn.rowCount(sheetIn, 0);
 
             // Creating Range A2:BB3000)
@@ -85,16 +84,14 @@ public class AnalyzeTRX implements CommandService {
     }
 
     private void cloneModel() {
-        File in = new File(pathModel);
-        File out = new File(pathResultFile);
-        log.info("Copy {} to {}.",in.getAbsolutePath(),out.getAbsolutePath());
+        Path in = Paths.get(pathModel);
+        Path out = Paths.get(pathResultFile);
+        log.info("Copy {} to {}.", pathModel, pathResultFile);
         try {
-            FileUtils.copyFile(in, out);
+            Files.copy(in, out);
         } catch (IOException e) {
             throw new FatalApplicationException(e.getMessage(),-1);
         }
     }
-
-
 
 }

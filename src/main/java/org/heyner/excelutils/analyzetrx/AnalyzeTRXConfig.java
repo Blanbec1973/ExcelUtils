@@ -1,9 +1,9 @@
 package org.heyner.excelutils.analyzetrx;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "analyzetrx")
 public class AnalyzeTRXConfig {
     private String pathModel;
