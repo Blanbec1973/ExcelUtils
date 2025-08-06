@@ -23,56 +23,59 @@ public class ExcelUtils implements CommandLineRunner {
     private final ApplicationProperties applicationProperties;
     private final ArgsChecker argsChecker;
     private final Map<String, CommandService> commandMap;
+    private final CustomExitCodeGenerator exitCodeGenerator;
 
     public static void main(String[] args) {
         if (log.isInfoEnabled())
             log.info("Main begins with arguments : {}", Arrays.toString(args));
 
-        ConfigurableApplicationContext context = null;
-        int exitCode = 0;
-
-        try {
-            SpringApplication.run(ExcelUtils.class, args);
-        } catch (FatalApplicationException e) {
-            log.error("Fatal Error : {}", e.getMessage());
-            exitCode = e.getExitCode();
-        } catch (GracefulExitException e) {
-            log.info("Program ends normally : {}", e.getMessage());
-            exitCode = e.getExitCode();
-        } finally {
-            if (context != null) {
-                context.close();
-            }
-        }
+        ConfigurableApplicationContext context = SpringApplication.run(ExcelUtils.class, args);
+        int exitCode = SpringApplication.exit(context);
         System.exit(exitCode);
+
     }
     @Autowired
-    public ExcelUtils(ApplicationProperties applicationProperties, List<CommandService> services, ArgsChecker argsChecker) {
+    public ExcelUtils(ApplicationProperties applicationProperties, List<CommandService> services,
+                      ArgsChecker argsChecker,
+                      CustomExitCodeGenerator exitCodeGenerator) {
         this.applicationProperties = applicationProperties;
         this.argsChecker = argsChecker;
+        this.exitCodeGenerator = exitCodeGenerator;
 
         this.commandMap = services.stream()
                 .collect(Collectors.toMap(CommandService::getCommandName, s -> s));
 
-        log.info("Available commands : {}", commandMap.keySet());
+        log.debug("Available commands : {}", commandMap.keySet());
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        String projectName = applicationProperties.getProjectName();
-        String version = applicationProperties.getVersion();
-        log.info("Beginning : {} version {} function {}",
-                projectName,
-                version,
-                args[0]);
+    public void run(String... args) {
+        try {
+            String projectName = applicationProperties.getProjectName();
 
-        argsChecker.validate(args);
-        String command = args[0].toLowerCase();
-        log.info("Command : *{}*",command);
-        CommandService service = commandMap.get(command);
-        if (service == null) {
-            throw new FatalApplicationException("Unknown command: " + command, 2);
+            String version = applicationProperties.getVersion();
+            log.info("Beginning : {} version {} function {}",
+                    projectName,
+                    version,
+                    args[0]);
+
+            argsChecker.validate(args);
+            String command = args[0].toLowerCase();
+            log.info("Command : *{}*", command);
+            CommandService service = commandMap.get(command);
+            if (service == null) {
+                throw new FatalApplicationException("Unknown command: " + command, 2);
+            }
+            service.execute(args);
+        } catch (GracefulExitException e) {
+            log.info("Program ends normally : {}", e.getMessage());
+            exitCodeGenerator.setExitCode(e.getExitCode());
+        } catch (FatalApplicationException e) {
+            log.error("Fatal Error : {}", e.getMessage());
+            exitCodeGenerator.setExitCode(e.getExitCode());
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            exitCodeGenerator.setExitCode(1);
         }
-        service.execute(args);
     }
 }
