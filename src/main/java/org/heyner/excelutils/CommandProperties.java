@@ -24,7 +24,7 @@ public class CommandProperties {
 
     @PostConstruct
     public void init() {
-        log.info("Command configs loaded : " + commands.keySet());
+        log.debug("Command configs loaded : " + commands.keySet());
     }
 
     public static class CommandConfig {

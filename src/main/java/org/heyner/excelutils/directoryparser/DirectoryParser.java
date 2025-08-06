@@ -2,8 +2,6 @@ package org.heyner.excelutils.directoryparser;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.GracefulExitException;
@@ -41,7 +39,7 @@ public class DirectoryParser implements CommandService {
     @Override
     public void execute(String... args) throws IOException {
         String directoryToProcess = args[1];
-        log.info("Beginning function : {}",
+        log.debug("Beginning function : {}",
                 this.getClass().getSimpleName());
         log.info("Processing {}",directoryToProcess);
         File myDirectory = new File(directoryToProcess);

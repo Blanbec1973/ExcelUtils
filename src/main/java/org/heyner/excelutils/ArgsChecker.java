@@ -17,8 +17,8 @@ public class ArgsChecker {
     }
 
     public boolean validate(String [] args) {
-        if (log.isInfoEnabled())
-            log.info("Arguments : {}", Arrays.toString(args));
+        if (log.isDebugEnabled())
+            log.debug("Arguments : {}", Arrays.toString(args));
 
         //Check argument present :
         if (args.length == 0) {
@@ -39,7 +39,7 @@ public class ArgsChecker {
     private void controlNumberOfArgument(String [] args) {
         int expected;
         try {
-            log.info("Config : {}",commandProperties.getCommands().toString());
+            log.debug("Config : {}",commandProperties.getCommands().toString());
             expected = commandProperties.getCommands().get(args[0]).getCounterarguments();
         } catch (NumberFormatException | NullPointerException e) {
             throw new FatalApplicationException("Unable to parse number of arguments for function: " + args[0], -1);
