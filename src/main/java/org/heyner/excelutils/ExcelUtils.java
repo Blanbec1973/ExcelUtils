@@ -26,11 +26,14 @@ public class ExcelUtils implements CommandLineRunner {
     private final CustomExitCodeGenerator exitCodeGenerator;
 
     public static void main(String[] args) {
+        long start = System.currentTimeMillis();
         if (log.isInfoEnabled())
             log.info("Main begins with arguments : {}", Arrays.toString(args));
 
         ConfigurableApplicationContext context = SpringApplication.run(ExcelUtils.class, args);
         int exitCode = SpringApplication.exit(context);
+
+        log.info("Program ends normally in {} ms.", System.currentTimeMillis()-start);
         System.exit(exitCode);
 
     }

@@ -35,7 +35,6 @@ public class AnalyzeTRX implements CommandService {
 
     @Override
     public void execute(String... args) {
-        long start = System.currentTimeMillis();
         String pathInput = args[1];
         pathModel = analyzeTRXConfig.getPathModel();
         pathResultFile=analyzeTRXConfig.getPathResultFile();
@@ -45,9 +44,6 @@ public class AnalyzeTRX implements CommandService {
         cloneModel();
         transferData(pathInput);
         checkFormula(pathResultFile);
-
-        log.info("Program ends normally in {} ms.", System.currentTimeMillis()-start);
-
     }
 
     private void checkFormula(String fileName) {
