@@ -8,6 +8,7 @@ import org.heyner.excelutils.GracefulExitException;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
 import org.heyner.excelutils.formatactivity.FormatActivity;
+import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +25,15 @@ public class DirectoryParser implements CommandService {
     public static final String AR_ITEM_ACTIVITY = "AR_ITEM_ACTIVITY";
     private final CorrectionImputation correctionImputation;
     private final FormatActivity formatActivity;
+
+    private final FormatInvRegisterLN formatInvRegisterLN;
     private File[] listFiles;
 
     @Autowired
-    public DirectoryParser (CorrectionImputation correctionImputation, FormatActivity formatActivity) {
+    public DirectoryParser (CorrectionImputation correctionImputation, FormatActivity formatActivity, FormatInvRegisterLN formatInvRegisterLN) {
         this.correctionImputation = correctionImputation;
         this.formatActivity = formatActivity;
+        this.formatInvRegisterLN = formatInvRegisterLN;
     }
     @Override
     public String getCommandName() {
@@ -59,6 +63,7 @@ public class DirectoryParser implements CommandService {
             log.info("ProcessList file : {}", file.getName());
             boolean isActivity = file.toString().contains(AR_ITEM_ACTIVITY);
             boolean isTrx = file.toString().contains(UC_PCB_PROJ_TRX);
+            boolean isInvRegisterLN = file.toString().contains("UC_PCB_MS_INV_REGISTER_LN");
 
             if (isActivity)
                 processActivity(file);
@@ -70,8 +75,17 @@ public class DirectoryParser implements CommandService {
                 processFormatTRX(file);
             if (isTrx)
                 processTrxRename(file);
+            if (isInvRegisterLN)
+                processInvRegisterLN(file);
         }
     }
+
+    private void processInvRegisterLN(File file) throws IOException {
+        log.info("Process InvRegisterLN file : {}", file);
+        String [] argFile = { file.toString()};
+        formatInvRegisterLN.execute(argFile);
+    }
+
     public void processFormatTRX(File file) {
         log.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};

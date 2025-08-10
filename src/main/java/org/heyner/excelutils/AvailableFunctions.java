@@ -6,7 +6,10 @@ public enum AvailableFunctions {
     DIRECTORYPARSER("directoryparser"),
     FORMATTRX("formattrx"),
     FORMATACTIVITY("formatactivity"),
-    FUSIONTRX("fusiontrx");
+    FUSIONTRX("fusiontrx"),
+
+    FORMATINVREGISTERLN("formatinvregisterln");
+
 
     private final String configKey;
 
