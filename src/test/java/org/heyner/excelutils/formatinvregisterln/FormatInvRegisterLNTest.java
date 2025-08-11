@@ -32,7 +32,6 @@ class FormatInvRegisterLNTest {
         ExcelFile fichierExcel = new ExcelFile(fileName);
         assertEquals("Entité",fichierExcel.getCellValue("sheet1",0,0));
         assertEquals(25, fichierExcel.rowCount("sheet1",0));
-        //assertEquals("Mt HT", fichierExcel.getCellValue("sheet1","AB1"));
     }
 
     @Test

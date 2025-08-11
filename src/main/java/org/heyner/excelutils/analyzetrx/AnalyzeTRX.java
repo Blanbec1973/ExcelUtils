@@ -89,7 +89,7 @@ public class AnalyzeTRX implements CommandService {
         try {
             Files.copy(in, out);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Model copy error", e);
             throw new FatalApplicationException(e.getMessage(),-1);
         }
     }

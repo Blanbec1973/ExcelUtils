@@ -33,7 +33,7 @@ public class ExcelUtils implements CommandLineRunner {
         ConfigurableApplicationContext context = SpringApplication.run(ExcelUtils.class, args);
         int exitCode = SpringApplication.exit(context);
 
-        log.info("Program ends normally in {} ms.", System.currentTimeMillis()-start);
+        log.info("Program ends in {} ms.", System.currentTimeMillis()-start);
         System.exit(exitCode);
 
     }
@@ -74,8 +74,7 @@ public class ExcelUtils implements CommandLineRunner {
             log.info("Program ends normally : {}", e.getMessage());
             exitCodeGenerator.setExitCode(e.getExitCode());
         } catch (FatalApplicationException e) {
-            log.error("Fatal Error : {}", e.getMessage());
-            e.printStackTrace();
+            log.error("Fatal Error", e);
             exitCodeGenerator.setExitCode(e.getExitCode());
         } catch (Exception e) {
             log.error("Unexpected error", e);
