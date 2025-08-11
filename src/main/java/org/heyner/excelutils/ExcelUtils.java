@@ -75,6 +75,7 @@ public class ExcelUtils implements CommandLineRunner {
             exitCodeGenerator.setExitCode(e.getExitCode());
         } catch (FatalApplicationException e) {
             log.error("Fatal Error : {}", e.getMessage());
+            e.printStackTrace();
             exitCodeGenerator.setExitCode(e.getExitCode());
         } catch (Exception e) {
             log.error("Unexpected error", e);

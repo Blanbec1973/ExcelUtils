@@ -83,9 +83,13 @@ public class AnalyzeTRX implements CommandService {
         Path in = Paths.get(pathModel);
         Path out = Paths.get(pathResultFile);
         log.info("Copy {} to {}.", pathModel, pathResultFile);
+        log.debug("CurrentPath : "+System.getProperty("user.dir"));
+        log.debug("Absolute path in : " + in.toAbsolutePath());
+        log.debug("Absolute path out : " + out.toAbsolutePath());
         try {
             Files.copy(in, out);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new FatalApplicationException(e.getMessage(),-1);
         }
     }
