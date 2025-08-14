@@ -2,8 +2,8 @@ package org.heyner.excelutils.directoryparser;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.FileNameGenerator;
 import org.heyner.excelutils.GracefulExitException;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
@@ -99,31 +99,19 @@ public class DirectoryParser implements CommandService {
     }
     public void processActivityRename(File file) throws IOException {
         log.info("Process rename activity file : {}", file);
-        if (checkAbsenceOfPrefix(file))
-            renamePSA(file,SHEET_1,"G3");
+        if (FileNameGenerator.hasFileNoPrefix(file))
+            FileNameGenerator.renamePSA(file,SHEET_1,"G3");
     }
     public void processTrxRename(File file) throws IOException {
         log.info("Process renameTRX file : {}", file);
-        if (checkAbsenceOfPrefix(file))
-            renamePSA(file,SHEET_1,"B3");
+        if (FileNameGenerator.hasFileNoPrefix(file))
+            FileNameGenerator.renamePSA(file,SHEET_1,"B3");
     }
     public void processCorrectionImputation(File file) throws IOException {
         log.info("Process correction imputationTRX file : {}", file);
         String [] trxFile = { file.toString(),SHEET_1};
         correctionImputation.execute(trxFile);
     }
-    public void renamePSA (File file, String sheet, String cell) throws IOException {
-        ExcelFile fichierExcel = new ExcelFile(file.toString());
-        String prefix = fichierExcel.getCellValue(sheet,cell);
-        fichierExcel.close();
-        String newName = file.getParent() + "/"+ prefix + "-"+file.getName();
-        File dest = new File(newName);
-        if (file.renameTo(dest)) log.info("Nouveau nom : {}", newName);
-    }
-    private boolean checkAbsenceOfPrefix(File fichier) {
-        String fileName = fichier.getName();
-        if (fileName.length()<15) return true;
-        String prefix = fileName.substring(0,15);
-        return (!prefix.matches("\\d+")) ;
-    }
+
+
 }

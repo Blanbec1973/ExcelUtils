@@ -6,9 +6,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.FatalApplicationException;
+import org.heyner.excelutils.FileNameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,12 +39,15 @@ public class AnalyzeTRX implements CommandService {
     public void execute(String... args) {
         String pathInput = args[1];
         pathModel = analyzeTRXConfig.getPathModel();
-        pathResultFile=analyzeTRXConfig.getPathResultFile();
+        pathResultFile= FileNameGenerator.generateFileNameWithDate(analyzeTRXConfig.getPathResultFile());
         sheetIn= analyzeTRXConfig.getSheetIn();
         sheetOut= analyzeTRXConfig.getSheetOut();
         log.debug("Beginning {}",args[0]);
         cloneModel();
         transferDataAndEvaluate(pathInput);
+        if (FileNameGenerator.hasFileNoPrefix(new File(pathResultFile))) {
+            FileNameGenerator.renamePSA(new File(pathResultFile),"Datas","B3");
+        }
     }
 
 
