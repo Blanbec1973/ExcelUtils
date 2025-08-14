@@ -16,7 +16,7 @@ public class CorrectionImputation implements CommandService {
     private ExcelFile fichierExcel;
 
     public void execute(String... args) throws IOException {
-        log.info("Beginning Timesheet correction, file to proceed : {}\", args[0]);");
+        log.info("Beginning Timesheet correction, file to proceed : {}", args[0]);
         fichierExcel = new ExcelFile(args[0]);
 
         int rowNum = 0;

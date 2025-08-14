@@ -64,7 +64,7 @@ public class ExcelUtils implements CommandLineRunner {
 
             argsChecker.validate(args);
             String command = args[0].toLowerCase();
-            log.info("Command : *{}*", command);
+            log.debug("Command : *{}*", command);
             CommandService service = commandMap.get(command);
             if (service == null) {
                 throw new FatalApplicationException("Unknown command: " + command, 2);

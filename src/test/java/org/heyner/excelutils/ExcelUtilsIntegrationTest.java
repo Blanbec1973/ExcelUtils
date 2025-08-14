@@ -33,7 +33,7 @@ class ExcelUtilsIntegrationTest {
     void testMainRunsSuccessfully(CapturedOutput output) {
         // Vérifie que l'application a bien démarré et exécuté la commande
         assertThat(output.getOut()).contains("Beginning");
-        assertThat(output.getOut()).contains("Command : *servicetest*");
+        assertThat(output.getOut()).contains("servicetest");
     }
 }
 
