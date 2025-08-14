@@ -40,25 +40,13 @@ public class AnalyzeTRX implements CommandService {
         pathResultFile=analyzeTRXConfig.getPathResultFile();
         sheetIn= analyzeTRXConfig.getSheetIn();
         sheetOut= analyzeTRXConfig.getSheetOut();
-        log.info("Beginning {}",args[0]);
+        log.debug("Beginning {}",args[0]);
         cloneModel();
-        transferData(pathInput);
-        checkFormula(pathResultFile);
+        transferDataAndEvaluate(pathInput);
     }
 
-    private void checkFormula(String fileName) {
-        try (ExcelFile excelFile = new ExcelFile(fileName)) {
-            for (Row row : excelFile.getWorkBook().getSheet(sheetOut)) {
-                excelFile.evaluateFormulaCell(row.getCell(54));
-                excelFile.evaluateFormulaCell(row.getCell(55));
-            }
-            excelFile.writeFichierExcel();
-        } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(),-1);
-        }
-    }
 
-    private void transferData(String inputFileName) {
+    private void transferDataAndEvaluate(String inputFileName) {
         try (ExcelFile excelIn = new ExcelFile(inputFileName);
         ExcelFile excelOut = new ExcelFile(pathResultFile)) {
             Integer rowCount = excelIn.rowCount(sheetIn, 0);
@@ -72,6 +60,11 @@ public class AnalyzeTRX implements CommandService {
             excelIn.setTileRange(new CellRangeAddress(1, rowCount - 1, 56, 56));
             excelOut.setTileRange(new CellRangeAddress(1, rowCount - 1, 56, 56));
             excelIn.copyRange(excelOut, sheetIn, sheetOut);
+
+            for (Row row : excelOut.getWorkBook().getSheet(sheetOut)) {
+                excelOut.evaluateFormulaCell(row.getCell(54));
+                excelOut.evaluateFormulaCell(row.getCell(55));
+            }
 
             excelOut.writeFichierExcel();
         } catch (IOException e) {
