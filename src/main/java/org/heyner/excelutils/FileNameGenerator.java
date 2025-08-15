@@ -20,11 +20,16 @@ public class FileNameGenerator {
     public static void renamePSA (File file, String sheet, String cell) {
         try (ExcelFile fichierExcel = new ExcelFile(file.toString())) {
             String prefix = fichierExcel.getCellValue(sheet,cell);
-            String newName = file.getParent() + "/"+ prefix + "-"+file.getName();
+            log.debug("prefix : {}", prefix);
+
+            String parentPath = file.getAbsoluteFile().getParent();
+            String newName = parentPath + "/" + prefix + "-" + file.getName();
+            log.debug("newName : {}",newName);
+
             File dest = new File(newName);
             if (file.renameTo(dest)) log.debug("New name : {}", newName);
         } catch (IOException e) {
-            log.error("Unable to rename {} : {}", file.toString(),e.getMessage() );
+            log.error("Unable to rename {} : {}", file,e.getMessage() );
         }
     }
     public static boolean hasFileNoPrefix(File fichier) {

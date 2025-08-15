@@ -50,7 +50,6 @@ public class AnalyzeTRX implements CommandService {
         }
     }
 
-
     private void transferDataAndEvaluate(String inputFileName) {
         try (ExcelFile excelIn = new ExcelFile(inputFileName);
         ExcelFile excelOut = new ExcelFile(pathResultFile)) {
