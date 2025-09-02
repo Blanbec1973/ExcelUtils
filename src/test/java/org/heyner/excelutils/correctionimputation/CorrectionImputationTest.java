@@ -5,6 +5,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class CorrectionImputationTest {
     @BeforeEach
@@ -25,8 +29,12 @@ class CorrectionImputationTest {
 
     @Test
     void testCorrectionImputation() throws IOException {
+
+        CorrectionImputationConfig correctionImputationConfig = mock(CorrectionImputationConfig.class);
+        when(correctionImputationConfig.isCorrectionImputationActionEnabled()).thenReturn(true);
+
         String [] args = new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", "sheet1"};
-        CorrectionImputation correctionImputation = new CorrectionImputation();
+        CorrectionImputation correctionImputation = new CorrectionImputation(correctionImputationConfig);
         correctionImputation.execute(args);
 
         ExcelFile fichierExcel = new ExcelFile("target/test/correctionImputation/TrxToCorrect.xlsx");
@@ -34,5 +42,23 @@ class CorrectionImputationTest {
         String formula = dataSheet.getRow(10).getCell(56).getCellFormula();
         assertEquals("AC11/8", formula);
         fichierExcel.close();
+    }
+    @Test
+    void testExecuteDoesNothingWhenConfigIsFalse() throws IOException {
+        // Mock de la configuration
+        CorrectionImputationConfig configMock = mock(CorrectionImputationConfig.class);
+        when(configMock.isCorrectionImputationActionEnabled()).thenReturn(false);
+
+        // Mock du logger si nécessaire
+        Logger logger = LoggerFactory.getLogger(CorrectionImputation.class);
+
+        // Spy de la classe à tester
+        CorrectionImputation correctionImputation = Mockito.spy(new CorrectionImputation(configMock));
+
+        // Appel de la méthode avec des arguments fictifs
+        correctionImputation.execute("dummy.xlsx", "sheet1");
+
+        // Vérifie que certaines méthodes internes ne sont jamais appelées
+        verify(correctionImputation, never()).processRow(any());
     }
 }

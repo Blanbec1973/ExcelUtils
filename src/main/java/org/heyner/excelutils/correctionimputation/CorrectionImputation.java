@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,8 +15,20 @@ import java.io.IOException;
 @Service
 public class CorrectionImputation implements CommandService {
     private ExcelFile fichierExcel;
+    private final CorrectionImputationConfig correctionImputationConfig;
+
+    @Autowired
+    public CorrectionImputation(CorrectionImputationConfig correctionImputationConfig) {
+        this.correctionImputationConfig = correctionImputationConfig;
+    }
 
     public void execute(String... args) throws IOException {
+
+        if (!correctionImputationConfig.isCorrectionImputationActionEnabled()) {
+            log.info("CorrectionImputation is disabled by configuration. Skipping execution.");
+            return;
+        }
+
         log.info("Beginning Timesheet correction, file to proceed : {}", args[0]);
         fichierExcel = new ExcelFile(args[0]);
 
@@ -35,7 +48,7 @@ public class CorrectionImputation implements CommandService {
         fichierExcel.writeFichierExcel();
     }
 
-    private void processRow(Row row) {
+    void processRow(Row row) {
         //8 : code   476867
         //9 : nom    POMMERET
         Cell cell = row.getCell(56);
