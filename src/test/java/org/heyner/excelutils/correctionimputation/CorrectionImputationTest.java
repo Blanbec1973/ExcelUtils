@@ -6,8 +6,6 @@ import org.heyner.common.ExcelFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,9 +46,6 @@ class CorrectionImputationTest {
         // Mock de la configuration
         CorrectionImputationConfig configMock = mock(CorrectionImputationConfig.class);
         when(configMock.isCorrectionImputationActionEnabled()).thenReturn(false);
-
-        // Mock du logger si nécessaire
-        Logger logger = LoggerFactory.getLogger(CorrectionImputation.class);
 
         // Spy de la classe à tester
         CorrectionImputation correctionImputation = Mockito.spy(new CorrectionImputation(configMock));
