@@ -1,6 +1,7 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.exceptions.FunctionalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -73,7 +74,11 @@ public class ExcelUtils implements CommandLineRunner {
         } catch (GracefulExitException e) {
             log.info("Program ends normally : {}", e.getMessage());
             exitCodeGenerator.setExitCode(e.getExitCode());
-        } catch (FatalApplicationException e) {
+        } catch (FunctionalException e) {
+            log.error(e.getMessage());
+            exitCodeGenerator.setExitCode(e.getExitCode());
+        }
+        catch (FatalApplicationException e) {
             log.error("Fatal Error", e);
             exitCodeGenerator.setExitCode(e.getExitCode());
         } catch (Exception e) {

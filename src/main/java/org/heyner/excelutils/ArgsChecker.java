@@ -1,6 +1,9 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.exceptions.InvalidArgumentCountException;
+import org.heyner.excelutils.exceptions.InvalidFunctionException;
+import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -22,12 +25,12 @@ public class ArgsChecker {
 
         //Check argument present :
         if (args.length == 0) {
-            throw new FatalApplicationException("No argument, end of program.", -1);
+            throw new MissingConfigurationException("No argument, end of program.", -1);
         }
 
         // Check function (first argument) :
         if (!AvailableFunctions.isFunctionValid(args[0])) {
-            throw new FatalApplicationException("Invalid function: " + args[0], -1);
+            throw new InvalidFunctionException(args[0], -1);
         }
 
         //Check number of argument for thr function :
@@ -42,12 +45,11 @@ public class ArgsChecker {
             log.debug("Config : {}",commandProperties.getCommands().toString());
             expected = commandProperties.getCommands().get(args[0]).getCounterarguments();
         } catch (NumberFormatException | NullPointerException e) {
-            throw new FatalApplicationException("Unable to parse number of arguments for function: " + args[0], -1);
+            throw new MissingConfigurationException("Unable to parse number of arguments for function: " + args[0], -1);
         }
 
         if ( args.length != expected) {
-            throw new FatalApplicationException("Invalid number of arguments, expected: " + expected +
-                                                ", actual: " + args.length, -1);
+            throw new InvalidArgumentCountException(expected, args.length, -1);
         }
 
     }

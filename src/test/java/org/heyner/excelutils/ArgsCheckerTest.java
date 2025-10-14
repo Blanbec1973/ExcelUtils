@@ -1,5 +1,8 @@
 package org.heyner.excelutils;
 
+import org.heyner.excelutils.exceptions.InvalidArgumentCountException;
+import org.heyner.excelutils.exceptions.InvalidFunctionException;
+import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +30,8 @@ class ArgsCheckerTest {
     }
     @Test
     void shouldThrowExceptionWhenNoArguments() {
-        FatalApplicationException exception = assertThrows(
-                FatalApplicationException.class,
+        MissingConfigurationException exception = assertThrows(
+                MissingConfigurationException.class,
                 () -> argsChecker.validate(new String[]{})
         );
         assertEquals("No argument, end of program.", exception.getMessage());
@@ -37,8 +40,8 @@ class ArgsCheckerTest {
     @Test
     void shouldThrowExceptionWhenFunctionIsInvalid() {
         String[] args = {"invalidFunction"};
-        FatalApplicationException exception = assertThrows(
-                FatalApplicationException.class,
+        InvalidFunctionException exception = assertThrows(
+                InvalidFunctionException.class,
                 () -> argsChecker.validate(args)
         );
         assertTrue(exception.getMessage().contains("Invalid function"));
@@ -61,8 +64,8 @@ class ArgsCheckerTest {
         // Instancier ArgsChecker avec le mock
         ArgsChecker argsChecker2 = new ArgsChecker(commandProperties);
 
-        FatalApplicationException exception = assertThrows(
-                FatalApplicationException.class,
+        InvalidArgumentCountException exception = assertThrows(
+                InvalidArgumentCountException.class,
                 () -> argsChecker2.validate(args)
         );
         System.out.println("Message : "+exception.getMessage());
