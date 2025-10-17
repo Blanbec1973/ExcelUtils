@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.exceptions.FatalApplicationException;
+import org.heyner.excelutils.exceptions.FusionSheetMissingException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
 
 import java.io.File;
@@ -54,7 +55,12 @@ public class FusionTRX {
         try (ExcelFile excelIn = new ExcelFile(file.getAbsolutePath())) {
             log.info("File {} opened.",file.getName());
             Sheet sheetIn = excelIn.getWorkBook().getSheet("sheet1");
+            if (sheetIn == null) {
+                throw new FusionSheetMissingException(file.getName(),-1);
+            }
             return excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
+        } catch (FusionSheetMissingException e) {
+          return rowOffset;
         } catch (IOException e) {
             throw new FatalApplicationException(e.getMessage(),-1);
         }
