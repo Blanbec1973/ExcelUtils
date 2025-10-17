@@ -1,4 +1,4 @@
-package org.heyner.excelutils;
+package org.heyner.excelutils.exceptions;
 
 public class FatalApplicationException extends RuntimeException {
     private final int exitCode;

@@ -1,6 +1,6 @@
 package org.heyner.excelutils.directoryparser;
 
-import org.heyner.excelutils.GracefulExitException;
+import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.formatactivity.FormatActivity;

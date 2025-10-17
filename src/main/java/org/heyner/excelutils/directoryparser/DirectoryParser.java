@@ -4,7 +4,7 @@ package org.heyner.excelutils.directoryparser;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.FileNameGenerator;
-import org.heyner.excelutils.GracefulExitException;
+import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
 import org.heyner.excelutils.formatactivity.FormatActivity;
@@ -97,12 +97,12 @@ public class DirectoryParser implements CommandService {
         String [] activityFile = { file.toString()};
         formatActivity.execute(activityFile);
     }
-    public void processActivityRename(File file) throws IOException {
+    public void processActivityRename(File file) {
         log.info("Process rename activity file : {}", file);
         if (FileNameGenerator.hasFileNoPrefix(file))
             FileNameGenerator.renamePSA(file,SHEET_1,"G3");
     }
-    public void processTrxRename(File file) throws IOException {
+    public void processTrxRename(File file) {
         log.info("Process renameTRX file : {}", file);
         if (FileNameGenerator.hasFileNoPrefix(file))
             FileNameGenerator.renamePSA(file,SHEET_1,"B3");

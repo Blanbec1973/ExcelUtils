@@ -1,7 +1,10 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.exceptions.FatalApplicationException;
 import org.heyner.excelutils.exceptions.FunctionalException;
+import org.heyner.excelutils.exceptions.GracefulExitException;
+import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -68,7 +71,7 @@ public class ExcelUtils implements CommandLineRunner {
             log.debug("Command : *{}*", command);
             CommandService service = commandMap.get(command);
             if (service == null) {
-                throw new FatalApplicationException("Unknown command: " + command, 2);
+                throw new MissingConfigurationException("Unable to load command : " + command, 2);
             }
             service.execute(args);
         } catch (GracefulExitException e) {

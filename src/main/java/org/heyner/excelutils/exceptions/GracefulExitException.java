@@ -1,4 +1,4 @@
-package org.heyner.excelutils;
+package org.heyner.excelutils.exceptions;
 
 public class GracefulExitException extends RuntimeException {
     private final int exitCode;

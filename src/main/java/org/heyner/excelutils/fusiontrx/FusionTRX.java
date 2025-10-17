@@ -4,8 +4,8 @@ package org.heyner.excelutils.fusiontrx;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
-import org.heyner.excelutils.FatalApplicationException;
-import org.heyner.excelutils.GracefulExitException;
+import org.heyner.excelutils.exceptions.FatalApplicationException;
+import org.heyner.excelutils.exceptions.GracefulExitException;
 
 import java.io.File;
 import java.io.FileFilter;
