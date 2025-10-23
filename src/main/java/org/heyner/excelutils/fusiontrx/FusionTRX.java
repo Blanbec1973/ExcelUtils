@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class FusionTRX implements CommandService {
-    @Autowired
     private final FusionProcessor fusionProcessor;
 
+    @Autowired
     public FusionTRX(FusionProcessor fusionProcessor) {
         this.fusionProcessor = fusionProcessor;
     }
