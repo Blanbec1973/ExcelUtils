@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.exceptions.CloneModelException;
 import org.heyner.excelutils.exceptions.FatalApplicationException;
 import org.heyner.excelutils.FileNameGenerator;
@@ -48,7 +49,7 @@ public class AnalyzeTRX implements CommandService {
         cloneModel();
         transferDataAndEvaluate(pathInput);
         if (FileNameGenerator.hasFileNoPrefix(new File(pathResultFile))) {
-            FileNameGenerator.renamePSA(new File(pathResultFile),"Datas","B3");
+            FileNameGenerator.renamePSA(new File(pathResultFile), ExcelConstants.DATAS_SHEET,ExcelConstants.TRX_CONTRACT_CELL);
         }
     }
 

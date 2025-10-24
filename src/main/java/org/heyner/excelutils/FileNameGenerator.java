@@ -15,7 +15,7 @@ public class FileNameGenerator {
     public static String generateFileNameWithDate(String template) {
         LocalDate today = LocalDate.now();
         String date = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return template.replace("aaaa-mm-jj", date);
+        return template.replace(ExcelConstants.DATE_TEMPLATE, date);
     }
     public static void renamePSA (File file, String sheet, String cell) {
         try (ExcelFile fichierExcel = new ExcelFile(file.toString())) {

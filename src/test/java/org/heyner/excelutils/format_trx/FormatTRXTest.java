@@ -1,5 +1,6 @@
 package org.heyner.excelutils.format_trx;
 
+import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.common.ExcelFile;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,7 +25,7 @@ class FormatTRXTest {
         formatTRX.execute(new String[]{fileName});
 
         ExcelFile fichierExcel = new ExcelFile(fileName);
-        assertEquals("Business Unit",fichierExcel.getCellValue("sheet1",0,0));
+        assertEquals("Business Unit",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
     }
 
 

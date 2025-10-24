@@ -3,6 +3,7 @@ package org.heyner.excelutils.directoryparser;
 
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.FileNameGenerator;
 import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
@@ -20,9 +21,6 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class DirectoryParser implements CommandService {
-    public static final String SHEET_1 = "sheet1";
-    public static final String UC_PCB_PROJ_TRX = "UC_PCB_PROJ_TRX";
-    public static final String AR_ITEM_ACTIVITY = "AR_ITEM_ACTIVITY";
     private final CorrectionImputation correctionImputation;
     private final FormatActivity formatActivity;
 
@@ -61,9 +59,9 @@ public class DirectoryParser implements CommandService {
     public void processList() throws IOException {
         for (File file : Objects.requireNonNull(listFiles)) {
             log.info("ProcessList file : {}", file.getName());
-            boolean isActivity = file.toString().contains(AR_ITEM_ACTIVITY);
-            boolean isTrx = file.toString().contains(UC_PCB_PROJ_TRX);
-            boolean isInvRegisterLN = file.toString().contains("UC_PCB_MS_INV_REGISTER_LN");
+            boolean isActivity = file.toString().contains(ExcelConstants.ACTIVITY_SHEET);
+            boolean isTrx = file.toString().contains(ExcelConstants.TRX_SHEET);
+            boolean isInvRegisterLN = file.toString().contains(ExcelConstants.INV_REGISTER_LN_SHEET);
 
             if (isActivity)
                 processActivity(file);
@@ -100,16 +98,16 @@ public class DirectoryParser implements CommandService {
     public void processActivityRename(File file) {
         log.info("Process rename activity file : {}", file);
         if (FileNameGenerator.hasFileNoPrefix(file))
-            FileNameGenerator.renamePSA(file,SHEET_1,"G3");
+            FileNameGenerator.renamePSA(file, ExcelConstants.DEFAULT_SHEET,ExcelConstants.ACTIVITY_CONTRACT_CELL);
     }
     public void processTrxRename(File file) {
         log.info("Process renameTRX file : {}", file);
         if (FileNameGenerator.hasFileNoPrefix(file))
-            FileNameGenerator.renamePSA(file,SHEET_1,"B3");
+            FileNameGenerator.renamePSA(file,ExcelConstants.DEFAULT_SHEET,ExcelConstants.TRX_CONTRACT_CELL);
     }
     public void processCorrectionImputation(File file) throws IOException {
         log.info("Process correction imputationTRX file : {}", file);
-        String [] trxFile = { file.toString(),SHEET_1};
+        String [] trxFile = { file.toString(),ExcelConstants.DEFAULT_SHEET};
         correctionImputation.execute(trxFile);
     }
 

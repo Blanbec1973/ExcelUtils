@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.ExcelConstants;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class FormatInvRegisterLN implements CommandService {
             log.info("File to process : {}", args[0]);
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
-            fichierExcel.deleteFirstLineContaining("sheet1","MS Invoice Register-LN detail");
+            fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"MS Invoice Register-LN detail");
 
             log.debug("Last column *"+formatInvRegisterLnConfig.getLastcolumn()+"*");
 

@@ -1,6 +1,7 @@
 package org.heyner.excelutils.fusiontrx;
 
 
+import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -32,12 +33,12 @@ class FusionProcessorTest {
         ExcelFile fichierExcel = new ExcelFile("target/temp-FusionProcessorTest/fusion/FusionTRX.xlsx");
         int rowNum = 0;
         float foreignAmountCum = 0;
-        Sheet dataSheet = fichierExcel.getWorkBook().getSheet("Fusion");
+        Sheet dataSheet = fichierExcel.getWorkBook().getSheet(ExcelConstants.FUSION_SHEET);
 
         for (Row row : dataSheet) {
             rowNum+=1;
             if (row.getRowNum() !=0) {
-                foreignAmountCum+=row.getCell(29).getNumericCellValue();
+                foreignAmountCum+=row.getCell(ExcelConstants.FOREIGN_AMOUNT_COLUMN).getNumericCellValue();
             }
         }
         assertEquals(12,rowNum);

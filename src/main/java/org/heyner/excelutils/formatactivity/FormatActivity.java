@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.ExcelFile;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.ExcelConstants;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class FormatActivity implements CommandService {
 
             dataSheet.setAutoFilter(new CellRangeAddress(0,0,0,27));
 
-            fichierExcel.deleteFirstLineContaining("sheet1","AR Historic by client");
+            fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,ExcelConstants.AR_HISTORIC_HEADER);
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
             log.error(e.getMessage());

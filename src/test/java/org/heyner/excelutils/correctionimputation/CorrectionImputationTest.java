@@ -3,6 +3,7 @@ package org.heyner.excelutils.correctionimputation;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.ExcelFile;
+import org.heyner.excelutils.ExcelConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -31,12 +32,12 @@ class CorrectionImputationTest {
         CorrectionImputationConfig correctionImputationConfig = mock(CorrectionImputationConfig.class);
         when(correctionImputationConfig.isCorrectionImputationActionEnabled()).thenReturn(true);
 
-        String [] args = new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", "sheet1"};
+        String [] args = new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", ExcelConstants.DEFAULT_SHEET};
         CorrectionImputation correctionImputation = new CorrectionImputation(correctionImputationConfig);
         correctionImputation.execute(args);
 
         ExcelFile fichierExcel = new ExcelFile("target/test/correctionImputation/TrxToCorrect.xlsx");
-        Sheet dataSheet = fichierExcel.getWorkBook().getSheet("sheet1");
+        Sheet dataSheet = fichierExcel.getWorkBook().getSheet(ExcelConstants.DEFAULT_SHEET);
         String formula = dataSheet.getRow(10).getCell(56).getCellFormula();
         assertEquals("AC11/8", formula);
         fichierExcel.close();
@@ -51,7 +52,7 @@ class CorrectionImputationTest {
         CorrectionImputation correctionImputation = Mockito.spy(new CorrectionImputation(configMock));
 
         // Appel de la méthode avec des arguments fictifs
-        correctionImputation.execute("dummy.xlsx", "sheet1");
+        correctionImputation.execute("dummy.xlsx", ExcelConstants.DEFAULT_SHEET);
 
         // Vérifie que certaines méthodes internes ne sont jamais appelées
         verify(correctionImputation, never()).processRow(any());

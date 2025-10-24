@@ -1,6 +1,7 @@
 package org.heyner.excelutils.formatactivity;
 
 import org.heyner.common.ExcelFile;
+import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,9 +25,9 @@ class FormatActivityTest {
         formatActivity.execute(fileName);
 
         ExcelFile fichierExcel = new ExcelFile(fileName);
-        assertEquals("From Date",fichierExcel.getCellValue("sheet1",0,0));
-        assertEquals(15, fichierExcel.rowCount("sheet1",0));
-        assertEquals("Mt HT", fichierExcel.getCellValue("sheet1","AB1"));
+        assertEquals("From Date",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
+        assertEquals(15, fichierExcel.rowCount(ExcelConstants.DEFAULT_SHEET,0));
+        assertEquals("Mt HT", fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,"AB1"));
     }
 
     @Test
