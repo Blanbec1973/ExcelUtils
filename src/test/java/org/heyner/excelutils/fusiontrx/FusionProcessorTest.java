@@ -6,13 +6,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FusionProcessorTest {
 
@@ -44,6 +45,24 @@ class FusionProcessorTest {
         assertEquals(12,rowNum);
         assertEquals(630260,Math.round(100*foreignAmountCum)/100);
     }
+    @Test
+    void shouldThrowGracefulExitExceptionWhenNoTrxFilesFound() {
+        // Arrange : créer un dossier vide
+        File emptyDir = new File("target/temp-FusionProcessorTest/empty");
+        if (!emptyDir.exists()) {
+            assertTrue(emptyDir.mkdirs(), "Échec de la création du dossier de test.");
+        }
 
+        FusionProcessor fusionProcessor = new FusionProcessor();
+        String emptyDirAboslutePath = emptyDir.getAbsolutePath();
+        // Act & Assert
+        GracefulExitException exception = assertThrows(
+                GracefulExitException.class,
+                () -> fusionProcessor.process(emptyDirAboslutePath, "target/test/fusiontrx/output/")
+        );
+
+        assertTrue(exception.getMessage().contains("No file to process"));
+        assertEquals(0, exception.getExitCode());
+    }
 
 }
