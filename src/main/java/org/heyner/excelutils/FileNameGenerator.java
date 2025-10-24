@@ -1,7 +1,7 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class FileNameGenerator {
         return template.replace(ExcelConstants.DATE_TEMPLATE, date);
     }
     public static void renamePSA (File file, String sheet, String cell) {
-        try (ExcelFile fichierExcel = new ExcelFile(file.toString())) {
+        try (ExcelFile fichierExcel = ExcelFile.open(file.toString())) {
             String prefix = fichierExcel.getCellValue(sheet,cell);
             log.debug("prefix : {}", prefix);
 

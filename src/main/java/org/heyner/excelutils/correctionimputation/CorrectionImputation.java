@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.CommandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class CorrectionImputation implements CommandService {
         }
 
         log.info("Beginning Timesheet correction, file to proceed : {}", args[0]);
-        fichierExcel = new ExcelFile(args[0]);
+        fichierExcel = ExcelFile.open(args[0]);
 
         int rowNum = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args[1]);

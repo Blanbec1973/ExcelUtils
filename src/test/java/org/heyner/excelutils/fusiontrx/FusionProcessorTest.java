@@ -1,18 +1,18 @@
 package org.heyner.excelutils.fusiontrx;
 
 
-import org.heyner.excelutils.ExcelConstants;
-import org.heyner.excelutils.TestInitializerFactory;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
+import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FusionProcessorTest {
 
@@ -30,7 +30,7 @@ class FusionProcessorTest {
         fusionProcessor.process( "target/temp-FusionProcessorTest/fusion/",
                                                         "target/temp-FusionProcessorTest/fusion/");
 
-        ExcelFile fichierExcel = new ExcelFile("target/temp-FusionProcessorTest/fusion/FusionTRX.xlsx");
+        ExcelFile fichierExcel = ExcelFile.open("target/temp-FusionProcessorTest/fusion/FusionTRX.xlsx");
         int rowNum = 0;
         float foreignAmountCum = 0;
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(ExcelConstants.FUSION_SHEET);

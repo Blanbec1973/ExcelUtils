@@ -1,6 +1,6 @@
 package org.heyner.excelutils.formatinvregisterln;
 
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.ApachePoiConfigurer;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
@@ -30,7 +30,7 @@ class FormatInvRegisterLNTest {
     void execute() throws IOException {
         formatInvRegisterLN.execute(fileName);
 
-        ExcelFile fichierExcel = new ExcelFile(fileName);
+        ExcelFile fichierExcel = ExcelFile.open(fileName);
         assertEquals("Entité",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
         assertEquals(25, fichierExcel.rowCount(ExcelConstants.DEFAULT_SHEET,0));
     }

@@ -3,7 +3,7 @@ package org.heyner.excelutils.analyzetrx;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.exceptions.CloneModelException;
@@ -54,8 +54,8 @@ public class AnalyzeTRX implements CommandService {
     }
 
     private void transferDataAndEvaluate(String inputFileName) {
-        try (ExcelFile excelIn = new ExcelFile(inputFileName);
-        ExcelFile excelOut = new ExcelFile(pathResultFile)) {
+        try (ExcelFile excelIn = ExcelFile.open(inputFileName);
+        ExcelFile excelOut = ExcelFile.open(pathResultFile)) {
             Integer rowCount = excelIn.rowCount(sheetIn, 0);
 
             // Creating Range A2:BB3000)

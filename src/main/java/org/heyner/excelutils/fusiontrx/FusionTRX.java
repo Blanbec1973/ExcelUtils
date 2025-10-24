@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class FusionTRX implements CommandService {
     private final FusionProcessor fusionProcessor;
-
     @Autowired
     public FusionTRX(FusionProcessor fusionProcessor) {
         this.fusionProcessor = fusionProcessor;
     }
-
     public void execute(String... args) {
         String directoryToProcess = (args[1].equals("")) ? System.getProperty("user.dir")+"\\" : args[1];
         String pathFusion = args[2];

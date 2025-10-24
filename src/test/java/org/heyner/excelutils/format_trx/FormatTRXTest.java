@@ -2,7 +2,7 @@ package org.heyner.excelutils.format_trx;
 
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,9 +22,9 @@ class FormatTRXTest {
     @Test
     void testFormatTrxMain() throws IOException {
         FormatTRX formatTRX = new FormatTRX();
-        formatTRX.execute(new String[]{fileName});
+        formatTRX.execute(fileName);
 
-        ExcelFile fichierExcel = new ExcelFile(fileName);
+        ExcelFile fichierExcel = ExcelFile.open(fileName);
         assertEquals("Business Unit",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
     }
 

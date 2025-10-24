@@ -2,7 +2,7 @@ package org.heyner.excelutils.fusiontrx;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.exceptions.FatalApplicationException;
 import org.heyner.excelutils.exceptions.FusionSheetMissingException;
@@ -37,7 +37,7 @@ public class FusionProcessor {
             throw new GracefulExitException("No file to process in {}"+ directoryToProcess,0);
         }
 
-        try (ExcelFile fusion = new ExcelFile(outputPath + "FusionTRX.xlsx")) {
+        try (ExcelFile fusion = ExcelFile.create(outputPath + "FusionTRX.xlsx")) {
             Sheet sheetFusion = fusion.createSheet("Fusion");
             int rowOffset = 0;
             boolean ignoreFirstLine = false;
@@ -67,7 +67,7 @@ public class FusionProcessor {
      * @throws FusionSheetMissingException si la feuille "sheet1" est absente
      */
     private int mergeFile(File file, Sheet sheetFusion, boolean ignoreFirstLine, int rowOffset) {
-        try (ExcelFile excelIn = new ExcelFile(file.getAbsolutePath())) {
+        try (ExcelFile excelIn = ExcelFile.open(file.getAbsolutePath())) {
             log.info("File {} opened.",file.getName());
             Sheet sheetIn = excelIn.getWorkBook().getSheet(ExcelConstants.DEFAULT_SHEET);
             if (sheetIn == null) {

@@ -2,7 +2,7 @@ package org.heyner.excelutils.correctionimputation;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.ExcelConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class CorrectionImputationTest {
         CorrectionImputation correctionImputation = new CorrectionImputation(correctionImputationConfig);
         correctionImputation.execute(args);
 
-        ExcelFile fichierExcel = new ExcelFile("target/test/correctionImputation/TrxToCorrect.xlsx");
+        ExcelFile fichierExcel = ExcelFile.open("target/test/correctionImputation/TrxToCorrect.xlsx");
         Sheet dataSheet = fichierExcel.getWorkBook().getSheet(ExcelConstants.DEFAULT_SHEET);
         String formula = dataSheet.getRow(10).getCell(56).getCellFormula();
         assertEquals("AC11/8", formula);

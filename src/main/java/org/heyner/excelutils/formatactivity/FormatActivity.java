@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.io.IOException;
 @Service
 public class FormatActivity implements CommandService {
     public void execute(String... args) throws IOException {
-        try(ExcelFile fichierExcel = new ExcelFile(args[0])) {
+        try(ExcelFile fichierExcel = ExcelFile.open(args[0])) {
             log.info("File to process : {}", args[0]);
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);

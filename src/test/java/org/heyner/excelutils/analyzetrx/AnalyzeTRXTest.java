@@ -1,6 +1,6 @@
 package org.heyner.excelutils.analyzetrx;
 
-import org.heyner.common.ExcelFile;
+import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.ApachePoiConfigurer;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,7 +47,7 @@ class AnalyzeTRXTest {
         Path path = Paths.get(filePath);
         assertTrue(Files.exists(path));
 
-        ExcelFile excelFile = new ExcelFile(filePath);
+        ExcelFile excelFile = ExcelFile.open(filePath);
         assertEquals(56, excelFile.rowCount("Datas",0));
     }
 }
