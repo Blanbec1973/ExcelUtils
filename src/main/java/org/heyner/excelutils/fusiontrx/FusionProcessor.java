@@ -12,6 +12,12 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -29,26 +35,43 @@ public class FusionProcessor {
      */
     public void process(String directoryToProcess, String outputPath) {
 
-        File myDirectory = new File(directoryToProcess);
-        FileFilter filter = file -> file.getName().contains("TRX") && file.getName().toLowerCase().endsWith(".xlsx");
-        File[] listFiles = myDirectory.listFiles(filter);
-        assert listFiles != null;
-        if (listFiles.length == 0) {
-            throw new GracefulExitException("No file to process in {}"+ directoryToProcess,0);
+        Path dir = Path.of(directoryToProcess);
+
+        List<Path> trxFiles = listTrxFiles(dir);
+        if (trxFiles.isEmpty()) {
+            throw new GracefulExitException("No file to process in "+ directoryToProcess,0);
         }
 
+        createFusionFile(outputPath, trxFiles);
+
+    }
+
+    private void createFusionFile(String outputPath, List<Path> trxFiles) {
         try (ExcelFile fusion = ExcelFile.create(outputPath + "FusionTRX.xlsx")) {
+
             Sheet sheetFusion = fusion.createSheet("Fusion");
             int rowOffset = 0;
             boolean ignoreFirstLine = false;
 
-            for (File file : listFiles) {
+            for (Path path : trxFiles) {
+                File file = path.toFile();
                 rowOffset = mergeFile(file, sheetFusion, ignoreFirstLine, rowOffset);
                 ignoreFirstLine = true;
             }
             fusion.writeFichierExcel();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(),-1);
+            throw new FatalApplicationException(e.getMessage(), -1);
+        }
+    }
+
+    private List<Path> listTrxFiles(Path dir) {
+        try (Stream<Path> paths = Files.list(dir)) {
+            return paths
+                    .filter(p -> p.getFileName().toString().contains("TRX"))
+                    .filter(p -> p.getFileName().toString().toLowerCase().endsWith(".xlsx"))
+                    .toList();
+        } catch (IOException e) {
+            throw new FatalApplicationException(e.getMessage(), -1);
         }
     }
 

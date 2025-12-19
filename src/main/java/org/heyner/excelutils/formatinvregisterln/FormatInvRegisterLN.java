@@ -10,6 +10,8 @@ import org.heyner.excelutils.ExcelConstants;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
+
 @Slf4j
 @Service
 public class FormatInvRegisterLN implements CommandService {
@@ -28,13 +30,10 @@ public class FormatInvRegisterLN implements CommandService {
 
             log.debug("Last column *"+formatInvRegisterLnConfig.getLastcolumn()+"*");
 
-            for (int i=0; i < formatInvRegisterLnConfig.getLastcolumn()+1 ; i++) {
-                if (!formatInvRegisterLnConfig.getNohidecolumns().contains(i)) {
-                    dataSheet.setColumnHidden(i,true);
-                    log.debug("dans if i="+i);
-                }
-                log.debug("hors if i="+i);
-            }
+
+            IntStream.rangeClosed(0, formatInvRegisterLnConfig.getLastcolumn())
+                    .filter(i -> !formatInvRegisterLnConfig.getNoHideSet().contains(i))
+                            .forEach(i -> dataSheet.setColumnHidden(i, true));
 
             createColumnLibelle(fichierExcel, dataSheet);
             createColumnInvReference(fichierExcel,dataSheet);

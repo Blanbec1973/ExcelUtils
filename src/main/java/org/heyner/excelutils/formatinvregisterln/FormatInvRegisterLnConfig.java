@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Configuration
 @ConfigurationProperties(prefix = "formatinvregisterln")
 @Slf4j
@@ -13,6 +16,8 @@ public class FormatInvRegisterLnConfig {
 
     private int lastcolumn;
     private List<Integer> nohidecolumns;
+
+    private Set<Integer> noHideSet;
 
     public int getLastcolumn() {
         return lastcolumn;
@@ -29,11 +34,16 @@ public class FormatInvRegisterLnConfig {
     public void setNohidecolumns(List<Integer> nohidecolumns) {
         this.nohidecolumns = nohidecolumns;
     }
+    public Set<Integer> getNoHideSet() {
+        return noHideSet;
+    }
 
     @PostConstruct
     public void init() {
         log.debug("Config loaded: lastcolumn = " + lastcolumn);
+        this.noHideSet = new HashSet<>(nohidecolumns);
     }
+
 
 
 }

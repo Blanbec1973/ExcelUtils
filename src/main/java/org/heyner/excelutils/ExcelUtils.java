@@ -49,10 +49,17 @@ public class ExcelUtils implements CommandLineRunner {
         this.argsChecker = argsChecker;
         this.exitCodeGenerator = exitCodeGenerator;
 
-        this.commandMap = services.stream()
-                .collect(Collectors.toMap(CommandService::getCommandName, s -> s));
 
-        log.debug("Available commands : {}", commandMap.keySet());
+        this.commandMap = services.stream()
+                .collect(Collectors.toMap(
+                        CommandService::getCommandName,
+                        s -> s,
+                        (s1, s2) -> { // merge function en cas de clé dupliquée
+                            throw new IllegalStateException(
+                                    "Duplicate command name: " + s1.getCommandName());
+                        }));
+
+                        log.debug("Available commands : {}", commandMap.keySet());
     }
 
     @Override

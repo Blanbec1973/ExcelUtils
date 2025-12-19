@@ -1,6 +1,7 @@
 package org.heyner.excelutils.fusiontrx;
 
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,17 +35,17 @@ class FusionProcessorTest {
                                                         "target/temp-FusionProcessorTest/fusion/");
 
         ExcelFile fichierExcel = ExcelFile.open("target/temp-FusionProcessorTest/fusion/FusionTRX.xlsx");
-        int rowNum = 0;
-        float foreignAmountCum = 0;
-        Sheet dataSheet = fichierExcel.getWorkBook().getSheet(ExcelConstants.FUSION_SHEET);
 
-        for (Row row : dataSheet) {
-            rowNum+=1;
-            if (row.getRowNum() !=0) {
-                foreignAmountCum+=row.getCell(ExcelConstants.FOREIGN_AMOUNT_COLUMN).getNumericCellValue();
-            }
-        }
-        assertEquals(12,rowNum);
+        Sheet dataSheet = fichierExcel.getWorkBook().getSheet(ExcelConstants.FUSION_SHEET);
+        double foreignAmountCum = StreamSupport.stream(dataSheet.spliterator(), false)
+                .skip(1)
+                .map(row -> row.getCell(ExcelConstants.FOREIGN_AMOUNT_COLUMN))
+                .filter(Objects::nonNull)
+                .mapToDouble(Cell::getNumericCellValue)
+                        .sum();
+
+        int rowCount = dataSheet.getLastRowNum() + 1; // getLastRowNum est 0-based
+        assertEquals(12, rowCount);
         assertEquals(630260,Math.round(100*foreignAmountCum)/100);
     }
     @Test
