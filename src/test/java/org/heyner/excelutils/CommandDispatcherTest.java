@@ -2,41 +2,34 @@
 package org.heyner.excelutils;
 
 import org.heyner.excelutils.exceptions.GracefulExitException;
+import org.heyner.excelutils.exitcode.ExitCodeHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class CommandDispatcherTest {
 
     private ArgsChecker argsChecker;
-    private CustomExitCodeGenerator exitCodeGenerator;
-    private CommandService commandService;
+    private ExitCodeHandler exitHandler;
+    private CommandService service;
     private CommandDispatcher dispatcher;
-    private CommandRegistry registry;
 
     @BeforeEach
     void setUp() {
-        ApplicationProperties applicationProperties = mock(ApplicationProperties.class);
+        ApplicationProperties props = mock(ApplicationProperties.class);
+        when(props.getProjectName()).thenReturn("ExcelUtils");
+        when(props.getVersion()).thenReturn("1.0.0");
+
         argsChecker = mock(ArgsChecker.class);
-        exitCodeGenerator = new CustomExitCodeGenerator();
-        commandService = mock(CommandService.class);
-        registry = mock(CommandRegistry.class);
+        exitHandler = mock(ExitCodeHandler.class);
+        service = mock(CommandService.class);
+        when(service.getCommandName()).thenReturn("test");
 
-        when(applicationProperties.getProjectName()).thenReturn("ExcelUtils");
-        when(applicationProperties.getVersion()).thenReturn("1.0.0");
-        when(commandService.getCommandName()).thenReturn("test");
-
-        dispatcher = new CommandDispatcher(
-                applicationProperties,
-                List.of(commandService),
-                argsChecker,
-                registry, exitCodeGenerator
-        );
+        CommandRegistry registry = new CommandRegistry(List.of(service));
+        dispatcher = new CommandDispatcher(props, argsChecker, registry, exitHandler);
     }
 
     @Test
@@ -44,38 +37,24 @@ class CommandDispatcherTest {
         String[] args = {"test", "arg1"};
 
         when(argsChecker.validate(args)).thenReturn(true);
-        when(registry.find(any())).thenReturn(Optional.ofNullable(commandService));
-        doNothing().when(commandService).execute(args);
+        doNothing().when(service).execute(args);
 
         dispatcher.run(args);
 
-        verify(commandService).execute(args);
-        assertEquals(0, exitCodeGenerator.getExitCode());
+        verify(service).execute(args);
+        verifyNoInteractions(exitHandler);
     }
 
     @Test
-    void shouldSetExitCodeWhenCommandNotFound() {
-        String[] args = {"unknown"};
-
-        when(argsChecker.validate(args)).thenReturn(true);
-        when(registry.find(any())).thenReturn(Optional.empty());
-
-        dispatcher.run(args);
-
-        assertEquals(2, exitCodeGenerator.getExitCode());
-    }
-
-    @Test
-    void shouldHandleGracefulExitException() throws Exception {
+    void shouldDelegateToExitHandlerOnGracefulExit() throws Exception {
         String[] args = {"test"};
 
         when(argsChecker.validate(args)).thenReturn(true);
-        when(registry.find(any())).thenReturn(Optional.ofNullable(commandService));
-        doThrow(new GracefulExitException("End", 5))
-                .when(commandService).execute(args);
+        doThrow(new GracefulExitException("bye", 0))
+                .when(service).execute(args);
 
         dispatcher.run(args);
 
-        assertEquals(5, exitCodeGenerator.getExitCode());
+        verify(exitHandler).handle(any(GracefulExitException.class));
     }
 }
