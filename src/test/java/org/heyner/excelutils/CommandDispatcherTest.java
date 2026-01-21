@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -15,8 +16,8 @@ class CommandDispatcherTest {
     private ArgsChecker argsChecker;
     private CustomExitCodeGenerator exitCodeGenerator;
     private CommandService commandService;
-
     private CommandDispatcher dispatcher;
+    private CommandRegistry registry;
 
     @BeforeEach
     void setUp() {
@@ -24,6 +25,7 @@ class CommandDispatcherTest {
         argsChecker = mock(ArgsChecker.class);
         exitCodeGenerator = new CustomExitCodeGenerator();
         commandService = mock(CommandService.class);
+        registry = mock(CommandRegistry.class);
 
         when(applicationProperties.getProjectName()).thenReturn("ExcelUtils");
         when(applicationProperties.getVersion()).thenReturn("1.0.0");
@@ -33,7 +35,7 @@ class CommandDispatcherTest {
                 applicationProperties,
                 List.of(commandService),
                 argsChecker,
-                exitCodeGenerator
+                registry, exitCodeGenerator
         );
     }
 
@@ -42,6 +44,7 @@ class CommandDispatcherTest {
         String[] args = {"test", "arg1"};
 
         when(argsChecker.validate(args)).thenReturn(true);
+        when(registry.find(any())).thenReturn(Optional.ofNullable(commandService));
         doNothing().when(commandService).execute(args);
 
         dispatcher.run(args);
@@ -55,6 +58,7 @@ class CommandDispatcherTest {
         String[] args = {"unknown"};
 
         when(argsChecker.validate(args)).thenReturn(true);
+        when(registry.find(any())).thenReturn(Optional.empty());
 
         dispatcher.run(args);
 
@@ -66,6 +70,7 @@ class CommandDispatcherTest {
         String[] args = {"test"};
 
         when(argsChecker.validate(args)).thenReturn(true);
+        when(registry.find(any())).thenReturn(Optional.ofNullable(commandService));
         doThrow(new GracefulExitException("End", 5))
                 .when(commandService).execute(args);
 

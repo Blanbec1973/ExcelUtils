@@ -11,8 +11,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,28 +18,18 @@ import java.util.stream.Collectors;
 public class CommandDispatcher implements CommandLineRunner {
     private final ApplicationProperties applicationProperties;
     private final ArgsChecker argsChecker;
-    private final Map<String, CommandService> commandMap;
+    private final CommandRegistry registry;
     private final CustomExitCodeGenerator exitCodeGenerator;
 
     @Autowired
     public CommandDispatcher(ApplicationProperties applicationProperties, List<CommandService> services,
-                      ArgsChecker argsChecker,
-                      CustomExitCodeGenerator exitCodeGenerator) {
+                             ArgsChecker argsChecker,
+                             CommandRegistry commandRegistry, CustomExitCodeGenerator exitCodeGenerator) {
         this.applicationProperties = applicationProperties;
         this.argsChecker = argsChecker;
+        this.registry = commandRegistry;
         this.exitCodeGenerator = exitCodeGenerator;
 
-
-        this.commandMap = services.stream()
-                .collect(Collectors.toMap(
-                        CommandService::getCommandName,
-                        s -> s,
-                        (s1, s2) -> { // merge function if duplicate
-                            throw new IllegalStateException(
-                                    "Duplicate command name: " + s1.getCommandName());
-                        }));
-
-        log.debug("Available commands : {}", commandMap.keySet());
     }
 
     @Override
@@ -58,10 +46,10 @@ public class CommandDispatcher implements CommandLineRunner {
             argsChecker.validate(args);
             String command = args[0].toLowerCase();
             log.debug("Command : *{}*", command);
-            CommandService service = commandMap.get(command);
-            if (service == null) {
-                throw new MissingConfigurationException("Unable to load command : " + command, 2);
-            }
+
+            CommandService service = registry.find(command)
+                    .orElseThrow(() -> new MissingConfigurationException("Unable to load command : " + command, 2));
+
             service.execute(args);
         } catch (GracefulExitException e) {
             log.info("Program ends normally : {}", e.getMessage());
