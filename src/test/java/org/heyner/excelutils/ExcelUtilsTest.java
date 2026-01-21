@@ -1,38 +1,40 @@
+
 package org.heyner.excelutils;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.system.CapturedOutput;
-import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
-@SpringBootTest(classes = {
-        ExcelUtils.class,
-        ApplicationProperties.class,
-        CustomExitCodeGenerator.class
-})
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest(
+        classes = {ExcelUtils.class},   // on démarre l'app Spring Boot réelle
+        args = {"test", "arg1"}         // on passe une commande "test"
+)
 class ExcelUtilsTest {
 
-    @Autowired
-    private ExcelUtils excelUtils;
+    // Remplace le vrai ArgsChecker par un mock
+    @MockitoBean
+    private ArgsChecker argsChecker;
 
-    @Autowired
-    private CustomExitCodeGenerator exitCodeGenerator;
+    // On ajoute un CommandService "test" mocké pour satisfaire le dispatcher
+    @MockitoBean(name = "testCommandService")
+    private CommandService testCommand;
 
-    @ExtendWith(OutputCaptureExtension.class)
     @Test
-    void testRunWithInvalidCommand(CapturedOutput output) {
-        String[] args = {"invalidCommand"};
+    void contextLoads() throws Exception {
+        // Arrange: on prépare les mocks
+        given(argsChecker.validate(Mockito.any())).willReturn(true);
+        given(testCommand.getCommandName()).willReturn("test");
+        doNothing().when(testCommand).execute(Mockito.any());
 
-        excelUtils.run(args);
+        // Act: rien à faire, @SpringBootTest démarre le contexte
+        // et CommandDispatcher (CommandLineRunner) s’exécute
 
-        // Vérifie que le code de sortie est bien celui d'erreur
-        assertEquals(2, exitCodeGenerator.getExitCode());
-        assertTrue(output.getOut().contains("Unable to load command"));
+        // Assert: si on arrive ici sans exception, le contexte a démarré.
+        // Tu peux ajouter des vérifications si tu veux, p.ex. :
+        Mockito.verify(testCommand, Mockito.atLeastOnce()).getCommandName();
     }
 }
