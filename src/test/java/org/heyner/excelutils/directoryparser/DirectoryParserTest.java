@@ -1,8 +1,8 @@
 package org.heyner.excelutils.directoryparser;
 
+import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.exceptions.FileHandlingException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
-import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
 import org.heyner.excelutils.formatactivity.FormatActivity;
@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,7 +44,7 @@ class DirectoryParserTest {
     }
     @Test
     void testDirectoryParser() throws IOException {
-        DirectoryParser d1 = new DirectoryParser(lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(List.of(),lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
         doNothing().when(correctionImputation).execute(any(),any());
         doNothing().when(formatActivity).execute(any());
 
@@ -66,7 +67,7 @@ class DirectoryParserTest {
             fail("Impossible de créer le dossier : " + dir.getAbsolutePath());
         }
 
-        DirectoryParser d1 = new DirectoryParser(lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(List.of(), lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
         assertThrows(GracefulExitException.class,
                 () -> d1.execute("directory_parser", "target/empty/")
         );
@@ -75,7 +76,7 @@ class DirectoryParserTest {
 
     @Test
     void shouldFailFastOnFirstHandlerError() throws IOException {
-        DirectoryParser d1 = new DirectoryParser(lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(List.of(), lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
 
         // Simule une IOException dans le handler activity
         doThrow(new IOException("boom")).when(formatActivity).execute(any());

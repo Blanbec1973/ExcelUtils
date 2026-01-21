@@ -1,28 +1,29 @@
 package org.heyner.excelutils.directoryparser;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.FileNameGenerator;
+import org.heyner.excelutils.correctionimputation.CorrectionImputation;
+import org.heyner.excelutils.directoryparser.processors.FileProcessor;
 import org.heyner.excelutils.exceptions.FileHandlingException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
-import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
 import org.heyner.excelutils.formatactivity.FormatActivity;
 import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLN;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class DirectoryParser implements CommandService {
+    private final List<FileProcessor> processors;
     private final DirectoryLister lister;
     private final CorrectionImputation correctionImputation;
     private final FormatActivity formatActivity;
@@ -96,16 +97,6 @@ public class DirectoryParser implements CommandService {
             }
     );
 
-
-    @Autowired
-    public DirectoryParser (DirectoryLister lister, CorrectionImputation correctionImputation, FormatActivity formatActivity,
-                            FormatInvRegisterLN formatInvRegisterLN, FormatTRX formatTRX) {
-        this.lister = lister;
-        this.correctionImputation = correctionImputation;
-        this.formatActivity = formatActivity;
-        this.formatInvRegisterLN = formatInvRegisterLN;
-        this.formatTRX = formatTRX;
-    }
     @Override
     public String getCommandName() {
         return "directoryparser";
@@ -131,7 +122,7 @@ public class DirectoryParser implements CommandService {
     }
 
 
-    public void processList() {
+/*    public void processList() {
         Stream.of(listFiles)
                 .forEach(f -> {
                     log.info("ProcessList file : {}", f.getName());
@@ -144,7 +135,62 @@ public class DirectoryParser implements CommandService {
                             });
                 });
 
+    }*/
+
+    public void processList() {
+        for (File f : listFiles) {
+            processFile(f);
+        }
     }
+
+
+    private void processFile(File file) {
+        log.info("ProcessList file : {}", file.getName());
+
+        boolean processedByNewChain = processWithProcessors(file);
+
+        if (!processedByNewChain) {
+            processWithLegacyHandlers(file);
+        }
+    }
+
+
+    private boolean processWithProcessors(File file) {
+        boolean processed = false;
+
+        for (FileProcessor processor : processors) {
+            if (processor.supports(file)) {
+                try {
+                    processor.process(file);
+                    processed = true;
+                } catch (IOException e) {
+                    throw new FileHandlingException(
+                            processor.getClass().getSimpleName(),
+                            e,
+                            -1
+                    );
+                }
+            }
+        }
+        return processed;
+    }
+
+
+    private void processWithLegacyHandlers(File file) {
+        for (FileHandler handler : handlers) {
+            if (handler.supports(file)) {
+                try {
+                    handler.run(file);
+                } catch (IOException e) {
+                    throw new FileHandlingException(
+                            handler.getClass().getSimpleName(), e, -1
+                    );
+
+                }
+            }
+        }
+    }
+
 
     private boolean isActivity(File f) { return f.toString().contains(ExcelConstants.ACTIVITY_SHEET); }
     private boolean isTrx(File f)      { return f.toString().contains(ExcelConstants.TRX_SHEET); }
