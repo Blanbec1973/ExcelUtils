@@ -34,6 +34,7 @@ class DirectoryParserTest {
     private FormatInvRegisterLN formatInvRegisterLN;
     @Mock
     private FormatTRX formatTRX;
+    private final DirectoryLister lister = new DirectoryLister();
     private final String fileName1 = "target/temp-"+this.getClass().getSimpleName()+"/300000000073327-UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx";
     private final String fileName2 = "target/temp-"+this.getClass().getSimpleName()+"/300000000073327-UC_PCB_PROJ_TRX_03_1265199083.xlsx";
     @BeforeAll
@@ -42,7 +43,7 @@ class DirectoryParserTest {
     }
     @Test
     void testDirectoryParser() throws IOException {
-        DirectoryParser d1 = new DirectoryParser(correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
         doNothing().when(correctionImputation).execute(any(),any());
         doNothing().when(formatActivity).execute(any());
 
@@ -65,7 +66,7 @@ class DirectoryParserTest {
             fail("Impossible de créer le dossier : " + dir.getAbsolutePath());
         }
 
-        DirectoryParser d1 = new DirectoryParser(correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
         assertThrows(GracefulExitException.class,
                 () -> d1.execute("directory_parser", "target/empty/")
         );
@@ -74,7 +75,7 @@ class DirectoryParserTest {
 
     @Test
     void shouldFailFastOnFirstHandlerError() throws IOException {
-        DirectoryParser d1 = new DirectoryParser(correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
 
         // Simule une IOException dans le handler activity
         doThrow(new IOException("boom")).when(formatActivity).execute(any());

@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 public class DirectoryParser implements CommandService {
+    private final DirectoryLister lister;
     private final CorrectionImputation correctionImputation;
     private final FormatActivity formatActivity;
     private final FormatInvRegisterLN formatInvRegisterLN;
-
     private final FormatTRX formatTRX;
     private File[] listFiles;
 
@@ -98,7 +98,9 @@ public class DirectoryParser implements CommandService {
 
 
     @Autowired
-    public DirectoryParser (CorrectionImputation correctionImputation, FormatActivity formatActivity, FormatInvRegisterLN formatInvRegisterLN, FormatTRX formatTRX) {
+    public DirectoryParser (DirectoryLister lister, CorrectionImputation correctionImputation, FormatActivity formatActivity,
+                            FormatInvRegisterLN formatInvRegisterLN, FormatTRX formatTRX) {
+        this.lister = lister;
         this.correctionImputation = correctionImputation;
         this.formatActivity = formatActivity;
         this.formatInvRegisterLN = formatInvRegisterLN;
@@ -115,9 +117,7 @@ public class DirectoryParser implements CommandService {
         log.debug("Beginning function : {}",
                 this.getClass().getSimpleName());
         log.info("Processing {}",directoryToProcess);
-        File myDirectory = new File(directoryToProcess);
-        FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");
-        listFiles = myDirectory.listFiles(filter);
+        listFiles = lister.listXlsx(directoryToProcess);
 
         if (isListFilesEmpty()) {
             throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
