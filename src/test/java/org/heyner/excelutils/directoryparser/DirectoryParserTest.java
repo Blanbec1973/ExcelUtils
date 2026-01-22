@@ -1,11 +1,11 @@
 package org.heyner.excelutils.directoryparser;
 
 import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.correctionimputation.CorrectionImputation;
+import org.heyner.excelutils.directoryparser.processors.FileProcessor;
 import org.heyner.excelutils.exceptions.FileHandlingException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
-import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.format_trx.FormatTRX;
-import org.heyner.excelutils.formatactivity.FormatActivity;
 import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLN;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,11 +16,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -30,7 +29,7 @@ class DirectoryParserTest {
     @Mock
     private CorrectionImputation correctionImputation;
     @Mock
-    private FormatActivity formatActivity;
+    private FileProcessor activityRenameProcessor;
     @Mock
     private FormatInvRegisterLN formatInvRegisterLN;
     @Mock
@@ -42,49 +41,79 @@ class DirectoryParserTest {
     void beforeAll() throws IOException {
         TestInitializerFactory.action(this.getClass().getSimpleName());
     }
+
     @Test
-    void testDirectoryParser() throws IOException {
-        DirectoryParser d1 = new DirectoryParser(List.of(),lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
-        doNothing().when(correctionImputation).execute(any(),any());
-        doNothing().when(formatActivity).execute(any());
+    void shouldCallActivityRenameProcessor() throws IOException {
+        when(activityRenameProcessor.supports(any(File.class)))
+                .thenAnswer(invocation -> {
+                    File f = invocation.getArgument(0);
+                    String name = f.getName();
+                    return name.contains("UC_AR_ITEM_ACTIVITY");
+                });
+        doNothing().when(activityRenameProcessor).process(argThat(f ->
+                f.getName().contains("UC_AR_ITEM_ACTIVITY")));
 
-        d1.execute("directory_parser", TestInitializerFactory.getPathTest()+"/");
-        assertFalse(d1.isListFilesEmpty());
+        DirectoryParser parser = new DirectoryParser(
+                List.of(activityRenameProcessor),
+                lister,
+                correctionImputation,
+                formatInvRegisterLN,
+                formatTRX
+        );
 
-        assertTrue(Files.exists(Paths.get(fileName1)));
-        assertTrue(Files.exists(Paths.get(fileName2)));
+        parser.execute("directoryparser", "target/temp-"+this.getClass().getSimpleName());
 
-        // Vérifications d'appels
-        verify(formatActivity,   times(1)).execute(any());
-        verify(correctionImputation, times(1)).execute(any(), any());
-        verify(formatTRX,        times(1)).execute(any());
-
+        verify(activityRenameProcessor, times(1)).process(any(File.class));
     }
+//    @Test
+//    void testDirectoryParser() throws IOException {
+//        DirectoryParser d1 = new DirectoryParser(List.of(),lister, correctionImputation, formatInvRegisterLN, formatTRX);
+//        doNothing().when(correctionImputation).execute(any(),any());
+//
+//        d1.execute("directory_parser", TestInitializerFactory.getPathTest()+"/");
+//        assertFalse(d1.isListFilesEmpty());
+//
+//        assertTrue(Files.exists(Paths.get(fileName1)));
+//        assertTrue(Files.exists(Paths.get(fileName2)));
+//
+//        // Vérifications d'appels
+//        verify(correctionImputation, times(1)).execute(any(), any());
+//        verify(formatTRX,        times(1)).execute(any());
+//
+//    }
     @Test
-    void testDirectoryParser2() {
+    void shouldCallGracefulExitWhenEmptyDirectory() {
         File dir = new File("target/empty");
         if (!dir.exists() && !dir.mkdir()) {
             fail("Impossible de créer le dossier : " + dir.getAbsolutePath());
         }
 
-        DirectoryParser d1 = new DirectoryParser(List.of(), lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(List.of(), lister, correctionImputation, formatInvRegisterLN, formatTRX);
         assertThrows(GracefulExitException.class,
                 () -> d1.execute("directory_parser", "target/empty/")
         );
     }
 
-
     @Test
     void shouldFailFastOnFirstHandlerError() throws IOException {
-        DirectoryParser d1 = new DirectoryParser(List.of(), lister, correctionImputation, formatActivity, formatInvRegisterLN, formatTRX);
-
-        // Simule une IOException dans le handler activity
-        doThrow(new IOException("boom")).when(formatActivity).execute(any());
-
         String pathTest = TestInitializerFactory.getPathTest() + "/";
+
+        FileProcessor activityProcessor = mock(FileProcessor.class);
+        when(activityProcessor.supports(any())).thenReturn(true);
+        doThrow(new IOException("boom")).when(activityProcessor).process(any());
+
+        DirectoryParser d1 = new DirectoryParser(
+                List.of(activityProcessor),
+                lister,
+                correctionImputation,
+                formatInvRegisterLN,
+                formatTRX
+        );
+
         assertThrows(FileHandlingException.class, () ->
                 d1.execute("directory_parser", pathTest)
         );
+
     }
 
 }

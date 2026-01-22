@@ -26,31 +26,11 @@ public class DirectoryParser implements CommandService {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
     private final CorrectionImputation correctionImputation;
-    private final FormatActivity formatActivity;
     private final FormatInvRegisterLN formatInvRegisterLN;
     private final FormatTRX formatTRX;
     private File[] listFiles;
 
-
     private final List<FileHandler> handlers = List.of(
-            // Activity : formater
-            new FileHandler() {
-                @Override public boolean supports(File f) {
-                    return isActivity(f);
-                }
-                @Override public void run(File f) throws IOException {
-                    processActivity(f);
-                }
-            },
-            // Activity : rename si pas de prefix
-            new FileHandler() {
-                @Override public boolean supports(File f) {
-                    return isActivity(f);
-                }
-                @Override public void run(File f) {
-                    processActivityRename(f);
-                }
-            },
             // TRX : correction imputation
             new FileHandler() {
                 @Override public boolean supports(File f) {
@@ -121,28 +101,11 @@ public class DirectoryParser implements CommandService {
         return listFiles == null || listFiles.length == 0;
     }
 
-
-/*    public void processList() {
-        Stream.of(listFiles)
-                .forEach(f -> {
-                    log.info("ProcessList file : {}", f.getName());
-                    handlers.stream()
-                            .filter(h -> h.supports(f))
-                            .forEach(h -> {
-                                try { h.run(f);
-                                } catch (IOException e) {
-                                    throw new FileHandlingException(h.getClass().getSimpleName(),e, -1); }
-                            });
-                });
-
-    }*/
-
     public void processList() {
         for (File f : listFiles) {
             processFile(f);
         }
     }
-
 
     private void processFile(File file) {
         log.info("ProcessList file : {}", file.getName());
@@ -153,7 +116,6 @@ public class DirectoryParser implements CommandService {
             processWithLegacyHandlers(file);
         }
     }
-
 
     private boolean processWithProcessors(File file) {
         boolean processed = false;
@@ -175,7 +137,6 @@ public class DirectoryParser implements CommandService {
         return processed;
     }
 
-
     private void processWithLegacyHandlers(File file) {
         for (FileHandler handler : handlers) {
             if (handler.supports(file)) {
@@ -191,24 +152,12 @@ public class DirectoryParser implements CommandService {
         }
     }
 
-
-    private boolean isActivity(File f) { return f.toString().contains(ExcelConstants.ACTIVITY_SHEET); }
     private boolean isTrx(File f)      { return f.toString().contains(ExcelConstants.TRX_SHEET); }
 
     public void processFormatTRX(File file) {
         log.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};
         formatTRX.execute(trxFile);
-    }
-    public void processActivity(File file) throws IOException {
-        log.info("Process activity file : {}", file);
-        String [] activityFile = { file.toString()};
-        formatActivity.execute(activityFile);
-    }
-    public void processActivityRename(File file) {
-        log.info("Process rename activity file : {}", file);
-        if (FileNameGenerator.hasFileNoPrefix(file))
-            FileNameGenerator.renamePSA(file, ExcelConstants.DEFAULT_SHEET,ExcelConstants.ACTIVITY_CONTRACT_CELL);
     }
     public void processTrxRename(File file) {
         log.info("Process renameTRX file : {}", file);
