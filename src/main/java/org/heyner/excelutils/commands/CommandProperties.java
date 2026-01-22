@@ -1,4 +1,4 @@
-package org.heyner.excelutils;
+package org.heyner.excelutils.commands;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 @ConfigurationProperties(prefix = "command")
 @Slf4j
 public class CommandProperties {

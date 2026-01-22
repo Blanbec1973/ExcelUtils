@@ -47,7 +47,7 @@ class ExcelUtilsTest {
 
     @BeforeEach
     void setUp() {
-        given(argsChecker.validate(any())).willReturn(true);
+        given(argsChecker.validateOrThrow(any())).willReturn(true);
         given(applicationProperties.getProjectName()).willReturn("ExcelUtils");
         given(applicationProperties.getVersion()).willReturn("Test");
     }

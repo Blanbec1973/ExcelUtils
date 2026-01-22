@@ -1,5 +1,6 @@
 package org.heyner.excelutils;
 
+import org.heyner.excelutils.commands.CommandProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

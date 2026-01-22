@@ -3,6 +3,7 @@ package org.heyner.excelutils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -10,6 +11,7 @@ import java.util.Arrays;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "org.heyner.excelutils")
+@EnableConfigurationProperties(org.heyner.excelutils.commands.CommandProperties.class)
 @Slf4j
 public class ExcelUtils {
 

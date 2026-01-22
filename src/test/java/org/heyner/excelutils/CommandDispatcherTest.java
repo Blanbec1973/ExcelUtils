@@ -36,7 +36,7 @@ class CommandDispatcherTest {
     void shouldExecuteCommandWhenValid() throws Exception {
         String[] args = {"test", "arg1"};
 
-        when(argsChecker.validate(args)).thenReturn(true);
+        when(argsChecker.validateOrThrow(args)).thenReturn(true);
         doNothing().when(service).execute(args);
 
         dispatcher.run(args);
@@ -49,7 +49,7 @@ class CommandDispatcherTest {
     void shouldDelegateToExitHandlerOnGracefulExit() throws Exception {
         String[] args = {"test"};
 
-        when(argsChecker.validate(args)).thenReturn(true);
+        when(argsChecker.validateOrThrow(args)).thenReturn(true);
         doThrow(new GracefulExitException("bye", 0))
                 .when(service).execute(args);
 

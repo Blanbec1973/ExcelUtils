@@ -23,7 +23,7 @@ class ExcelUtilsIntegrationTest {
         public ArgsChecker argsChecker() {
             return new ArgsChecker(null) {
                 @Override
-                public boolean validate(String[] args) {
+                public boolean validateOrThrow(String[] args) {
                     return true;
                 }
             };

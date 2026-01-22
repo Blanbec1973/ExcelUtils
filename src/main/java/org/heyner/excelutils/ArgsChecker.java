@@ -1,57 +1,44 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.commands.CommandSpec;
+import org.heyner.excelutils.commands.CommandSpecCatalog;
 import org.heyner.excelutils.exceptions.InvalidArgumentCountException;
 import org.heyner.excelutils.exceptions.InvalidFunctionException;
 import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 @Component
-@EnableConfigurationProperties(CommandProperties.class)
 @Slf4j
 public class ArgsChecker {
-    private final CommandProperties commandProperties;
+    private final CommandSpecCatalog catalog;
     @Autowired
-    public ArgsChecker(CommandProperties commandProperties) {
-        this.commandProperties = commandProperties;
+    public ArgsChecker(CommandSpecCatalog catalog) {
+        this.catalog = catalog;
     }
 
-    public boolean validate(String [] args) {
+    public boolean validateOrThrow(String [] args) {
         if (log.isDebugEnabled())
             log.debug("Arguments : {}", Arrays.toString(args));
 
         //Check argument present :
-        if (args.length == 0) {
+        if (args == null || args.length == 0) {
             throw new MissingConfigurationException("No argument, end of program.", -1);
         }
 
         // Check function (first argument) :
-        if (!AvailableFunctions.isFunctionValid(args[0])) {
-            throw new InvalidFunctionException(args[0], -1);
+        String cmd = args[0].toLowerCase();
+        CommandSpec spec = catalog.find(cmd)
+                .orElseThrow(() -> new InvalidFunctionException("Unknown function: " + cmd, -1));
+
+        int expected = spec.expectedArgs();
+        int actual = args.length;
+
+        if (actual != expected) {
+            throw new InvalidArgumentCountException(expected, actual, -1);
         }
-
-        //Check number of argument for thr function :
-        controlNumberOfArgument(args);
-
         return true;
     }
-
-    private void controlNumberOfArgument(String [] args) {
-        int expected;
-        try {
-            log.debug("Config : {}",commandProperties.getCommands().toString());
-            expected = commandProperties.getCommands().get(args[0]).getCounterarguments();
-        } catch (NumberFormatException | NullPointerException e) {
-            throw new MissingConfigurationException("Unable to parse number of arguments for function: " + args[0], -1);
-        }
-
-        if ( args.length != expected) {
-            throw new InvalidArgumentCountException(expected, args.length, -1);
-        }
-
-    }
-
 }

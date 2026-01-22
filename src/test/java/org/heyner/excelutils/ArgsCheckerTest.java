@@ -1,100 +1,87 @@
 package org.heyner.excelutils;
 
+import org.heyner.excelutils.commands.CommandSpec;
+import org.heyner.excelutils.commands.CommandSpecCatalog;
 import org.heyner.excelutils.exceptions.InvalidArgumentCountException;
 import org.heyner.excelutils.exceptions.InvalidFunctionException;
 import org.heyner.excelutils.exceptions.MissingConfigurationException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ArgsCheckerTest {
-    @Autowired
-    private ArgsChecker argsChecker;
-    @Mock
-    private CommandProperties commandProperties;
-    @BeforeEach
-    void setUp() {
-        argsChecker = new ArgsChecker(commandProperties);
-    }
+
     @Test
-    void shouldThrowExceptionWhenNoArguments() {
-        MissingConfigurationException exception = assertThrows(
-                MissingConfigurationException.class,
-                () -> argsChecker.validate(new String[]{})
-        );
-        assertEquals("No argument, end of program.", exception.getMessage());
-        assertEquals(-1, exception.getExitCode());
+    void ok_whenCommandExists_andArgsCountMatches() {
+        // given
+        CommandSpecCatalog catalog = mock(CommandSpecCatalog.class);
+        when(catalog.find("directoryparser"))
+                .thenReturn(Optional.of(new CommandSpec("directoryparser", 2)));
+
+        ArgsChecker checker = new ArgsChecker(catalog);
+
+        // when / then
+        assertDoesNotThrow(() -> checker.validateOrThrow(new String[]{"directoryparser", "/tmp/dir"}));
+        // (optionnel) vérifier qu'on n’a pas fait d'autres appels
+        verify(catalog).find("directoryparser");
+        verifyNoMoreInteractions(catalog);
     }
+
     @Test
-    void shouldThrowExceptionWhenFunctionIsInvalid() {
-        String[] args = {"invalidFunction"};
-        InvalidFunctionException exception = assertThrows(
-                InvalidFunctionException.class,
-                () -> argsChecker.validate(args)
-        );
-        assertTrue(exception.getMessage().contains("Invalid function"));
-        assertEquals(-1, exception.getExitCode());
+    void fail_whenNoArgs() {
+        CommandSpecCatalog catalog = mock(CommandSpecCatalog.class);
+        ArgsChecker checker = new ArgsChecker(catalog);
+
+        assertThrows(MissingConfigurationException.class, () -> checker.validateOrThrow(new String[] {}));
+        verifyNoInteractions(catalog); // rien n’est appelé si args est vide
     }
+
     @Test
-    void shouldThrowExceptionWhenNumberOfArgumentsIsInvalid() {
-        String[] args = {"directoryparser", "arg1"};
+    void fail_whenUnknownCommand() {
+        CommandSpecCatalog catalog = mock(CommandSpecCatalog.class);
+        when(catalog.find("unknown")).thenReturn(Optional.empty());
 
-        CommandProperties.CommandConfig mockConfig = mock(CommandProperties.CommandConfig.class);
-        when(mockConfig.getCounterarguments()).thenReturn(3);
+        ArgsChecker checker = new ArgsChecker(catalog);
 
-        // Créer une map contenant la fonction "validFunction"
-        Map<String, CommandProperties.CommandConfig> mockMap = new HashMap<>();
-        mockMap.put("directoryparser", mockConfig);
-
-        // Configurer le mock de commandProperties
-        when(commandProperties.getCommands()).thenReturn(mockMap);
-
-        // Instancier ArgsChecker avec le mock
-        ArgsChecker argsChecker2 = new ArgsChecker(commandProperties);
-
-        InvalidArgumentCountException exception = assertThrows(
-                InvalidArgumentCountException.class,
-                () -> argsChecker2.validate(args)
-        );
-        System.out.println("Message : "+exception.getMessage());
-        assertTrue(exception.getMessage().contains("Invalid number of arguments"));
-        assertEquals(-1, exception.getExitCode());
+        assertThrows(InvalidFunctionException.class, () -> checker.validateOrThrow(new String[]{"unknown"}));
+        verify(catalog).find("unknown");
+        verifyNoMoreInteractions(catalog);
     }
+
     @Test
-    void shouldPassValidationWithValidArguments() {
-        String[] args = {"directoryparser", "arg1", "arg2"};
+    void fail_whenWrongArgsCount() {
+        CommandSpecCatalog catalog = mock(CommandSpecCatalog.class);
+        when(catalog.find("fusiontrx"))
+                .thenReturn(Optional.of(new CommandSpec("fusiontrx", 2)));
 
-        // Mock de la config de la commande
-        CommandProperties.CommandConfig mockConfig = mock(CommandProperties.CommandConfig.class);
-        when(mockConfig.getCounterarguments()).thenReturn(3);
+        ArgsChecker checker = new ArgsChecker(catalog);
 
-        // Mock de la map des commandes
-        Map<String, CommandProperties.CommandConfig> mockMap = Map.of("directoryparser", mockConfig);
-        when(commandProperties.getCommands()).thenReturn(mockMap);
-
-        // Configurer le mock de commandProperties
-        when(commandProperties.getCommands()).thenReturn(mockMap);
-
-        // Instancier ArgsChecker avec le mock
-        ArgsChecker argsChecker3 = new ArgsChecker(commandProperties);
-
-        // Appel réel
-        boolean result = argsChecker3.validate(args);
-
-        // Vérification
-        assertTrue(result);
+        assertThrows(InvalidArgumentCountException.class, () -> checker.validateOrThrow(new String[]{"fusiontrx"}));
+        verify(catalog).find("fusiontrx");
+        verifyNoMoreInteractions(catalog);
     }
+
+
+    @Test
+    void lookup_is_case_insensitive_if_checker_normalizes() {
+        CommandSpecCatalog catalog = mock(CommandSpecCatalog.class);
+        // Le checker normalise en lower, mais on accepte n’importe quelle casse ici :
+        when(catalog.find(argThat(cmd -> cmd != null && cmd.equalsIgnoreCase("DIRECTORYPARSER"))))
+                .thenReturn(Optional.of(new CommandSpec("directoryparser", 2)));
+
+        ArgsChecker checker = new ArgsChecker(catalog);
+
+        assertDoesNotThrow(() -> checker.validateOrThrow(new String[]{"DIRECTORYPARSER", "/tmp"}));
+        // Interaction réelle se fera avec "directoryparser"
+        verify(catalog).find(argThat(cmd -> cmd.equals("directoryparser")));
+        verifyNoMoreInteractions(catalog);
+    }
+
 }
-

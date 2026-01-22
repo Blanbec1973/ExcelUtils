@@ -1,17 +1,12 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.exceptions.FatalApplicationException;
-import org.heyner.excelutils.exceptions.FunctionalException;
-import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.heyner.excelutils.exitcode.ExitCodeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -43,7 +38,7 @@ public class CommandDispatcher implements CommandLineRunner {
                     projectName,
                     version);
 
-            argsChecker.validate(args);
+            argsChecker.validateOrThrow(args);
             String command = args[0].toLowerCase();
             log.debug("Command : *{}*", command);
 
