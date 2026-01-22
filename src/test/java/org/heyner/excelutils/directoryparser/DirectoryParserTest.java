@@ -1,11 +1,10 @@
 package org.heyner.excelutils.directoryparser;
 
+import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
-import org.heyner.excelutils.correctionimputation.CorrectionImputation;
 import org.heyner.excelutils.directoryparser.processors.FileProcessor;
-import org.heyner.excelutils.exceptions.FileHandlingException;
+import org.heyner.excelutils.exceptions.FileProcessorException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
-import org.heyner.excelutils.format_trx.FormatTRX;
 import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLN;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,44 +27,54 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DirectoryParserTest {
     @Mock
-    private CorrectionImputation correctionImputation;
-    @Mock
     private FileProcessor activityRenameProcessor;
     @Mock
     private FormatInvRegisterLN formatInvRegisterLN;
-    @Mock
-    private FormatTRX formatTRX;
     private final DirectoryLister lister = new DirectoryLister();
-    private final String fileName1 = "target/temp-"+this.getClass().getSimpleName()+"/300000000073327-UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx";
-    private final String fileName2 = "target/temp-"+this.getClass().getSimpleName()+"/300000000073327-UC_PCB_PROJ_TRX_03_1265199083.xlsx";
+    private final String pathTest = "target/temp-"+this.getClass().getSimpleName();
+
     @BeforeAll
     void beforeAll() throws IOException {
         TestInitializerFactory.action(this.getClass().getSimpleName());
     }
 
+
     @Test
     void shouldCallActivityRenameProcessor() throws IOException {
-        when(activityRenameProcessor.supports(any(File.class)))
-                .thenAnswer(invocation -> {
-                    File f = invocation.getArgument(0);
-                    String name = f.getName();
-                    return name.contains("UC_AR_ITEM_ACTIVITY");
-                });
+        // --- Arrange
+        // 1) supports(..) -> true UNIQUEMENT pour les fichiers "activity"
+        when(activityRenameProcessor.supports(argThat(f ->
+                f != null && f.getName().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
+                .thenReturn(true);
+        when(activityRenameProcessor.supports(argThat(f ->
+                f != null && !f.getName().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
+                .thenReturn(false);
+
+        // 2) process(..) ne fait rien (on vérifie juste l'appel)
         doNothing().when(activityRenameProcessor).process(argThat(f ->
-                f.getName().contains("UC_AR_ITEM_ACTIVITY")));
+                f != null && f.getName().contains(ExcelConstants.ACTIVITY_SHEET)));
 
         DirectoryParser parser = new DirectoryParser(
                 List.of(activityRenameProcessor),
-                lister,
-                correctionImputation,
-                formatInvRegisterLN,
-                formatTRX
+                lister
         );
 
-        parser.execute("directoryparser", "target/temp-"+this.getClass().getSimpleName());
+        // 3) Compter les fichiers "activity" dans le dossier
+        long expectedActivityCount =
+                Arrays.stream(new File(pathTest).listFiles())
+                        .filter(f -> f.getName().endsWith(".xlsx"))
+                        .filter(f -> f.getName().contains(ExcelConstants.ACTIVITY_SHEET))
+                        .count();
 
-        verify(activityRenameProcessor, times(1)).process(any(File.class));
+        // --- Act
+        parser.execute("directoryparser", pathTest);
+
+        // --- Assert
+        verify(activityRenameProcessor, times((int) expectedActivityCount))
+                .process(argThat(f -> f.getName().contains(ExcelConstants.ACTIVITY_SHEET)));
+        verifyNoMoreInteractions(activityRenameProcessor);
     }
+
 //    @Test
 //    void testDirectoryParser() throws IOException {
 //        DirectoryParser d1 = new DirectoryParser(List.of(),lister, correctionImputation, formatInvRegisterLN, formatTRX);
@@ -88,32 +98,26 @@ class DirectoryParserTest {
             fail("Impossible de créer le dossier : " + dir.getAbsolutePath());
         }
 
-        DirectoryParser d1 = new DirectoryParser(List.of(), lister, correctionImputation, formatInvRegisterLN, formatTRX);
+        DirectoryParser d1 = new DirectoryParser(List.of(), lister);
         assertThrows(GracefulExitException.class,
                 () -> d1.execute("directory_parser", "target/empty/")
         );
     }
 
+
     @Test
-    void shouldFailFastOnFirstHandlerError() throws IOException {
-        String pathTest = TestInitializerFactory.getPathTest() + "/";
+    void shouldFailFastOnFirstProcessorError() throws IOException {
+        // Arrange
+        FileProcessor failing = mock(FileProcessor.class);
+        when(failing.supports(any())).thenReturn(true);               // il "supporte" tout
+        doThrow(new IOException("boom")).when(failing).process(any()); // il échoue dès le premier fichier
 
-        FileProcessor activityProcessor = mock(FileProcessor.class);
-        when(activityProcessor.supports(any())).thenReturn(true);
-        doThrow(new IOException("boom")).when(activityProcessor).process(any());
+        DirectoryParser d1 = new DirectoryParser(List.of(failing), lister);
 
-        DirectoryParser d1 = new DirectoryParser(
-                List.of(activityProcessor),
-                lister,
-                correctionImputation,
-                formatInvRegisterLN,
-                formatTRX
-        );
-
-        assertThrows(FileHandlingException.class, () ->
-                d1.execute("directory_parser", pathTest)
-        );
-
+        // Act + Assert
+        assertThrows(FileProcessorException.class, () ->
+                d1.execute("directory_parser", pathTest));
     }
+
 
 }
