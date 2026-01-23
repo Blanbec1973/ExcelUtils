@@ -75,22 +75,6 @@ class DirectoryParserTest {
         verifyNoMoreInteractions(activityRenameProcessor);
     }
 
-//    @Test
-//    void testDirectoryParser() throws IOException {
-//        DirectoryParser d1 = new DirectoryParser(List.of(),lister, correctionImputation, formatInvRegisterLN, formatTRX);
-//        doNothing().when(correctionImputation).execute(any(),any());
-//
-//        d1.execute("directory_parser", TestInitializerFactory.getPathTest()+"/");
-//        assertFalse(d1.isListFilesEmpty());
-//
-//        assertTrue(Files.exists(Paths.get(fileName1)));
-//        assertTrue(Files.exists(Paths.get(fileName2)));
-//
-//        // Vérifications d'appels
-//        verify(correctionImputation, times(1)).execute(any(), any());
-//        verify(formatTRX,        times(1)).execute(any());
-//
-//    }
     @Test
     void shouldCallGracefulExitWhenEmptyDirectory() {
         File dir = new File("target/empty");
@@ -103,7 +87,6 @@ class DirectoryParserTest {
                 () -> d1.execute("directory_parser", "target/empty/")
         );
     }
-
 
     @Test
     void shouldFailFastOnFirstProcessorError() throws IOException {

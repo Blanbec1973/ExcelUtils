@@ -35,7 +35,8 @@ class CommandRegistryTest {
     void shouldFailOnDuplicateCommand() {
         CommandService s1 = new DummyService("formatactivity");
         CommandService s2 = new DummyService("formatactivity");
+        List<CommandService> myList = List.of(s1, s2);
 
-        assertThrows(IllegalStateException.class, () -> new CommandRegistry(List.of(s1, s2)));
+        assertThrows(IllegalStateException.class, () -> new CommandRegistry(myList));
     }
 }
