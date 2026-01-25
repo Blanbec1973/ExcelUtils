@@ -1,24 +1,30 @@
 package org.heyner.excelutils.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import org.heyner.common.excelfile.ExcelFile;
-import org.springframework.stereotype.Component;
+import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.TestInitializerFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 
-@Component
-@Slf4j
-public class ExcelPrefixReaderTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    public String read(File f, String sheet, String cell) {
-        try (ExcelFile fichierExcel = ExcelFile.open(f.toString())) {
-            String prefix = fichierExcel.getCellValue(sheet,cell);
-            log.debug("prefix : {}", prefix);
-            return prefix;
-        } catch (IOException e) {
-            log.error("Unable to read file {} : {}", f,e.getMessage() );
-        }
-        return null;
+class ExcelPrefixReaderTest {
+    private final String trxFileName = "UC_PCB_PROJ_TRX_03_1265199083.xlsx";
+    private final String trxPath = "target/temp-" + this.getClass().getSimpleName() + "/";
+
+    @BeforeEach
+    void setUp() throws IOException {
+        System.out.println("icila : " + this.getClass().getSimpleName());
+        TestInitializerFactory.action(this.getClass().getSimpleName());
+    }
+    @Test
+    void readTrxTest() {
+        ExcelPrefixReader excelPrefixReader = new ExcelPrefixReader();
+
+        String prefix = excelPrefixReader.read(trxPath+trxFileName, ExcelConstants.DEFAULT_SHEET,
+                ExcelConstants.TRX_CONTRACT_CELL);
+
+        assertEquals("300000000073327", prefix);
     }
 }

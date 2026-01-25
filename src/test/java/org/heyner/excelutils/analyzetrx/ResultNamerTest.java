@@ -1,8 +1,6 @@
 package org.heyner.excelutils.analyzetrx;
 
-import org.heyner.excelutils.utils.ExcelPrefixReader;
 import org.heyner.excelutils.utils.FsRenamePort;
-import org.heyner.excelutils.utils.FsRenamer;
 import org.heyner.excelutils.utils.PrefixReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +38,8 @@ class ResultNamerTest {
     @Test
     void renameIfNeededNotPassedTest() {
         String inputName = "300000000073657-toto.com";
+
+        resultNamer.renameIfNeeded(inputName, "dummy", "dummy");
         verify(prefixReader, times(0)).read(any(), any(), any());
         verify(fsRenamer, times(0)).rename(any(), any());
     }

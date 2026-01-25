@@ -35,10 +35,10 @@ class ExcelUtilsTest {
     }
 
 //    TODO régler tests
-//    @Test
-//    void contextLoads() {
-//        assertTrue(true);
-//    }
+    @Test
+    void contextLoads() {
+        assertTrue(true);
+    }
 }
 
 
