@@ -5,18 +5,11 @@ import org.heyner.common.excelfile.ExcelFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Slf4j
 public class FileNameGenerator {
 
     private FileNameGenerator() {}
-    public static String generateFileNameWithDate(String template) {
-        LocalDate today = LocalDate.now();
-        String date = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return template.replace(ExcelConstants.DATE_TEMPLATE, date);
-    }
     public static void renamePSA (File file, String sheet, String cell) {
         try (ExcelFile fichierExcel = ExcelFile.open(file.toString())) {
             String prefix = fichierExcel.getCellValue(sheet,cell);

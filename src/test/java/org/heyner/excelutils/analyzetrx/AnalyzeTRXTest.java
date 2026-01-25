@@ -1,53 +1,70 @@
 package org.heyner.excelutils.analyzetrx;
 
-import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.ApachePoiConfigurer;
-import org.heyner.excelutils.TestInitializerFactory;
-import org.junit.jupiter.api.BeforeAll;
+import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.utils.DateTemplateExpander;
+import org.heyner.excelutils.utils.DateTemplateExpanderImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = {AnalyzeTRX.class, AnalyzeTRXConfig.class, ApachePoiConfigurer.class})
-@EnableConfigurationProperties(AnalyzeTRXConfig.class)
-@ExtendWith(OutputCaptureExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class AnalyzeTRXTest {
-    private final String fileName = "target/temp-"+this.getClass().getSimpleName()+"/UC_PCB_PROJ_TRX_03_1265199083.xlsx";
-    @Autowired
-    private AnalyzeTRX analyzeTRX;
 
-    @BeforeAll
-    void beforeAll() throws IOException {
-        TestInitializerFactory.action(this.getClass().getSimpleName());
-        String [] args = {"analyzetrx", fileName};
-        analyzeTRX.execute(args);
+    @Mock private AnalyzeTRXConfig cfg;
+    @Mock private DateTemplateExpander expander;
+    @Mock private ModelCloner cloner;
+    @Mock private TrxDataTransfer transfer;
+    @Mock private ResultNamer namer;
+
+    @InjectMocks
+    private AnalyzeTRX sut; // construit via le constructeur
+
+    @Test
+    void execute_happy_path_calls_collaborators_in_order_with_expected_params() {
+        //arrange
+        when(cfg.getPathModel()).thenReturn("model/model Analyze TRX.xlsm");
+        when(cfg.getPathResultFile()).thenReturn("target/out/Analyze TRX-aaaa-mm-jj.xlsm");
+        when(cfg.getSheetIn()).thenReturn("sheet1");
+        when(cfg.getSheetOut()).thenReturn("Datas");
+
+        when(expander.expand("target/out/Analyze TRX-aaaa-mm-jj.xlsm"))
+                .thenReturn("target/out/Analyze TRX-2026-01-23.xlsm");
+        when(transfer.transfer(any(), any(), any(), any())).thenReturn(56);
+
+        // Act
+        sut.execute("analyzetrx", "C:/tmp/input.xlsx");
+
+        // Assert – ordre
+        InOrder inOrder = inOrder(cloner, transfer, namer);
+        inOrder.verify(cloner).copy(
+                Paths.get("model/model Analyze TRX.xlsm"),
+                Paths.get("target/out/Analyze TRX-2026-01-23.xlsm")
+        );
+        inOrder.verify(transfer).transfer(
+                "C:/tmp/input.xlsx",
+                "target/out/Analyze TRX-2026-01-23.xlsm",
+                "sheet1",
+                "Datas"
+        );
+        inOrder.verify(namer).renameIfNeeded(
+                "target/out/Analyze TRX-2026-01-23.xlsm",
+                ExcelConstants.DATAS_SHEET,
+                ExcelConstants.TRX_CONTRACT_CELL
+        );
+
+        // Pas d'autres interactions
+        verifyNoMoreInteractions(cloner, transfer, namer);
     }
 
     @Test
-    void getCommandName() {
-        assertEquals("analyzetrx", analyzeTRX.getCommandName());
-    }
-
-    @Test
-    void execute() throws IOException {
-        String filePath = "target/temp-"+this.getClass().getSimpleName()+"/300000000073327-Analyze TRX.xlsx";
-        Path path = Paths.get(filePath);
-        assertTrue(Files.exists(path));
-
-        ExcelFile excelFile = ExcelFile.open(filePath);
-        assertEquals(56, excelFile.rowCount("Datas",0));
+    void getCommandName_is_stable() {
+        assert(sut.getCommandName().equals("analyzetrx"));
     }
 }

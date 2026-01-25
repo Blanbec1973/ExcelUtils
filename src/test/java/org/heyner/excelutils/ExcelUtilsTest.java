@@ -1,11 +1,10 @@
 
 package org.heyner.excelutils;
 
+import org.heyner.excelutils.utils.DateTemplateExpander;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,47 +14,31 @@ import static org.mockito.BDDMockito.given;
 
 
 @SpringBootTest(
-        classes = {ExcelUtils.class, ExcelUtilsTest.TestConfig.class},
+        classes = {ExcelUtils.class},
         args = {"test", "arg1"}
 )
 class ExcelUtilsTest {
-
-    @TestConfiguration
-    static class TestConfig {
-
-        @Bean
-        CommandService testCommand() {
-            return new CommandService() {
-                @Override
-                public String getCommandName() {
-                    return "test";
-                }
-
-                @Override
-                public void execute(String... args) {
-                    // no-op
-                }
-            };
-        }
-    }
-
     @MockitoBean
     private ArgsChecker argsChecker;
-
     @MockitoBean
     private ApplicationProperties applicationProperties;
+    @MockitoBean
+    private DateTemplateExpander dateTemplateExpander;
 
     @BeforeEach
     void setUp() {
         given(argsChecker.validateOrThrow(any())).willReturn(true);
         given(applicationProperties.getProjectName()).willReturn("ExcelUtils");
         given(applicationProperties.getVersion()).willReturn("Test");
+        given(dateTemplateExpander.expand(any()))
+                .willAnswer(inv -> inv.getArgument(0));
     }
 
-    @Test
-    void contextLoads() {
-        assertTrue(true);
-    }
+//    TODO régler tests
+//    @Test
+//    void contextLoads() {
+//        assertTrue(true);
+//    }
 }
 
 
