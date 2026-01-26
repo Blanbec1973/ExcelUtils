@@ -44,15 +44,15 @@ public class FusionProcessor {
     }
 
     private void createFusionFile(String outputPath, List<Path> trxFiles) {
-        try (ExcelFile fusion = ExcelFile.create(outputPath + "FusionTRX.xlsx")) {
+        Path out = Path.of(outputPath).resolve("FusionTRX.xlsx");
+        try (ExcelFile fusion = ExcelFile.create(out.toString())) {
 
             Sheet sheetFusion = fusion.createSheet("Fusion");
             int rowOffset = 0;
             boolean ignoreFirstLine = false;
 
             for (Path path : trxFiles) {
-                File file = path.toFile();
-                rowOffset = mergeFile(file, sheetFusion, ignoreFirstLine, rowOffset);
+                rowOffset = mergeFile(path, sheetFusion, ignoreFirstLine, rowOffset);
                 ignoreFirstLine = true;
             }
             fusion.writeFichierExcel();
@@ -86,16 +86,16 @@ public class FusionProcessor {
      * @throws FatalApplicationException en cas d’erreur d’ouverture ou de lecture du fichier
      * @throws FusionSheetMissingException si la feuille "sheet1" est absente
      */
-    private int mergeFile(File file, Sheet sheetFusion, boolean ignoreFirstLine, int rowOffset) {
-        try (ExcelFile excelIn = ExcelFile.open(file.getAbsolutePath())) {
-            log.info("File {} opened.",file.getName());
+    private int mergeFile(Path file, Sheet sheetFusion, boolean ignoreFirstLine, int rowOffset) {
+        try (ExcelFile excelIn = ExcelFile.open(file.toString())) {
+            log.info("File {} opened.",file);
             Sheet sheetIn = excelIn.getWorkBook().getSheet(ExcelConstants.DEFAULT_SHEET);
             if (sheetIn == null) {
-                throw new FusionSheetMissingException(file.getName(),-1);
+                throw new FusionSheetMissingException(file.toString(),-1);
             }
             return excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
         } catch (FusionSheetMissingException e) {
-            log.warn("Skipping file {} due to missing sheet 'sheet1'", file.getName());
+            log.warn("Skipping file {} due to missing sheet 'sheet1'", file);
             return rowOffset;
         } catch (IOException e) {
             throw new FatalApplicationException(e.getMessage(),-1);
