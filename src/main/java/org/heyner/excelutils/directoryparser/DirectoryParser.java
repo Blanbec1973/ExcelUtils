@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -19,7 +20,7 @@ import java.util.List;
 public class DirectoryParser implements CommandService {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
-    private File[] listFiles;
+    private Path[] listPaths;
 
     @Override
     public String getCommandName() {
@@ -32,7 +33,7 @@ public class DirectoryParser implements CommandService {
         log.debug("Beginning function : {}",
                 this.getClass().getSimpleName());
         log.info("Processing {}",directoryToProcess);
-        listFiles = lister.listXlsx(directoryToProcess);
+        listPaths = lister.listXlsx(directoryToProcess).toArray(new Path[0]);
 
         if (isListFilesEmpty()) {
             throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
@@ -41,22 +42,22 @@ public class DirectoryParser implements CommandService {
     }
 
     public boolean isListFilesEmpty() {
-        return listFiles == null || listFiles.length == 0;
+        return listPaths == null || listPaths.length == 0;
     }
 
     public void processList() {
-        for (File f : listFiles) {
-            log.info("ProcessList file : {}", f.getName());
-            processWithProcessors(f);
+        for (Path p : listPaths) {
+            log.info("ProcessList file : {}", p.getFileName());
+            processWithProcessors(p);
         }
     }
 
-    private void processWithProcessors(File file) {
+    private void processWithProcessors(Path filePath) {
 
         for (FileProcessor processor : processors) {
-            if (processor.supports(file)) {
+            if (processor.supports(filePath)) {
                 try {
-                    processor.process(file);
+                    processor.process(filePath);
                 } catch (IOException e) {
                     throw new FileProcessorException(
                             processor.getClass().getSimpleName(),

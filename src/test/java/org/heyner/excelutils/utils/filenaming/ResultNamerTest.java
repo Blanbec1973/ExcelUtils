@@ -1,7 +1,8 @@
-package org.heyner.excelutils.analyzetrx;
+package org.heyner.excelutils.utils.filenaming;
 
-import org.heyner.excelutils.utils.FsRenamePort;
+import org.heyner.excelutils.utils.filenaming.FsRenamePort;
 import org.heyner.excelutils.utils.PrefixReader;
+import org.heyner.excelutils.utils.filenaming.ResultNamer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

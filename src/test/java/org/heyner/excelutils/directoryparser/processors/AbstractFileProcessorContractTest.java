@@ -2,9 +2,12 @@
 package org.heyner.excelutils.directoryparser.processors;
 
 import org.junit.jupiter.api.Test;
-import java.io.File;
+
+import java.nio.file.Path;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 abstract class AbstractFileProcessorContractTest<P extends FileProcessor> {
 
@@ -12,20 +15,20 @@ abstract class AbstractFileProcessorContractTest<P extends FileProcessor> {
     protected abstract P newProcessor();
 
     /** Fichiers qui DOIVENT matcher supports() */
-    protected abstract List<File> matchingSamples();
+    protected abstract List<Path> matchingSamples();
 
     /** Fichiers qui NE DOIVENT PAS matcher supports() */
-    protected abstract List<File> nonMatchingSamples();
+    protected abstract List<Path> nonMatchingSamples();
 
     @Test
     void supports_contract() {
         P p = newProcessor();
 
-        for (File f : matchingSamples()) {
-            assertTrue(p.supports(f), () -> "Expected supports=true for: " + f.getName());
+        for (Path f : matchingSamples()) {
+            assertTrue(p.supports(f), () -> "Expected supports=true for: " + f.toString());
         }
-        for (File f : nonMatchingSamples()) {
-            assertFalse(p.supports(f), () -> "Expected supports=false for: " + f.getName());
+        for (Path f : nonMatchingSamples()) {
+            assertFalse(p.supports(f), () -> "Expected supports=false for: " + f.toString());
         }
     }
 }

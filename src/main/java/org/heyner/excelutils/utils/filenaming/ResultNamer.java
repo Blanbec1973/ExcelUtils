@@ -1,8 +1,7 @@
-package org.heyner.excelutils.analyzetrx;
+package org.heyner.excelutils.utils.filenaming;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.utils.FsRenamePort;
 import org.heyner.excelutils.utils.PrefixReader;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +17,9 @@ public class ResultNamer {
 
         String prefix = excelPrefixReader.read(inputName, sheet, cell);
         fsRenamer.rename(inputName, prefix + "-" + inputName);
-
     }
 
-    boolean hasFileNumericPrefix(String fileName) {
+    public boolean hasFileNumericPrefix(String fileName) {
         if (fileName.length()<15) return false;
         String prefix = fileName.substring(0,15);
         return (prefix.matches("\\d+")) ;

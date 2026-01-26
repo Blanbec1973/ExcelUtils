@@ -3,16 +3,22 @@ package org.heyner.excelutils.directoryparser;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
 
 @Component
 public class DirectoryLister {
-
-    public File[] listXlsx(String directory) {
-        File dir = new File(directory);
-        FileFilter filter = file -> file.getName().toLowerCase().endsWith(".xlsx");
-        File[] files = dir.listFiles(filter);
-        return (files == null) ? new File[0] : files;
+    public List<Path> listXlsx(String directory) throws IOException {
+        Path dir = Path.of(directory);
+        try (var s = Files.list(dir)) {
+            return s.filter(p -> {
+                        String name = p.getFileName().toString().toLowerCase();
+                        return name.endsWith(".xlsx") && Files.isRegularFile(p);
+                    })
+                    .toList();
+        }
     }
 }

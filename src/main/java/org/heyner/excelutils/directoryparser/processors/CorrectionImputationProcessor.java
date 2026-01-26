@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 @Component
 @RequiredArgsConstructor
@@ -21,12 +22,12 @@ public class CorrectionImputationProcessor implements FileProcessor {
     private final CorrectionImputation correctionImputation;
 
     @Override
-    public boolean supports(File file) {
+    public boolean supports(Path file) {
         return classifier.classify(file) == FileType.TRX;
     }
 
     @Override
-    public void process(File file) throws IOException {
+    public void process(Path file) throws IOException {
         log.info("Process correction imputationTRX file : {}", file);
         String [] trxFile = { file.toString(), ExcelConstants.DEFAULT_SHEET};
         correctionImputation.execute(trxFile);

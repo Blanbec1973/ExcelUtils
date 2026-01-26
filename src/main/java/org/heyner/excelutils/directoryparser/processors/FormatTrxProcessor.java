@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 @Component
 @RequiredArgsConstructor
@@ -21,12 +22,12 @@ public class FormatTrxProcessor implements FileProcessor {
     private final FormatTRX formatTRX;
 
     @Override
-    public boolean supports(File file) {
+    public boolean supports(Path file) {
         return classifier.classify(file) == FileType.TRX;
     }
 
     @Override
-    public void process(File file) throws IOException {
+    public void process(Path file) throws IOException {
         log.info("Process FormatTRX file : {}", file);
         String [] trxFile = { file.toString()};
         formatTRX.execute(trxFile);

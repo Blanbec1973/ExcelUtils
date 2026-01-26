@@ -1,4 +1,4 @@
-package org.heyner.excelutils.utils;
+package org.heyner.excelutils.utils.filenaming;
 
 
 public interface FsRenamePort {

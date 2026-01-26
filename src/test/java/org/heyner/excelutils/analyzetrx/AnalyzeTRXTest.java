@@ -2,6 +2,7 @@ package org.heyner.excelutils.analyzetrx;
 
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.utils.DateTemplateExpander;
+import org.heyner.excelutils.utils.filenaming.ResultNamer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;

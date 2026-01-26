@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,15 +45,15 @@ class DirectoryParserTest {
         // --- Arrange
         // 1) supports(..) -> true UNIQUEMENT pour les fichiers "activity"
         when(activityRenameProcessor.supports(argThat(f ->
-                f != null && f.getName().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
+                f != null && f.toString().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
                 .thenReturn(true);
         when(activityRenameProcessor.supports(argThat(f ->
-                f != null && !f.getName().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
+                f != null && !f.toString().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
                 .thenReturn(false);
 
         // 2) process(..) ne fait rien (on vérifie juste l'appel)
         doNothing().when(activityRenameProcessor).process(argThat(f ->
-                f != null && f.getName().contains(ExcelConstants.ACTIVITY_SHEET)));
+                f != null && f.toString().contains(ExcelConstants.ACTIVITY_SHEET)));
 
         DirectoryParser parser = new DirectoryParser(
                 List.of(activityRenameProcessor),
@@ -61,9 +62,9 @@ class DirectoryParserTest {
 
         // 3) Compter les fichiers "activity" dans le dossier
         long expectedActivityCount =
-                Arrays.stream(new File(pathTest).listFiles())
-                        .filter(f -> f.getName().endsWith(".xlsx"))
-                        .filter(f -> f.getName().contains(ExcelConstants.ACTIVITY_SHEET))
+                Arrays.stream(Path.of(pathTest).toFile().listFiles())
+                        .filter(f -> f.toString().endsWith(".xlsx"))
+                        .filter(f -> f.toString().contains(ExcelConstants.ACTIVITY_SHEET))
                         .count();
 
         // --- Act
@@ -71,7 +72,7 @@ class DirectoryParserTest {
 
         // --- Assert
         verify(activityRenameProcessor, times((int) expectedActivityCount))
-                .process(argThat(f -> f.getName().contains(ExcelConstants.ACTIVITY_SHEET)));
+                .process(argThat(f -> f.toString().contains(ExcelConstants.ACTIVITY_SHEET)));
         verifyNoMoreInteractions(activityRenameProcessor);
     }
 
