@@ -28,6 +28,6 @@ public class RenameTrxProcessor implements FileProcessor{
     @Override
     public void process(Path file) throws IOException {
         log.info("Process rename renameTRX file : {}", file);
-        renamer.renameIfNeeded(file.toString(), ExcelConstants.DEFAULT_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
+        renamer.renameIfNeeded(file, ExcelConstants.DEFAULT_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
     }
 }

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.utils.PrefixReader;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -12,11 +14,11 @@ public class ResultNamer {
     private final PrefixReader excelPrefixReader;
     private final FsRenamePort fsRenamer;
 
-    public void renameIfNeeded(String inputName, String sheet, String cell) {
-        if (hasFileNumericPrefix(inputName)) return;
+    public void renameIfNeeded(Path inputName, String sheet, String cell) {
+        if (hasFileNumericPrefix(inputName.getFileName().toString())) return;
 
-        String prefix = excelPrefixReader.read(inputName, sheet, cell);
-        fsRenamer.rename(inputName, prefix + "-" + inputName);
+        String prefix = excelPrefixReader.read(inputName.toString(), sheet, cell);
+        fsRenamer.rename(inputName.toString(), prefix + "-" + inputName);
     }
 
     public boolean hasFileNumericPrefix(String fileName) {

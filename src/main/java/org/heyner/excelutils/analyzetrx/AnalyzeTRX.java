@@ -8,6 +8,7 @@ import org.heyner.excelutils.utils.filenaming.ResultNamer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
@@ -38,13 +39,13 @@ public class AnalyzeTRX implements CommandService {
     @Override
     public void execute(String... args) {
         log.debug("Beginning {}",args[0]);
-        String pathInput = args[1];
-        String pathModel = analyzeTRXConfig.getPathModel();
-        String pathResultFile = dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile());
+        Path pathInput = Path.of(args[1]);
+        Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
+        Path pathResultFile = Path.of(dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile()));
         String sheetIn = analyzeTRXConfig.getSheetIn();
         String sheetOut = analyzeTRXConfig.getSheetOut();
 
-        modelCloner.copy(Paths.get(pathModel), Paths.get(pathResultFile));
+        modelCloner.copy(pathModel, pathResultFile);
 
         int rowCount = trxDataTransfer.transfer(pathInput, pathResultFile, sheetIn, sheetOut);
 

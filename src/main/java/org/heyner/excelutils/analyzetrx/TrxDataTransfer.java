@@ -7,13 +7,14 @@ import org.heyner.excelutils.exceptions.TransferDataException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 @Component
 public class TrxDataTransfer {
 
-    public int transfer(String inputFileName, String outputFileName, String sheetIn, String sheetOut) {
-        try (ExcelFile excelIn = ExcelFile.open(inputFileName);
-             ExcelFile excelOut = ExcelFile.open(outputFileName)) {
+    public int transfer(Path inputFileName, Path outputFileName, String sheetIn, String sheetOut) {
+        try (ExcelFile excelIn = ExcelFile.open(inputFileName.toString());
+             ExcelFile excelOut = ExcelFile.open(outputFileName.toString())) {
             Integer rowCount = excelIn.rowCount(sheetIn, 0);
 
             // Creating Range A2:BB3000)

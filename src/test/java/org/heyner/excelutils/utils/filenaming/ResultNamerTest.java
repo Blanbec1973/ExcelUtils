@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -28,17 +30,17 @@ class ResultNamerTest {
 
     @Test
     void renameIfNeededPassedTest() {
-        String inputName = "toto.com";
-        when(prefixReader.read(inputName, "dummy", "dummy")).thenReturn("300000000073657");
+        Path inputName = Path.of("toto.com");
+        when(prefixReader.read(String.valueOf(inputName), "dummy", "dummy")).thenReturn("300000000073657");
 
         resultNamer.renameIfNeeded(inputName, "dummy", "dummy");
 
-        verify(fsRenamer, times(1)).rename(inputName, "300000000073657-toto.com");
+        verify(fsRenamer, times(1)).rename(String.valueOf(inputName), "300000000073657-toto.com");
     }
 
     @Test
     void renameIfNeededNotPassedTest() {
-        String inputName = "300000000073657-toto.com";
+        Path inputName = Path.of("300000000073657-toto.com");
 
         resultNamer.renameIfNeeded(inputName, "dummy", "dummy");
         verify(prefixReader, times(0)).read(any(), any(), any());

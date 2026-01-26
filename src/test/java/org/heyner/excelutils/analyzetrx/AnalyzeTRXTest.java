@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,13 +50,13 @@ class AnalyzeTRXTest {
                 Paths.get("target/out/Analyze TRX-2026-01-23.xlsm")
         );
         inOrder.verify(transfer).transfer(
-                "C:/tmp/input.xlsx",
-                "target/out/Analyze TRX-2026-01-23.xlsm",
+                Path.of("C:/tmp/input.xlsx"),
+                Path.of("target/out/Analyze TRX-2026-01-23.xlsm"),
                 "sheet1",
                 "Datas"
         );
         inOrder.verify(namer).renameIfNeeded(
-                "target/out/Analyze TRX-2026-01-23.xlsm",
+                Path.of("target/out/Analyze TRX-2026-01-23.xlsm"),
                 ExcelConstants.DATAS_SHEET,
                 ExcelConstants.TRX_CONTRACT_CELL
         );
