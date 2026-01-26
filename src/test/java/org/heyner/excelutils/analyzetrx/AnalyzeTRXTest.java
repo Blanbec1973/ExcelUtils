@@ -2,7 +2,6 @@ package org.heyner.excelutils.analyzetrx;
 
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.utils.DateTemplateExpander;
-import org.heyner.excelutils.utils.DateTemplateExpanderImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -12,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.file.Paths;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +65,6 @@ class AnalyzeTRXTest {
 
     @Test
     void getCommandName_is_stable() {
-        assert(sut.getCommandName().equals("analyzetrx"));
+        assertEquals("analyzetrx", sut.getCommandName());
     }
 }
