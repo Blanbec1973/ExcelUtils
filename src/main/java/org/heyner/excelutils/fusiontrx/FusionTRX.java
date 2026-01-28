@@ -3,13 +3,11 @@ package org.heyner.excelutils.fusiontrx;
 
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class FusionTRX implements CommandService {
     private final FusionProcessor fusionProcessor;
-    @Autowired
     public FusionTRX(FusionProcessor fusionProcessor) {
         this.fusionProcessor = fusionProcessor;
     }

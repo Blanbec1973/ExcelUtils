@@ -5,7 +5,6 @@ import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.utils.DateTemplateExpander;
 import org.heyner.excelutils.utils.filenaming.ResultNamer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -19,7 +18,6 @@ public class AnalyzeTRX implements CommandService {
     private final TrxDataTransfer trxDataTransfer;
     private final ResultNamer resultNamer;
 
-    @Autowired
     public AnalyzeTRX(AnalyzeTRXConfig analyzeTRXConfig,
                       DateTemplateExpander dateTemplateExpander,
                       ModelCloner modelCloner, TrxDataTransfer trxDataTransfer, ResultNamer resultNamer) {

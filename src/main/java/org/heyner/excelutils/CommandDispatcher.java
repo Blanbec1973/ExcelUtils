@@ -3,21 +3,17 @@ package org.heyner.excelutils;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.heyner.excelutils.exitcode.ExitCodeHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@EnableConfigurationProperties(ApplicationProperties.class)
 public class CommandDispatcher implements CommandLineRunner {
     private final ApplicationProperties applicationProperties;
     private final ArgsChecker argsChecker;
     private final CommandRegistry registry;
     private final ExitCodeHandler exitCodeHandler;
 
-    @Autowired
     public CommandDispatcher(ApplicationProperties applicationProperties,
                              ArgsChecker argsChecker,
                              CommandRegistry commandRegistry, ExitCodeHandler exitCodeHandler) {

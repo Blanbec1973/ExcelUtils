@@ -6,7 +6,6 @@ import org.heyner.excelutils.commands.CommandSpecCatalog;
 import org.heyner.excelutils.exceptions.InvalidArgumentCountException;
 import org.heyner.excelutils.exceptions.InvalidFunctionException;
 import org.heyner.excelutils.exceptions.MissingConfigurationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -14,7 +13,6 @@ import java.util.Arrays;
 @Slf4j
 public class ArgsChecker {
     private final CommandSpecCatalog catalog;
-    @Autowired
     public ArgsChecker(CommandSpecCatalog catalog) {
         this.catalog = catalog;
     }
