@@ -18,7 +18,14 @@ public class ResultNamer {
         if (hasFileNumericPrefix(inputName.getFileName().toString())) return;
 
         String prefix = excelPrefixReader.read(inputName.toString(), sheet, cell);
-        fsRenamer.rename(inputName.toString(), prefix + "-" + inputName);
+
+        String baseName = inputName.getFileName().toString();
+        Path parent = inputName.getParent();
+        Path target = (parent != null)
+                    ? parent.resolve(prefix + "-" + baseName)
+                    : Path.of(prefix + "-" + baseName);
+
+        fsRenamer.rename(inputName.toString(), target.toString());
     }
 
     public boolean hasFileNumericPrefix(String fileName) {

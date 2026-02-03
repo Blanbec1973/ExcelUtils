@@ -92,7 +92,7 @@ class AnalyzeTrxIntegrationTest {
         analyzeTRX.execute("analyzetrx", input);
 
         // Assert : le fichier résultat existe
-        Path out = Paths.get("target/temp-AnalyzeTRXIT/Analyze TRX.xlsx");
+        Path out = Paths.get("target/temp-AnalyzeTRXIT/300000000073327-Analyze TRX.xlsx");
         assertTrue(Files.exists(out), "Le fichier résultat doit exister");
 
         // Assert : rowCount attendu sur la feuille Datas

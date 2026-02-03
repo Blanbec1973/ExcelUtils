@@ -13,6 +13,7 @@ public class FsRenamer implements FsRenamePort {
         File inputFile = new File(inputName);
         File outputFile = new File(outputName);
 
+        log.debug("In FsRenamer.rename : {}  ==> {}", inputFile, outputFile);
         if (inputFile.renameTo(outputFile)) log.debug("New name : {}", outputFile);
     }
 }

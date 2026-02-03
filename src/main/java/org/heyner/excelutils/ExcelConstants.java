@@ -19,6 +19,8 @@ public final class ExcelConstants {
     public static final String TRX_CONTRACT_CELL = "B3";
     public static final String ACTIVITY_CONTRACT_CELL = "G3";
 
+    public static final String INV_REGISTER_LN_CONTRACT_CELL = "B3";
+
     // Colonnes utilisées
     public static final int FOREIGN_AMOUNT_COLUMN = 29;
 
