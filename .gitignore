@@ -44,3 +44,4 @@ build/
 /out/
 /.env
 /run-sonar.ps1
+/.run/
