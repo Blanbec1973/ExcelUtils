@@ -44,10 +44,6 @@ package "org.heyner.excelutils" #F5F5F5 {
         +validateOrThrow(args: String[]): void
     }
 
-    class AvailableFunctions {
-        -functions: List<String>
-    }
-
     class ExcelConstants {
         {static} DATAS_SHEET: String
         {static} TRX_CONTRACT_CELL: String
