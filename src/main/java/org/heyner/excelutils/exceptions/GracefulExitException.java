@@ -1,14 +1,7 @@
 package org.heyner.excelutils.exceptions;
 
-public class GracefulExitException extends RuntimeException {
-    private final int exitCode;
-
+public class GracefulExitException extends BaseApplicationException {
     public GracefulExitException(String message, int exitCode) {
-        super(message);
-        this.exitCode = exitCode;
-    }
-
-    public int getExitCode() {
-        return exitCode;
+        super(message, exitCode);
     }
 }

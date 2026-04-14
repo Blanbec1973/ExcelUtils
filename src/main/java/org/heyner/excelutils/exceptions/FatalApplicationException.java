@@ -1,14 +1,7 @@
 package org.heyner.excelutils.exceptions;
 
-public class FatalApplicationException extends RuntimeException {
-    private final int exitCode;
-
+public class FatalApplicationException extends BaseApplicationException {
     public FatalApplicationException(String message, int exitCode) {
-        super(message);
-        this.exitCode = exitCode;
-    }
-
-    public int getExitCode() {
-        return exitCode;
+        super(message, exitCode);
     }
 }
