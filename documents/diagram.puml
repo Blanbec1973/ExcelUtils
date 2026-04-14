@@ -1,0 +1,407 @@
+@startuml ExcelUtils_ClassDiagram
+
+!define ABSTRACT_BG #E1F5FF
+!define INTERFACE_BG #FFF3E0
+!define ENUM_BG #F3E5F5
+!define SERVICE_BG #E8F5E9
+!define EXCEPTION_BG #FFEBEE
+
+skinparam backgroundColor #FFFFFF
+skinparam classBackgroundColor #FFFACD
+skinparam classBorderColor #333333
+skinparam arrowColor #333333
+
+' ================================
+' CORE INTERFACES & SERVICES
+' ================================
+
+package "org.heyner.excelutils" #F5F5F5 {
+    interface CommandService {
+        +{abstract} getCommandName(): String
+        +{abstract} execute(args: String...): void
+    }
+
+    class CommandDispatcher implements CommandLineRunner {
+        -applicationProperties: ApplicationProperties
+        -argsChecker: ArgsChecker
+        -registry: CommandRegistry
+        -exitCodeHandler: ExitCodeHandler
+        +{override} run(args: String...): void
+    }
+
+    class CommandRegistry {
+        -commandMap: Map<String, CommandService>
+        +find(name: String): Optional<CommandService>
+        +getCommandNames(): List<String>
+    }
+
+    class ApplicationProperties {
+        +getProjectName(): String
+        +getVersion(): String
+    }
+
+    class ArgsChecker {
+        +validateOrThrow(args: String[]): void
+    }
+
+    class AvailableFunctions {
+        -functions: List<String>
+    }
+
+    class ExcelConstants {
+        {static} DATAS_SHEET: String
+        {static} TRX_CONTRACT_CELL: String
+    }
+
+    class ExcelUtils {
+        +{static} main(args: String[]): void
+    }
+
+    class ApachePoiConfigurer
+
+    CommandDispatcher --> CommandRegistry
+    CommandDispatcher --> ApplicationProperties
+    CommandDispatcher --> ArgsChecker
+    CommandDispatcher --> ExitCodeHandler
+    CommandRegistry --> CommandService
+}
+
+' ================================
+' EXIT CODE HANDLING
+' ================================
+
+package "org.heyner.excelutils.exitcode" #F5F5F5 {
+    interface ExitCodeHandler {
+        +{abstract} handle(throwable: Throwable): void
+    }
+
+    class DefaultExitCodeHandler implements ExitCodeHandler {
+        +handle(throwable: Throwable): void
+    }
+}
+
+' ================================
+' EXCEPTIONS HIERARCHY
+' ================================
+
+package "org.heyner.excelutils.exceptions" <<EXCEPTION_BG>> {
+    abstract class FunctionalException extends RuntimeException {
+        #exitCode: int
+        +getExitCode(): int
+    }
+
+    class InvalidArgumentCountException extends FunctionalException
+    class FileProcessorException extends FunctionalException
+    class InvalidFunctionException extends FunctionalException
+    class MissingConfigurationException extends FunctionalException
+    class TransferDataException extends FunctionalException
+    class FusionSheetMissingException extends FunctionalException
+    class CloneModelException extends FunctionalException
+
+    class GracefulExitException extends RuntimeException
+    class FatalApplicationException extends RuntimeException
+}
+
+' ================================
+' ANALYZTRX PACKAGE
+' ================================
+
+package "org.heyner.excelutils.analyzetrx" <<SERVICE_BG>> {
+    class AnalyzeTRX implements CommandService {
+        -analyzeTRXConfig: AnalyzeTRXConfig
+        -dateTemplateExpander: DateTemplateExpander
+        -modelCloner: ModelCloner
+        -trxDataTransfer: TrxDataTransfer
+        -resultNamer: ResultNamer
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+
+    class AnalyzeTRXConfig
+
+    interface ModelCloner {
+        +{abstract} copy(source: Path, target: Path): void
+    }
+
+    class ModelClonerImpl implements ModelCloner {
+        +copy(source: Path, target: Path): void
+    }
+
+    class TrxDataTransfer {
+        +transfer(inputPath: Path, outputPath: Path, sheetIn: String, sheetOut: String): int
+    }
+
+    AnalyzeTRX --> AnalyzeTRXConfig
+    AnalyzeTRX --> ModelCloner
+    AnalyzeTRX --> TrxDataTransfer
+    AnalyzeTRX --> DateTemplateExpander
+    AnalyzeTRX --> ResultNamer
+}
+
+' ================================
+' FORMAT_TRX PACKAGE
+' ================================
+
+package "org.heyner.excelutils.format_trx" <<SERVICE_BG>> {
+    class FormatTRX implements CommandService {
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+}
+
+' ================================
+' FORMAT ACTIVITY PACKAGE
+' ================================
+
+package "org.heyner.excelutils.formatactivity" <<SERVICE_BG>> {
+    class FormatActivity implements CommandService {
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+}
+
+' ================================
+' FORMAT INV REGISTER LN PACKAGE
+' ================================
+
+package "org.heyner.excelutils.formatinvregisterln" <<SERVICE_BG>> {
+    class FormatInvRegisterLN implements CommandService {
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+
+    class FormatInvRegisterLnConfig
+
+    FormatInvRegisterLN --> FormatInvRegisterLnConfig
+}
+
+' ================================
+' CORRECTION IMPUTATION PACKAGE
+' ================================
+
+package "org.heyner.excelutils.correctionimputation" <<SERVICE_BG>> {
+    class CorrectionImputation implements CommandService {
+        -correctionImputationConfig: CorrectionImputationConfig
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+
+    class CorrectionImputationConfig
+
+    CorrectionImputation --> CorrectionImputationConfig
+}
+
+' ================================
+' FUSION TRX PACKAGE
+' ================================
+
+package "org.heyner.excelutils.fusiontrx" <<SERVICE_BG>> {
+    class FusionTRX implements CommandService {
+        -fusionProcessor: FusionProcessor
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+
+    class FusionProcessor {
+        +mergeSheets(inputFile: Path, outputFile: Path): void
+    }
+
+    FusionTRX --> FusionProcessor
+}
+
+' ================================
+' DIRECTORY PARSER PACKAGE
+' ================================
+
+package "org.heyner.excelutils.directoryparser" <<SERVICE_BG>> {
+    class DirectoryParser implements CommandService {
+        -directoryLister: DirectoryLister
+        -fileClassifier: FileClassifier
+        -fileProcessors: List<FileProcessor>
+        +getCommandName(): String
+        +execute(args: String...): void
+    }
+
+    class DirectoryLister {
+        +listFiles(directory: Path): List<Path>
+    }
+
+    class FileClassifier {
+        +classify(file: File): FileType
+    }
+
+    enum FileType {
+        TRX_FILE
+        ACTIVITY_FILE
+        INV_REGISTER_FILE
+        UNKNOWN
+    }
+
+    interface FileHandler {
+        +{abstract} supports(file: File): boolean
+        +run(file: File): void
+    }
+
+    DirectoryParser --> DirectoryLister
+    DirectoryParser --> FileClassifier
+    DirectoryParser --> FileProcessor
+    FileClassifier --> FileType
+}
+
+' ================================
+' FILE PROCESSORS
+' ================================
+
+package "org.heyner.excelutils.directoryparser.processors" <<SERVICE_BG>> {
+    interface FileProcessor {
+        +{abstract} supports(path: Path): boolean
+        +{abstract} process(path: Path): void
+    }
+
+    class FormatActivityProcessor implements FileProcessor {
+        -formatActivity: FormatActivity
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    class FormatTrxProcessor implements FileProcessor {
+        -formatTRX: FormatTRX
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    class FormatInvRegisterLnProcessor implements FileProcessor {
+        -formatInvRegisterLN: FormatInvRegisterLN
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    class RenameActivityProcessor implements FileProcessor {
+        -resultNamer: ResultNamer
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    class RenameTrxProcessor implements FileProcessor {
+        -resultNamer: ResultNamer
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    class RenameRegisterLnProcessor implements FileProcessor {
+        -resultNamer: ResultNamer
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    class CorrectionImputationProcessor implements FileProcessor {
+        -correctionImputation: CorrectionImputation
+        +supports(path: Path): boolean
+        +process(path: Path): void
+    }
+
+    FormatActivityProcessor --> FormatActivity
+    FormatTrxProcessor --> FormatTRX
+    FormatInvRegisterLnProcessor --> FormatInvRegisterLN
+    RenameActivityProcessor --> ResultNamer
+    RenameTrxProcessor --> ResultNamer
+    RenameRegisterLnProcessor --> ResultNamer
+    CorrectionImputationProcessor --> CorrectionImputation
+}
+
+' ================================
+' UTILITIES PACKAGE
+' ================================
+
+package "org.heyner.excelutils.utils" #F5F5F5 {
+    interface DateTemplateExpander {
+        +{abstract} expand(template: String): String
+    }
+
+    class DateTemplateExpanderImpl implements DateTemplateExpander {
+        +expand(template: String): String
+    }
+
+    class ExcelPrefixReader {
+        +readPrefixValue(file: File, sheetName: String, cellReference: String): String
+    }
+
+    class PrefixReader {
+        +read(filePath: Path): Map<String, String>
+    }
+
+    package "filenaming" {
+        class ResultNamer {
+            -fSRenamer: FsRenamer
+            +renameIfNeeded(path: Path, sheetName: String, cellReference: String): void
+        }
+
+        interface FsRenamePort {
+            +{abstract} rename(sourcePath: Path, targetPath: Path): void
+        }
+
+        class FsRenamer implements FsRenamePort {
+            +rename(sourcePath: Path, targetPath: Path): void
+        }
+
+        ResultNamer --> FsRenamer
+    }
+}
+
+' ================================
+' COMMANDS CONFIGURATION PACKAGE
+' ================================
+
+package "org.heyner.excelutils.commands" #F5F5F5 {
+    interface CommandSpecCatalog {
+        +{abstract} getCatalog(): Map<String, CommandSpec>
+    }
+
+    class PropertiesBackedCommandSpecCatalog implements CommandSpecCatalog {
+        +getCatalog(): Map<String, CommandSpec>
+    }
+
+    class CommandSpec {
+        -name: String
+        -description: String
+        -argCount: int
+    }
+
+    class CommandProperties {
+        -specs: Map<String, CommandSpec>
+    }
+
+    PropertiesBackedCommandSpecCatalog --> CommandProperties
+    CommandProperties --> CommandSpec
+}
+
+' ================================
+' CUSTOM EXIT CODE GENERATOR
+' ================================
+
+package "org.heyner.excelutils" #F5F5F5 {
+    class CustomExitCodeGenerator {
+        +generateCode(exception: Exception): int
+    }
+}
+
+' ================================
+' RELATIONSHIPS
+' ================================
+
+CommandService <|.. AnalyzeTRX
+CommandService <|.. FormatTRX
+CommandService <|.. FormatActivity
+CommandService <|.. FormatInvRegisterLN
+CommandService <|.. CorrectionImputation
+CommandService <|.. FusionTRX
+CommandService <|.. DirectoryParser
+
+DefaultExitCodeHandler .-> FunctionalException
+DefaultExitCodeHandler .-> GracefulExitException
+DefaultExitCodeHandler .-> FatalApplicationException
+
+DirectoryParser --> FileProcessor
+
+@enduml
+
