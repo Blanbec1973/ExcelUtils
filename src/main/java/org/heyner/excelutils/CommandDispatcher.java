@@ -27,23 +27,32 @@ public class CommandDispatcher implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            String projectName = applicationProperties.getProjectName();
-
-            String version = applicationProperties.getVersion();
-            log.info("Beginning : {} version {}",
-                    projectName,
-                    version);
-
+            logStartup();
             argsChecker.validateOrThrow(args);
-            String command = args[0].toLowerCase();
-            log.debug("Command : *{}*", command);
 
-            CommandService service = registry.find(command)
-                    .orElseThrow(() -> new MissingConfigurationException("Unable to load command : " + command, 2));
+            String command = extractCommand(args);
+            CommandService service = findCommandService(command);
 
             service.execute(args);
-        } catch (Throwable t) {
-            exitCodeHandler.handle(t);
+        } catch (Exception e) {
+            exitCodeHandler.handle(e);
         }
+    }
+
+    private void logStartup() {
+        String projectName = applicationProperties.getProjectName();
+        String version = applicationProperties.getVersion();
+        log.info("Beginning : {} version {}", projectName, version);
+    }
+
+    private String extractCommand(String[] args) {
+        String command = args[0].toLowerCase();
+        log.debug("Command : *{}*", command);
+        return command;
+    }
+
+    private CommandService findCommandService(String command) {
+        return registry.find(command)
+                .orElseThrow(() -> new MissingConfigurationException("Unable to load command : " + command, 2));
     }
 }
