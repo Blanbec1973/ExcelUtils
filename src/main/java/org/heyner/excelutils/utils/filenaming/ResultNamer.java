@@ -6,6 +6,7 @@ import org.heyner.excelutils.utils.PrefixReader;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
+import java.util.regex.Pattern;
 
 @Component
 @Slf4j
@@ -13,6 +14,8 @@ import java.nio.file.Path;
 public class ResultNamer {
     private final PrefixReader excelPrefixReader;
     private final FsRenamePort fsRenamer;
+    private static final int PREFIX_LENGTH = 15;
+    private static final Pattern NUMERIC_PREFIX_PATTERN = Pattern.compile("^\\d{15}");
 
     public void renameIfNeeded(Path inputName, String sheet, String cell) {
         if (hasFileNumericPrefix(inputName.getFileName().toString())) return;
@@ -29,8 +32,7 @@ public class ResultNamer {
     }
 
     public boolean hasFileNumericPrefix(String fileName) {
-        if (fileName.length()<15) return false;
-        String prefix = fileName.substring(0,15);
-        return (prefix.matches("\\d+")) ;
+        return fileName.length() >= PREFIX_LENGTH &&
+                NUMERIC_PREFIX_PATTERN.matcher(fileName).find();
     }
 }
