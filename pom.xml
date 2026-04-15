@@ -105,6 +105,9 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.springframework.boot</groupId>
@@ -126,6 +129,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>org.heyner.excelutils.ExcelUtils</mainClass>
+                    <jvmArguments>--enable-preview</jvmArguments>
                 </configuration>
             </plugin>
             <!-- Tests & coverage -->
@@ -133,6 +137,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>

@@ -19,19 +19,23 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
 
     @Override
     public void handle(Throwable t) {
-        if (t instanceof GracefulExitException e) {
-            log.info("Program ends normally : {}", e.getMessage());
-            exitCodeGenerator.setExitCode(e.getExitCode());
-        } else if (t instanceof FunctionalException e) {
-            log.error(e.getMessage());
-            exitCodeGenerator.setExitCode(e.getExitCode());
-        } else if (t instanceof FatalApplicationException e) {
-            log.error("Fatal Error", e);
-            exitCodeGenerator.setExitCode(e.getExitCode());
-        } else {
-            log.error("Unexpected error", t);
-            exitCodeGenerator.setExitCode(1);
+        switch (t) {
+            case GracefulExitException e -> {
+                log.info("Program ends normally : {}", e.getMessage());
+                exitCodeGenerator.setExitCode(e.getExitCode());
+            }
+            case FunctionalException e -> {
+                log.error(e.getMessage());
+                exitCodeGenerator.setExitCode(e.getExitCode());
+            }
+            case FatalApplicationException e -> {
+                log.error("Fatal Error", e);
+                exitCodeGenerator.setExitCode(e.getExitCode());
+            }
+            default -> {
+                log.error("Unexpected error", t);
+                exitCodeGenerator.setExitCode(1);
+            }
         }
     }
 }
-
