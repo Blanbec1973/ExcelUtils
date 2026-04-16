@@ -22,19 +22,19 @@ public class ArgsChecker {
 
         //Check argument present :
         if (args == null || args.length == 0) {
-            throw new MissingConfigurationException("No argument, end of program.", -1);
+            throw new MissingConfigurationException("No argument, end of program.", ExitCodes.FUNCTIONAL_ERROR);
         }
 
         // Check function (first argument) :
         String cmd = args[0].toLowerCase();
         CommandSpec spec = catalog.find(cmd)
-                .orElseThrow(() -> new InvalidFunctionException("Unknown function: " + cmd, -1));
+                .orElseThrow(() -> new InvalidFunctionException("Unknown function: " + cmd, ExitCodes.FUNCTIONAL_ERROR));
 
         int expected = spec.expectedArgs();
         int actual = args.length;
 
         if (actual != expected) {
-            throw new InvalidArgumentCountException(expected, actual, -1);
+            throw new InvalidArgumentCountException(expected, actual, ExitCodes.FUNCTIONAL_ERROR);
         }
         return true;
     }

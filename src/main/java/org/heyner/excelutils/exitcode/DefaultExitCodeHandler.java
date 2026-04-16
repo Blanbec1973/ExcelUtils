@@ -3,6 +3,7 @@ package org.heyner.excelutils.exitcode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CustomExitCodeGenerator;
+import org.heyner.excelutils.ExitCodes;
 import org.heyner.excelutils.exceptions.FatalApplicationException;
 import org.heyner.excelutils.exceptions.FunctionalException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
@@ -32,7 +33,7 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
             }
             default -> {
                 log.error("Unexpected error", t);
-                exitCodeGenerator.setExitCode(1);
+                exitCodeGenerator.setExitCode(ExitCodes.UNEXPECTED_ERROR);
             }
         }
     }

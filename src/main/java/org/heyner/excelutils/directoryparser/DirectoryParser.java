@@ -4,6 +4,7 @@ package org.heyner.excelutils.directoryparser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.ExitCodes;
 import org.heyner.excelutils.directoryparser.processors.FileProcessor;
 import org.heyner.excelutils.exceptions.FileProcessorException;
 import org.heyner.excelutils.exceptions.GracefulExitException;
@@ -61,7 +62,7 @@ public class DirectoryParser implements CommandService {
                     throw new FileProcessorException(
                             processor.getClass().getSimpleName(),
                             e,
-                            -1
+                            ExitCodes.FILE_PROCESSING_ERROR
                     );
                 }
             }

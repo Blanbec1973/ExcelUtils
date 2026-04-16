@@ -1,6 +1,7 @@
 package org.heyner.excelutils.analyzetrx;
 
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.ExitCodes;
 import org.heyner.excelutils.exceptions.CloneModelException;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,7 @@ public class ModelClonerImpl implements ModelCloner {
             Files.copy(in, out);
         } catch (IOException e) {
             log.error("Model copy error", e);
-            throw new CloneModelException(e.getMessage(), -1);
+            throw new CloneModelException(e.getMessage(), ExitCodes.FILE_PROCESSING_ERROR);
 
         }
     }

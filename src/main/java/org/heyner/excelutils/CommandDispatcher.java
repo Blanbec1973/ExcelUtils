@@ -45,6 +45,6 @@ public class CommandDispatcher implements CommandLineRunner {
 
     private CommandService findCommandService(String command) {
         return registry.find(command)
-                .orElseThrow(() -> new MissingConfigurationException("Unable to load command : " + command, 2));
+                .orElseThrow(() -> new MissingConfigurationException("Unable to load command : " + command, ExitCodes.MISSING_CONFIGURATION));
     }
 }
