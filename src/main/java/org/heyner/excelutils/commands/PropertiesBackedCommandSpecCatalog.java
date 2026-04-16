@@ -50,5 +50,6 @@ public class PropertiesBackedCommandSpecCatalog implements CommandSpecCatalog {
     public Set<String> names() {
         return catalog.keySet();
     }
-}
 
+
+}

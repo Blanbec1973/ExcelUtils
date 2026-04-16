@@ -1,5 +1,6 @@
 package org.heyner.excelutils.formatinvregisterln;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,12 +15,9 @@ import java.util.stream.IntStream;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FormatInvRegisterLN implements CommandService {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
-
-    public FormatInvRegisterLN(FormatInvRegisterLnConfig formatInvRegisterLnConfig) {
-        this.formatInvRegisterLnConfig = formatInvRegisterLnConfig;
-    }
 
     public void execute(String... args) throws IOException {
         try(ExcelFile fichierExcel = ExcelFile.open(args[0])) {

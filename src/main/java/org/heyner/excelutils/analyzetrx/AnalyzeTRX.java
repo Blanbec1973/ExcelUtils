@@ -1,5 +1,6 @@
 package org.heyner.excelutils.analyzetrx;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
@@ -11,22 +12,13 @@ import java.nio.file.Path;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AnalyzeTRX implements CommandService {
     private final AnalyzeTRXConfig analyzeTRXConfig;
     private final DateTemplateExpander dateTemplateExpander;
     private final ModelCloner modelCloner;
     private final TrxDataTransfer trxDataTransfer;
     private final ResultNamer resultNamer;
-
-    public AnalyzeTRX(AnalyzeTRXConfig analyzeTRXConfig,
-                      DateTemplateExpander dateTemplateExpander,
-                      ModelCloner modelCloner, TrxDataTransfer trxDataTransfer, ResultNamer resultNamer) {
-        this.analyzeTRXConfig = analyzeTRXConfig;
-        this.dateTemplateExpander = dateTemplateExpander;
-        this.modelCloner = modelCloner;
-        this.trxDataTransfer = trxDataTransfer;
-        this.resultNamer = resultNamer;
-    }
 
     @Override
     public String getCommandName() {

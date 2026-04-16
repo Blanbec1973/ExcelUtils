@@ -1,5 +1,6 @@
 package org.heyner.excelutils.exitcode;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CustomExitCodeGenerator;
 import org.heyner.excelutils.exceptions.FatalApplicationException;
@@ -9,13 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DefaultExitCodeHandler implements ExitCodeHandler {
 
     private final CustomExitCodeGenerator exitCodeGenerator;
-
-    public DefaultExitCodeHandler(CustomExitCodeGenerator exitCodeGenerator) {
-        this.exitCodeGenerator = exitCodeGenerator;
-    }
 
     @Override
     public void handle(Throwable t) {

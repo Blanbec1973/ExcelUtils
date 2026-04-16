@@ -1,5 +1,6 @@
 package org.heyner.excelutils.correctionimputation;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -7,20 +8,15 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.CommandService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CorrectionImputation implements CommandService {
     private ExcelFile fichierExcel;
     private final CorrectionImputationConfig correctionImputationConfig;
-
-    @Autowired
-    public CorrectionImputation(CorrectionImputationConfig correctionImputationConfig) {
-        this.correctionImputationConfig = correctionImputationConfig;
-    }
 
     public void execute(String... args) throws IOException {
 

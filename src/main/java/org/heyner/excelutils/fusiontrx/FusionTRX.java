@@ -1,16 +1,16 @@
 package org.heyner.excelutils.fusiontrx;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandService;
 import org.springframework.stereotype.Service;
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FusionTRX implements CommandService {
     private final FusionProcessor fusionProcessor;
-    public FusionTRX(FusionProcessor fusionProcessor) {
-        this.fusionProcessor = fusionProcessor;
-    }
+
     public void execute(String... args) {
         String directoryToProcess = (args[1].equals("")) ? System.getProperty("user.dir")+"\\" : args[1];
         String pathFusion = args[2];

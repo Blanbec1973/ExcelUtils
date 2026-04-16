@@ -1,5 +1,6 @@
 package org.heyner.excelutils;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.commands.CommandSpec;
 import org.heyner.excelutils.commands.CommandSpecCatalog;
@@ -11,11 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ArgsChecker {
     private final CommandSpecCatalog catalog;
-    public ArgsChecker(CommandSpecCatalog catalog) {
-        this.catalog = catalog;
-    }
 
     public boolean validateOrThrow(String [] args) {
         if (log.isDebugEnabled())
