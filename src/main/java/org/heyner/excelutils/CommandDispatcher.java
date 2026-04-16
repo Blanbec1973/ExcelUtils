@@ -8,21 +8,13 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@lombok.RequiredArgsConstructor
 public class CommandDispatcher implements CommandLineRunner {
     private final ApplicationProperties applicationProperties;
     private final ArgsChecker argsChecker;
     private final CommandRegistry registry;
     private final ExitCodeHandler exitCodeHandler;
 
-    public CommandDispatcher(ApplicationProperties applicationProperties,
-                             ArgsChecker argsChecker,
-                             CommandRegistry commandRegistry, ExitCodeHandler exitCodeHandler) {
-        this.applicationProperties = applicationProperties;
-        this.argsChecker = argsChecker;
-        this.registry = commandRegistry;
-        this.exitCodeHandler = exitCodeHandler;
-
-    }
 
     @Override
     public void run(String... args) {
