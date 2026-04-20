@@ -20,6 +20,9 @@ public class AnalyzeTRX implements CommandService {
     private final TrxDataTransfer trxDataTransfer;
     private final ResultNamer resultNamer;
 
+    private static final String BEGINNING_LOG = "Beginning {}";
+    private static final String TRANSFERRED_ROWS_LOG = "Number of transferred rows: {}";
+
     @Override
     public String getCommandName() {
         return "analyzetrx";
@@ -27,7 +30,7 @@ public class AnalyzeTRX implements CommandService {
 
     @Override
     public void execute(String... args) {
-        log.debug("Beginning {}",args[0]);
+        log.debug(BEGINNING_LOG,args[0]);
         Path pathInput = Path.of(args[1]);
         Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
         Path pathResultFile = Path.of(dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile()));
@@ -38,7 +41,7 @@ public class AnalyzeTRX implements CommandService {
 
         int rowCount = trxDataTransfer.transfer(pathInput, pathResultFile, sheetIn, sheetOut);
 
-        log.info("Number of transferred rows : {}", rowCount);
+        log.info(TRANSFERRED_ROWS_LOG, rowCount);
 
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
     }

@@ -22,6 +22,10 @@ public class DirectoryParser implements CommandService {
     private final DirectoryLister lister;
     private Path[] listPaths;
 
+    private static final String BEGIN_FUNCTION_LOG = "Beginning function: {}";
+    private static final String PROCESSING_LOG = "Processing {}";
+    private static final String PROCESS_FILE_LOG = "ProcessList file: {}";
+
     @Override
     public String getCommandName() {
         return "directoryparser";
@@ -30,9 +34,9 @@ public class DirectoryParser implements CommandService {
     @Override
     public void execute(String... args) throws IOException {
         String directoryToProcess = args[1];
-        log.debug("Beginning function : {}",
+        log.debug(BEGIN_FUNCTION_LOG,
                 this.getClass().getSimpleName());
-        log.info("Processing {}",directoryToProcess);
+        log.info(PROCESSING_LOG,directoryToProcess);
         listPaths = lister.listXlsx(directoryToProcess).toArray(new Path[0]);
 
         if (isListFilesEmpty()) {
@@ -47,7 +51,7 @@ public class DirectoryParser implements CommandService {
 
     public void processList() {
         for (Path p : listPaths) {
-            log.info("ProcessList file : {}", p.getFileName());
+            log.info(PROCESS_FILE_LOG, p.getFileName());
             processWithProcessors(p);
         }
     }

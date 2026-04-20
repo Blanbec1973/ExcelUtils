@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 public class FusionTRX implements CommandService {
     private final FusionProcessor fusionProcessor;
 
+    private static final String STARTING_FUSION_LOG = "Starting FusionTRX with directory: {} and output path: {}";
+    private static final String FUSION_COMPLETED_LOG = "FusionTRX completed successfully.";
+
     public void execute(String... args) {
-        String directoryToProcess = (args[1].equals("")) ? System.getProperty("user.dir")+"\\" : args[1];
+        String directoryToProcess = (args[1].isEmpty()) ? System.getProperty("user.dir")+"\\" : args[1];
         String pathFusion = args[2];
-        log.info("Starting FusionTRX with directory: {} and output path: {}", directoryToProcess, pathFusion);
+        log.info(STARTING_FUSION_LOG, directoryToProcess, pathFusion);
         fusionProcessor.process(directoryToProcess,pathFusion);
-        log.info("FusionTRX completed successfully.");
+        log.info(FUSION_COMPLETED_LOG);
     }
     @Override
     public String getCommandName() {

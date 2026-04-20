@@ -16,11 +16,15 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
 
     private final CustomExitCodeGenerator exitCodeGenerator;
 
+    private static final String PROGRAM_ENDS_NORMALLY_LOG = "Program ends normally: {}";
+    private static final String FATAL_ERROR_LOG = "Fatal Error";
+    private static final String UNEXPECTED_ERROR_LOG = "Unexpected error";
+
     @Override
     public void handle(Throwable t) {
         switch (t) {
             case GracefulExitException e -> {
-                log.info("Program ends normally : {}", e.getMessage());
+                log.info(PROGRAM_ENDS_NORMALLY_LOG, e.getMessage());
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             case FunctionalException e -> {
@@ -28,11 +32,11 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             case FatalApplicationException e -> {
-                log.error("Fatal Error", e);
+                log.error(FATAL_ERROR_LOG, e);
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             default -> {
-                log.error("Unexpected error", t);
+                log.error(UNEXPECTED_ERROR_LOG, t);
                 exitCodeGenerator.setExitCode(ExitCodes.UNEXPECTED_ERROR);
             }
         }

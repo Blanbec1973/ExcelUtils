@@ -14,9 +14,13 @@ import java.io.IOException;
 @Slf4j
 @Service
 public class FormatActivity implements CommandService {
+
+    private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
+    private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
+
     public void execute(String... args) throws IOException {
         try(ExcelFile fichierExcel = ExcelFile.open(args[0])) {
-            log.info("File to process : {}", args[0]);
+            log.info(FILE_TO_PROCESS_LOG, args[0]);
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
             hideUnusefulColumns(dataSheet);
@@ -28,7 +32,7 @@ public class FormatActivity implements CommandService {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,ExcelConstants.AR_HISTORIC_HEADER);
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error(ERROR_PROCESSING_FILE_LOG, args[0], e);
         }
     }
 

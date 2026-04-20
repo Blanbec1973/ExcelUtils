@@ -16,9 +16,11 @@ import java.util.Arrays;
 public class ArgsChecker {
     private final CommandSpecCatalog catalog;
 
+    private static final String ARGUMENTS_LOG = "Arguments: {}";
+
     public boolean validateOrThrow(String [] args) {
         if (log.isDebugEnabled())
-            log.debug("Arguments : {}", Arrays.toString(args));
+            log.debug(ARGUMENTS_LOG, Arrays.toString(args));
 
         //Check argument present :
         if (args == null || args.length == 0) {

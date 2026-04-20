@@ -15,6 +15,8 @@ public class CommandDispatcher implements CommandLineRunner {
     private final CommandRegistry registry;
     private final ExitCodeHandler exitCodeHandler;
 
+    private static final String BEGINNING_LOG = "Beginning: {} version {}";
+    private static final String COMMAND_LOG = "Command: *{}*";
 
     @Override
     public void run(String... args) {
@@ -34,12 +36,12 @@ public class CommandDispatcher implements CommandLineRunner {
     private void logStartup() {
         String projectName = applicationProperties.getProjectName();
         String version = applicationProperties.getVersion();
-        log.info("Beginning : {} version {}", projectName, version);
+        log.info(BEGINNING_LOG, projectName, version);
     }
 
     private String extractCommand(String[] args) {
         String command = args[0].toLowerCase();
-        log.debug("Command : *{}*", command);
+        log.debug(COMMAND_LOG, command);
         return command;
     }
 
