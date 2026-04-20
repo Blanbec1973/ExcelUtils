@@ -19,13 +19,14 @@ public class FormatTRX implements CommandService {
         return "formattrx";
     }
     @Override
-    public void execute(String... args) {
+    public void execute(String... args) throws IOException {
         log.info(FILE_TO_PROCESS_LOG, args[0]);
         try (ExcelFile fichierExcel = ExcelFile.open(args[0])) {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"Transaction analysis");
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args[0], e);
+            throw e;
         }
     }
 }

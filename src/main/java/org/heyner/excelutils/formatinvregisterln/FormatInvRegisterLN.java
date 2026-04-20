@@ -19,9 +19,12 @@ import java.util.stream.IntStream;
 public class FormatInvRegisterLN implements CommandService {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
 
+    private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
+    private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
+
     public void execute(String... args) throws IOException {
         try(ExcelFile fichierExcel = ExcelFile.open(args[0])) {
-            log.info("File to process : {}", args[0]);
+            log.info(FILE_TO_PROCESS_LOG, args[0]);
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"MS Invoice Register-LN detail");
@@ -38,7 +41,8 @@ public class FormatInvRegisterLN implements CommandService {
 
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error(ERROR_PROCESSING_FILE_LOG, args[0], e);
+            throw e;
         }
     }
 
