@@ -1,5 +1,8 @@
 package org.heyner.excelutils.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public abstract class FunctionalException extends RuntimeException {
     private final int exitCode;
 
@@ -13,7 +16,4 @@ public abstract class FunctionalException extends RuntimeException {
         this.exitCode = exitCode;
     }
 
-    public int getExitCode() {
-        return exitCode;
-    }
 }

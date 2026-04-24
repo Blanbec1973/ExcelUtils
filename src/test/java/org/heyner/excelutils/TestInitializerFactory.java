@@ -1,5 +1,6 @@
 package org.heyner.excelutils;
 
+import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -10,8 +11,8 @@ import java.nio.file.Paths;
 
 public class TestInitializerFactory {
 
+    @Getter
     private static String pathTest= "em";
-    public static String getPathTest() {return pathTest;}
 
     public static void action(String suffix) throws IOException {
         pathTest = "target/temp-"+suffix;

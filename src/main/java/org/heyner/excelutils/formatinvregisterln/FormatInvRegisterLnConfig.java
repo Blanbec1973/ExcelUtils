@@ -1,41 +1,26 @@
 package org.heyner.excelutils.formatinvregisterln;
 
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
 @ConfigurationProperties(prefix = "formatinvregisterln")
 @Slf4j
 public class FormatInvRegisterLnConfig {
 
+    @Setter
     private int lastcolumn;
+    @Setter
     private List<Integer> nohidecolumns;
 
     private Set<Integer> noHideSet;
-
-    public int getLastcolumn() {
-        return lastcolumn;
-    }
-
-    public void setLastcolumn(int lastcolumn) {
-        this.lastcolumn = lastcolumn;
-    }
-
-    public List<Integer> getNohidecolumns() {
-        return nohidecolumns;
-    }
-
-    public void setNohidecolumns(List<Integer> nohidecolumns) {
-        this.nohidecolumns = nohidecolumns;
-    }
-    public Set<Integer> getNoHideSet() {
-        return noHideSet;
-    }
 
     @PostConstruct
     public void init() {

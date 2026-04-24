@@ -1,27 +1,15 @@
 package org.heyner.excelutils;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@Setter
+@Getter
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
     private String version;
     private String projectName;
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-    public String getVersion() {
-        return version;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
 
 
 }

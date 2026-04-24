@@ -1,25 +1,18 @@
 package org.heyner.excelutils.analyzetrx;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@Setter
+@Getter
 @ConfigurationProperties(prefix = "analyzetrx")
 public class AnalyzeTRXConfig {
+    // Getters et setters
     private String pathModel;
     private String pathResultFile;
     private String sheetIn;
     private String sheetOut;
 
-    // Getters et setters
-    public String getPathModel() { return pathModel; }
-    public void setPathModel(String pathModel) { this.pathModel = pathModel; }
-
-    public String getPathResultFile() { return pathResultFile; }
-    public void setPathResultFile(String pathResultFile) { this.pathResultFile = pathResultFile; }
-
-    public String getSheetIn() { return sheetIn; }
-    public void setSheetIn(String sheetIn) { this.sheetIn = sheetIn; }
-
-    public String getSheetOut() { return sheetOut; }
-    public void setSheetOut(String sheetOut) { this.sheetOut = sheetOut; }
 }
 
