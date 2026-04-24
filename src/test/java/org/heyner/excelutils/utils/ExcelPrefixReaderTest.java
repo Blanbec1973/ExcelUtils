@@ -10,7 +10,6 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExcelPrefixReaderTest {
-    private final String trxFileName = "UC_PCB_PROJ_TRX_03_1265199083.xlsx";
     private final String trxPath = "target/temp-" + this.getClass().getSimpleName() + "/";
 
     @BeforeEach
@@ -22,7 +21,8 @@ class ExcelPrefixReaderTest {
     void readTrxTest() {
         ExcelPrefixReader excelPrefixReader = new ExcelPrefixReader();
 
-        String prefix = excelPrefixReader.read(trxPath+trxFileName, ExcelConstants.DEFAULT_SHEET,
+        String trxFileName = "UC_PCB_PROJ_TRX_03_1265199083.xlsx";
+        String prefix = excelPrefixReader.read(trxPath+ trxFileName, ExcelConstants.DEFAULT_SHEET,
                 ExcelConstants.TRX_CONTRACT_CELL);
 
         assertEquals("300000000073327", prefix);
