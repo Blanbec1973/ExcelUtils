@@ -12,7 +12,7 @@
 
     <groupId>org.heyner</groupId>
     <artifactId>ExcelUtils</artifactId>
-    <version>4.6.0</version>
+    <version>4.6.1</version>
     <description>Tools for financial Excel files</description>
 
     <properties>
@@ -167,19 +167,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>ExcelUtils</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
             </plugin>
             <!-- Quality -->
             <plugin>
