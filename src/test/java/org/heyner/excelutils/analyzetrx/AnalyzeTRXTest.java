@@ -41,7 +41,7 @@ class AnalyzeTRXTest {
         when(transfer.transfer(any(), any(), any(), any())).thenReturn(56);
 
         // Act
-        sut.execute("analyzetrx", "C:/tmp/input.xlsx");
+        sut.execute(new AnalyzeTRXArgs(Path.of("C:/tmp/input.xlsx")));
 
         // Assert – ordre
         InOrder inOrder = inOrder(cloner, transfer, namer);

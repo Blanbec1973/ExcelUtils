@@ -89,7 +89,7 @@ class AnalyzeTrxIntegrationTest {
         String input = "target/temp-AnalyzeTRXIT/UC_PCB_PROJ_TRX_03_1265199083.xlsx";
 
         // Act
-        analyzeTRX.execute("analyzetrx", input);
+        analyzeTRX.execute(new AnalyzeTRXArgs(Path.of(input)));
 
         // Assert : le fichier résultat existe
         Path out = Paths.get("target/temp-AnalyzeTRXIT/300000000073327-Analyze TRX.xlsx");

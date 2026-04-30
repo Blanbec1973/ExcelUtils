@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.directoryparser.FileClassifier;
 import org.heyner.excelutils.directoryparser.FileType;
 import org.heyner.excelutils.format_trx.FormatTRX;
+import org.heyner.excelutils.format_trx.FormatTRXArgs;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,6 @@ public class FormatTrxProcessor implements FileProcessor {
     @Override
     public void process(Path file) throws IOException {
         log.info("Process FormatTRX file : {}", file);
-        String [] trxFile = { file.toString()};
-        formatTRX.execute(trxFile);
+        formatTRX.execute(new FormatTRXArgs(file));
     }
 }

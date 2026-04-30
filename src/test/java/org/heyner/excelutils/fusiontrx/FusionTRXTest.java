@@ -6,6 +6,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
+import java.nio.file.Path;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -16,7 +18,7 @@ class FusionTRXTest {
     void fusionTrxTest(CapturedOutput output) {
         FusionTRX fusionTRX = new FusionTRX(fusionProcessorMock);
         doNothing().when(fusionProcessorMock).process(any(),any());
-        fusionTRX.execute("arg1","arg2", "arg3");
+        fusionTRX.execute(new FusionTRXArgs(Path.of("arg2"), Path.of("arg3")));
         assertThat(output.getOut()).contains("FusionTRX completed successfully.");
     }
 }

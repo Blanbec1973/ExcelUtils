@@ -30,8 +30,14 @@ public class AnalyzeTRX implements CommandService {
 
     @Override
     public void execute(String... args) {
-        log.debug(BEGINNING_LOG,args[0]);
-        Path pathInput = Path.of(args[1]);
+        AnalyzeTRXArgs parsed = mapArgs(args);
+        execute(parsed);
+    }
+
+
+    public void execute(AnalyzeTRXArgs args) {
+
+        Path pathInput = args.inputFile();
         Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
         Path pathResultFile = Path.of(dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile()));
         String sheetIn = analyzeTRXConfig.getSheetIn();
@@ -44,5 +50,11 @@ public class AnalyzeTRX implements CommandService {
         log.info(TRANSFERRED_ROWS_LOG, rowCount);
 
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
+    }
+
+    private AnalyzeTRXArgs mapArgs(String[] args) {
+        return new AnalyzeTRXArgs(
+                Path.of(args[1])
+        );
     }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -22,7 +23,7 @@ class FormatTRXTest {
     @Test
     void testFormatTrxMain() throws IOException {
         FormatTRX formatTRX = new FormatTRX();
-        formatTRX.execute(fileName);
+        formatTRX.execute(new FormatTRXArgs(Path.of(fileName)));
 
         ExcelFile fichierExcel = ExcelFile.open(fileName);
         assertEquals("Business Unit",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));

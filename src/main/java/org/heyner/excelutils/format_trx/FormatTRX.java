@@ -20,13 +20,24 @@ public class FormatTRX implements CommandService {
     }
     @Override
     public void execute(String... args) throws IOException {
-        log.info(FILE_TO_PROCESS_LOG, args[0]);
-        try (ExcelFile fichierExcel = ExcelFile.open(args[0])) {
+        FormatTRXArgs parsed = mapArgs(args);
+        execute(parsed);
+    }
+
+    public void execute(FormatTRXArgs args) throws IOException {
+        log.info(FILE_TO_PROCESS_LOG, args.inputFile());
+        try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"Transaction analysis");
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, args[0], e);
+            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
             throw e;
         }
+    }
+
+    private FormatTRXArgs mapArgs(String[] args) {
+        return new FormatTRXArgs(
+                java.nio.file.Path.of(args[1])
+        );
     }
 }

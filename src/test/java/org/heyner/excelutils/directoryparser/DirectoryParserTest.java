@@ -67,7 +67,7 @@ class DirectoryParserTest {
                         .count();
 
         // --- Act
-        parser.execute("directoryparser", pathTest);
+        parser.execute(new DirectoryParserArgs(Path.of(pathTest)));
 
         // --- Assert
         verify(activityRenameProcessor, times((int) expectedActivityCount))
@@ -84,7 +84,7 @@ class DirectoryParserTest {
 
         DirectoryParser d1 = new DirectoryParser(List.of(), lister);
         assertThrows(GracefulExitException.class,
-                () -> d1.execute("directory_parser", "target/empty/")
+                () -> d1.execute(new DirectoryParserArgs(Path.of("target/empty/")))
         );
     }
 
@@ -99,7 +99,7 @@ class DirectoryParserTest {
 
         // Act + Assert
         assertThrows(FileProcessorException.class, () ->
-                d1.execute("directory_parser", pathTest));
+                d1.execute(new DirectoryParserArgs(Path.of(pathTest))));
     }
 
 
