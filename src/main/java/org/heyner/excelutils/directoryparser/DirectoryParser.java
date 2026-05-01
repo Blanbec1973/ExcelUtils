@@ -21,7 +21,6 @@ public class DirectoryParser implements CommandService<DirectoryParserArgs> {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
     private final FileClassifier classifier;
-    private Path[] listPaths;
 
     private static final String BEGIN_FUNCTION_LOG = "Beginning function: {}";
     private static final String PROCESSING_LOG = "Processing {}";
@@ -44,12 +43,11 @@ public class DirectoryParser implements CommandService<DirectoryParserArgs> {
         if (paths.isEmpty()) {
             throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
         }
-        listPaths = paths.toArray(new Path[0]);
         processList(paths);
     }
 
     public void processList(List<Path> paths) {
-        for (Path p : listPaths) {
+        for (Path p : paths) {
             log.info(PROCESS_FILE_LOG, p.getFileName());
             processWithProcessors(p);
         }
