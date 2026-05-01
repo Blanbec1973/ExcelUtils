@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.directoryparser.FileClassifier;
 import org.heyner.excelutils.directoryparser.FileType;
 import org.heyner.excelutils.formatactivity.FormatActivity;
+import org.heyner.excelutils.formatactivity.FormatActivityArgs;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,9 @@ public class FormatActivityProcessor implements FileProcessor {
     @Override
     public void process(Path file) throws IOException {
         log.info("ActivityFormatProcessor: {}", file.toString());
-        formatActivity.execute(file.toString());
+        FormatActivityArgs args = FormatActivityArgs.builder()
+                .inputFile(file).build();
+        formatActivity.execute(args);
     }
 }
 

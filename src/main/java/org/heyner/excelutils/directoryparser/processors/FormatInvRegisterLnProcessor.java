@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.directoryparser.FileClassifier;
 import org.heyner.excelutils.directoryparser.FileType;
 import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLN;
+import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLNArgs;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,8 @@ public class FormatInvRegisterLnProcessor implements FileProcessor {
     @Override
     public void process(Path path) throws IOException {
         log.info("Process InvRegisterLN file : {}", path);
-        String [] argFile = { path.toString()};
-        formatInvRegisterLN.execute(argFile);
+        FormatInvRegisterLNArgs args = FormatInvRegisterLNArgs.builder()
+                .inputFile(path).build();
+        formatInvRegisterLN.execute(args);
     }
 }

@@ -3,6 +3,8 @@ package org.heyner.excelutils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 @Service
 @Slf4j
 @SuppressWarnings("squid:S2187")
@@ -14,7 +16,7 @@ public class ServiceTest implements CommandService {
     }
 
     @Override
-    public void execute(String[] args) {
-        log.info("TestFormatActivityService executed with args: " + String.join(", ", args));
+    public void execute(CommandArgs args) throws IOException {
+        log.info("TestFormatActivityService executed with args: " + args);
     }
 }

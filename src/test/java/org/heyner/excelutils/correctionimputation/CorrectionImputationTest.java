@@ -32,7 +32,10 @@ class CorrectionImputationTest {
         CorrectionImputationConfig correctionImputationConfig = mock(CorrectionImputationConfig.class);
         when(correctionImputationConfig.isCorrectionImputationActionEnabled()).thenReturn(true);
 
-        String [] args = new String[] {"target/test/correctionImputation/TrxToCorrect.xlsx", ExcelConstants.DEFAULT_SHEET};
+        CorrectionImputationArgs args = CorrectionImputationArgs.builder()
+                .inputFile(Path.of("target/test/correctionImputation/TrxToCorrect.xlsx"))
+                .sheetName(ExcelConstants.DEFAULT_SHEET)
+                .build();
         CorrectionImputation correctionImputation = new CorrectionImputation(correctionImputationConfig);
         correctionImputation.execute(args);
 
@@ -52,7 +55,11 @@ class CorrectionImputationTest {
         CorrectionImputation correctionImputation = Mockito.spy(new CorrectionImputation(configMock));
 
         // Appel de la méthode avec des arguments fictifs
-        correctionImputation.execute("dummy.xlsx", ExcelConstants.DEFAULT_SHEET);
+        CorrectionImputationArgs args = CorrectionImputationArgs.builder()
+                .inputFile(Path.of("dummy.xlsx"))
+                .sheetName(ExcelConstants.DEFAULT_SHEET)
+                .build();
+        correctionImputation.execute(args);
 
         // Vérifie que certaines méthodes internes ne sont jamais appelées
         verify(correctionImputation, never()).processRow(any());

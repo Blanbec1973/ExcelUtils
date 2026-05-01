@@ -1,9 +1,11 @@
-package org.heyner.excelutils.format_trx;
+package org.heyner.excelutils.formatactivity;
 
+import lombok.Builder;
 import org.heyner.excelutils.CommandArgs;
 
 import java.nio.file.Path;
 
-public record FormatTRXArgs(
+@Builder
+public record FormatActivityArgs(
         Path inputFile
 ) implements CommandArgs {}

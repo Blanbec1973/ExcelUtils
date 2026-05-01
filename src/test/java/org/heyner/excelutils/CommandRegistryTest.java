@@ -13,7 +13,7 @@ class CommandRegistryTest {
         private final String name;
         DummyService(String name) { this.name = name; }
         @Override public String getCommandName() { return name; }
-        @Override public void execute(String... args) throws IOException { /* no-op */ }
+        @Override public void execute(CommandArgs args) throws IOException { /* no-op */ }
     }
 
     @Test

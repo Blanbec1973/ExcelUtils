@@ -2,6 +2,7 @@ package org.heyner.excelutils.format_trx;
 
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.common.excelfile.ExcelFile;
+import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
 import org.springframework.stereotype.Service;
@@ -18,26 +19,17 @@ public class FormatTRX implements CommandService {
     public String getCommandName() {
         return "formattrx";
     }
-    @Override
-    public void execute(String... args) throws IOException {
-        FormatTRXArgs parsed = mapArgs(args);
-        execute(parsed);
-    }
 
-    public void execute(FormatTRXArgs args) throws IOException {
-        log.info(FILE_TO_PROCESS_LOG, args.inputFile());
-        try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
+    @Override
+    public void execute(CommandArgs args) throws IOException {
+        FormatTRXArgs parsed = (FormatTRXArgs) args;
+        log.info(FILE_TO_PROCESS_LOG, parsed.inputFile());
+        try (ExcelFile fichierExcel = ExcelFile.open(parsed.inputFile().toString())) {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"Transaction analysis");
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
+            log.error(ERROR_PROCESSING_FILE_LOG, parsed.inputFile(), e);
             throw e;
         }
-    }
-
-    private FormatTRXArgs mapArgs(String[] args) {
-        return new FormatTRXArgs(
-                java.nio.file.Path.of(args[1])
-        );
     }
 }

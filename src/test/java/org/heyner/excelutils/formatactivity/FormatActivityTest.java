@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,7 +23,7 @@ class FormatActivityTest {
     @Test
     void execute() throws IOException {
         FormatActivity formatActivity = new FormatActivity();
-        formatActivity.execute(fileName);
+        formatActivity.execute(FormatActivityArgs.builder().inputFile(Path.of(fileName)).build());
 
         ExcelFile fichierExcel = ExcelFile.open(fileName);
         assertEquals("From Date",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));

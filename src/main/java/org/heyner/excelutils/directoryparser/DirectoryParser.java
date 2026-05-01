@@ -3,6 +3,7 @@ package org.heyner.excelutils.directoryparser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExitCodes;
 import org.heyner.excelutils.directoryparser.processors.FileProcessor;
@@ -32,13 +33,9 @@ public class DirectoryParser implements CommandService {
     }
 
     @Override
-    public void execute(String... args) throws IOException {
-        DirectoryParserArgs parsed = mapArgs(args);
-        execute(parsed);
-    }
-
-    public void execute(DirectoryParserArgs args) throws IOException {
-        String directoryToProcess = args.directory().toString();
+    public void execute(CommandArgs args) throws IOException {
+        DirectoryParserArgs parsed = (DirectoryParserArgs) args;
+        String directoryToProcess = parsed.directory().toString();
         log.debug(BEGIN_FUNCTION_LOG,
                 this.getClass().getSimpleName());
         log.info(PROCESSING_LOG,directoryToProcess);
@@ -48,12 +45,6 @@ public class DirectoryParser implements CommandService {
             throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
         }
         processList();
-    }
-
-    private DirectoryParserArgs mapArgs(String[] args) {
-        return new DirectoryParserArgs(
-                Path.of(args[1])
-        );
     }
 
     public boolean isListFilesEmpty() {

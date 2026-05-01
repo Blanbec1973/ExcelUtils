@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,7 +29,7 @@ class FormatInvRegisterLNTest {
     }
     @Test
     void execute() throws IOException {
-        formatInvRegisterLN.execute(fileName);
+        formatInvRegisterLN.execute(FormatInvRegisterLNArgs.builder().inputFile(Path.of(fileName)).build());
 
         ExcelFile fichierExcel = ExcelFile.open(fileName);
         assertEquals("Entité",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));

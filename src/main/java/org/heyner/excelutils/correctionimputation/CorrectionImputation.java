@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
+import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +26,19 @@ public class CorrectionImputation implements CommandService {
     private static final String INSERTED_FORMULA_LOG = "Inserted formula {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
-    public void execute(String... args) throws IOException {
-
+    public void execute(CommandArgs args) throws IOException {
+        CorrectionImputationArgs parsed = (CorrectionImputationArgs) args;
         if (!correctionImputationConfig.isCorrectionImputationActionEnabled()) {
             log.info(CORRECTION_DISABLED_LOG);
             return;
         }
 
         try {
-            log.info(BEGINNING_CORRECTION_LOG, args[0]);
-            fichierExcel = ExcelFile.open(args[0]);
+            log.info(BEGINNING_CORRECTION_LOG, parsed.inputFile());
+            fichierExcel = ExcelFile.open(parsed.inputFile().toString());
 
             int rowNum = 0;
-            Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args[1]);
+            Sheet dataSheet = fichierExcel.getWorkBook().getSheet(parsed.sheetName());
             fichierExcel.getWorkBook().setMissingCellPolicy(Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
             //Get iterator to all the rows in current sheet Iterator<Row> rowIterator = dataSheet.iterator()
             for (Row row : dataSheet) {
@@ -51,7 +52,7 @@ public class CorrectionImputation implements CommandService {
             }
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, args[0], e);
+            log.error(ERROR_PROCESSING_FILE_LOG, parsed.inputFile(), e);
             throw e;
         }
     }

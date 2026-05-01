@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.correctionimputation.CorrectionImputation;
+import org.heyner.excelutils.correctionimputation.CorrectionImputationArgs;
 import org.heyner.excelutils.directoryparser.FileClassifier;
 import org.heyner.excelutils.directoryparser.FileType;
 import org.springframework.core.annotation.Order;
@@ -28,7 +29,11 @@ public class CorrectionImputationProcessor implements FileProcessor {
     @Override
     public void process(Path file) throws IOException {
         log.info("Process correction imputationTRX file : {}", file);
-        String [] trxFile = { file.toString(), ExcelConstants.DEFAULT_SHEET};
-        correctionImputation.execute(trxFile);
+
+        CorrectionImputationArgs args = CorrectionImputationArgs.builder()
+                .inputFile(Path.of(file.toString()))
+                .sheetName(ExcelConstants.DEFAULT_SHEET)
+                .build();
+        correctionImputation.execute(args);
     }
 }

@@ -1,6 +1,7 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.commands.commandParser.CommandParser;
 import org.heyner.excelutils.exceptions.MissingConfigurationException;
 import org.heyner.excelutils.exitcode.ExitCodeHandler;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,7 @@ public class CommandDispatcher implements CommandLineRunner {
     private final ArgsChecker argsChecker;
     private final CommandRegistry registry;
     private final ExitCodeHandler exitCodeHandler;
+    private final CommandParser parser;
 
     private static final String BEGINNING_LOG = "Beginning: {} version {}";
     private static final String COMMAND_LOG = "Command: *{}*";
@@ -27,7 +29,8 @@ public class CommandDispatcher implements CommandLineRunner {
             String command = extractCommand(args);
             CommandService service = findCommandService(command);
 
-            service.execute(args);
+            CommandArgs commandArgs = parser.parse(args);
+            service.execute(commandArgs);
         } catch (Exception e) {
             exitCodeHandler.handle(e);
         }

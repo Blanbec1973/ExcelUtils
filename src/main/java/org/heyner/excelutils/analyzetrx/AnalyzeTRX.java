@@ -2,6 +2,7 @@ package org.heyner.excelutils.analyzetrx;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
 import org.heyner.excelutils.utils.DateTemplateExpander;
@@ -29,15 +30,9 @@ public class AnalyzeTRX implements CommandService {
     }
 
     @Override
-    public void execute(String... args) {
-        AnalyzeTRXArgs parsed = mapArgs(args);
-        execute(parsed);
-    }
-
-
-    public void execute(AnalyzeTRXArgs args) {
-
-        Path pathInput = args.inputFile();
+    public void execute(CommandArgs args) {
+        AnalyzeTRXArgs parsed = (AnalyzeTRXArgs) args;
+        Path pathInput = parsed.inputFile();
         Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
         Path pathResultFile = Path.of(dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile()));
         String sheetIn = analyzeTRXConfig.getSheetIn();
@@ -52,9 +47,4 @@ public class AnalyzeTRX implements CommandService {
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
     }
 
-    private AnalyzeTRXArgs mapArgs(String[] args) {
-        return new AnalyzeTRXArgs(
-                Path.of(args[1])
-        );
-    }
 }
