@@ -32,11 +32,12 @@ class CorrectionImputationTest {
         CorrectionImputationConfig correctionImputationConfig = mock(CorrectionImputationConfig.class);
         when(correctionImputationConfig.isCorrectionImputationActionEnabled()).thenReturn(true);
 
+        CorrectionImputationService service = new CorrectionImputationService();
         CorrectionImputationArgs args = CorrectionImputationArgs.builder()
                 .inputFile(Path.of("target/test/correctionImputation/TrxToCorrect.xlsx"))
                 .sheetName(ExcelConstants.DEFAULT_SHEET)
                 .build();
-        CorrectionImputation correctionImputation = new CorrectionImputation(correctionImputationConfig);
+        CorrectionImputation correctionImputation = new CorrectionImputation(correctionImputationConfig, service);
         correctionImputation.execute(args);
 
         ExcelFile fichierExcel = ExcelFile.open("target/test/correctionImputation/TrxToCorrect.xlsx");
@@ -51,8 +52,10 @@ class CorrectionImputationTest {
         CorrectionImputationConfig configMock = mock(CorrectionImputationConfig.class);
         when(configMock.isCorrectionImputationActionEnabled()).thenReturn(false);
 
-        // Spy de la classe à tester
-        CorrectionImputation correctionImputation = Mockito.spy(new CorrectionImputation(configMock));
+        // Mock du service
+        CorrectionImputationService serviceMock = mock(CorrectionImputationService.class);
+
+        CorrectionImputation correctionImputation = new CorrectionImputation(configMock, serviceMock);
 
         // Appel de la méthode avec des arguments fictifs
         CorrectionImputationArgs args = CorrectionImputationArgs.builder()
@@ -61,7 +64,7 @@ class CorrectionImputationTest {
                 .build();
         correctionImputation.execute(args);
 
-        // Vérifie que certaines méthodes internes ne sont jamais appelées
-        verify(correctionImputation, never()).processRow(any());
+        // Vérifie que le service n'est jamais appelé
+        verify(serviceMock, never()).processRow(any(), any());
     }
 }

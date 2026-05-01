@@ -16,8 +16,8 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class CorrectionImputation implements CommandService<CorrectionImputationArgs> {
-    private ExcelFile fichierExcel;
     private final CorrectionImputationConfig correctionImputationConfig;
+    private final CorrectionImputationService service;
 
     private static final String CORRECTION_DISABLED_LOG = "CorrectionImputation is disabled by configuration. Skipping execution.";
     private static final String BEGINNING_CORRECTION_LOG = "Beginning Timesheet correction, file to proceed: {}";
@@ -32,9 +32,8 @@ public class CorrectionImputation implements CommandService<CorrectionImputation
             return;
         }
 
-        try {
+        try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())){
             log.info(BEGINNING_CORRECTION_LOG, args.inputFile());
-            fichierExcel = ExcelFile.open(args.inputFile().toString());
 
             int rowNum = 0;
             Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args.sheetName());
@@ -44,7 +43,7 @@ public class CorrectionImputation implements CommandService<CorrectionImputation
                Cell cell = row.getCell(56);
                if (cell != null && cell.getCellType() == CellType.STRING) {
                    log.info(PROCESSING_ROW_LOG, rowNum, cell.getStringCellValue());
-                   processRow(row);
+                   service.processRow(row, fichierExcel);
                 }
 
                 rowNum = rowNum + 1;
@@ -56,23 +55,6 @@ public class CorrectionImputation implements CommandService<CorrectionImputation
         }
     }
 
-    void processRow(Row row) {
-        //8 : code   476867
-        //9 : nom    POMMERET
-        Cell cell = row.getCell(56);
-
-        log.info(LINE_LOG, cell.getStringCellValue());
-        log.info(LINE_LOG, row.getCell(8).getStringCellValue());
-
-            if (cell.getStringCellValue().equals("-Difficulté à déterminer-") &&
-                row.getCell(8).getStringCellValue().equals("476867")) {
-            int rowNum = row.getRowNum() + 1;
-            String formula = "AC" + rowNum + "/8";
-            cell.setCellFormula(formula);
-            fichierExcel.evaluateFormulaCell(cell);
-            log.info(INSERTED_FORMULA_LOG, formula);
-        }
-    }
     @Override
     public String getCommandName() {
         return "correctionimputation";
