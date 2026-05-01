@@ -39,7 +39,7 @@ public class DirectoryParser implements CommandService<DirectoryParserArgs> {
         log.debug(BEGIN_FUNCTION_LOG,
                 this.getClass().getSimpleName());
         log.info(PROCESSING_LOG,directoryToProcess);
-        List<Path> paths = lister.listXlsx(args.directory().toString());
+        List<Path> paths = lister.listXlsx(args.directory());
 
         if (paths.isEmpty()) {
             throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
