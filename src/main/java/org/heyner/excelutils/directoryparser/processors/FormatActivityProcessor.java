@@ -22,8 +22,8 @@ public class FormatActivityProcessor implements FileProcessor {
     private final FormatActivity formatActivity;
 
     @Override
-    public boolean supports(Path file) {
-        return classifier.classify(file) == FileType.ACTIVITY;
+    public FileType getSupportedFileType() {
+        return FileType.ACTIVITY;
     }
 
     @Override

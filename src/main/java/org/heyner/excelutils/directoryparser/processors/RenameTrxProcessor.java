@@ -21,8 +21,8 @@ public class RenameTrxProcessor implements FileProcessor{
     private final ResultNamer renamer;
 
     @Override
-    public boolean supports(Path file) {
-        return classifier.classify(file) == FileType.TRX;
+    public FileType getSupportedFileType() {
+        return FileType.TRX;
     }
 
     @Override

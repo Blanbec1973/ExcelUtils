@@ -21,8 +21,8 @@ public class FormatInvRegisterLnProcessor implements FileProcessor {
     private final FormatInvRegisterLN formatInvRegisterLN;
 
     @Override
-    public boolean supports(Path path) {
-        return classifier.classify(path) == FileType.INV_REGISTER_LN;
+    public FileType getSupportedFileType() {
+        return FileType.INV_REGISTER_LN;
     }
 
     @Override

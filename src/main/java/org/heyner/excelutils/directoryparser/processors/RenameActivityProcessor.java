@@ -19,9 +19,10 @@ import java.nio.file.Path;
 public class RenameActivityProcessor implements FileProcessor{
     private final FileClassifier classifier;
     private final ResultNamer renamer;
+
     @Override
-    public boolean supports(Path file) {
-        return classifier.classify(file) == FileType.ACTIVITY;
+    public FileType getSupportedFileType() {
+        return FileType.ACTIVITY;
     }
 
     @Override

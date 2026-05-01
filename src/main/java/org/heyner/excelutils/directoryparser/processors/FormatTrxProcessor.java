@@ -21,8 +21,8 @@ public class FormatTrxProcessor implements FileProcessor {
     private final FormatTRX formatTRX;
 
     @Override
-    public boolean supports(Path file) {
-        return classifier.classify(file) == FileType.TRX;
+    public FileType getSupportedFileType() {
+        return FileType.TRX;
     }
 
     @Override

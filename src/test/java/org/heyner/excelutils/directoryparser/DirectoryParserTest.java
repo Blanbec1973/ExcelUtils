@@ -30,6 +30,8 @@ class DirectoryParserTest {
     private FileProcessor activityRenameProcessor;
     @Mock
     private FormatInvRegisterLN formatInvRegisterLN;
+    @Mock
+    private FileClassifier classifier;
     private final DirectoryLister lister = new DirectoryLister();
     private final String pathTest = "target/temp-"+this.getClass().getSimpleName();
 
@@ -42,24 +44,28 @@ class DirectoryParserTest {
     @Test
     void shouldCallActivityRenameProcessor() throws IOException {
         // --- Arrange
-        // 1) supports(..) -> true UNIQUEMENT pour les fichiers "activity"
-        when(activityRenameProcessor.supports(argThat(f ->
-                f != null && f.toString().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
-                .thenReturn(true);
-        when(activityRenameProcessor.supports(argThat(f ->
-                f != null && !f.toString().contains(ExcelConstants.ACTIVITY_SHEET)))) // "AR_ITEM_ACTIVITY"
-                .thenReturn(false);
+        // 1) getSupportedFileType() -> ACTIVITY
+        when(activityRenameProcessor.getSupportedFileType()).thenReturn(FileType.ACTIVITY);
 
-        // 2) process(..) ne fait rien (on vérifie juste l'appel)
+        // 2) classifier retourne ACTIVITY pour les fichiers activity, UNKNOWN sinon
+        when(classifier.classify(argThat(f ->
+                f != null && f.toString().contains(ExcelConstants.ACTIVITY_SHEET))))
+                .thenReturn(FileType.ACTIVITY);
+        when(classifier.classify(argThat(f ->
+                f != null && !f.toString().contains(ExcelConstants.ACTIVITY_SHEET))))
+                .thenReturn(FileType.UNKNOWN);
+
+        // 3) process(..) ne fait rien (on vérifie juste l'appel)
         doNothing().when(activityRenameProcessor).process(argThat(f ->
                 f != null && f.toString().contains(ExcelConstants.ACTIVITY_SHEET)));
 
         DirectoryParser parser = new DirectoryParser(
                 List.of(activityRenameProcessor),
-                lister
+                lister,
+                classifier
         );
 
-        // 3) Compter les fichiers "activity" dans le dossier
+        // 4) Compter les fichiers "activity" dans le dossier
         long expectedActivityCount =
                 Arrays.stream(Path.of(pathTest).toFile().listFiles())
                         .filter(f -> f.toString().endsWith(".xlsx"))
@@ -82,7 +88,7 @@ class DirectoryParserTest {
             fail("Impossible de créer le dossier : " + dir.getAbsolutePath());
         }
 
-        DirectoryParser d1 = new DirectoryParser(List.of(), lister);
+        DirectoryParser d1 = new DirectoryParser(List.of(), lister, classifier);
         assertThrows(GracefulExitException.class,
                 () -> d1.execute(new DirectoryParserArgs(Path.of("target/empty/")))
         );
@@ -92,10 +98,11 @@ class DirectoryParserTest {
     void shouldFailFastOnFirstProcessorError() throws IOException {
         // Arrange
         FileProcessor failing = mock(FileProcessor.class);
-        when(failing.supports(any())).thenReturn(true);               // il "supporte" tout
+        when(failing.getSupportedFileType()).thenReturn(FileType.TRX);
+        when(classifier.classify(any())).thenReturn(FileType.TRX);
         doThrow(new IOException("boom")).when(failing).process(any()); // il échoue dès le premier fichier
 
-        DirectoryParser d1 = new DirectoryParser(List.of(failing), lister);
+        DirectoryParser d1 = new DirectoryParser(List.of(failing), lister, classifier);
 
         // Act + Assert
         assertThrows(FileProcessorException.class, () ->

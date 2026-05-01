@@ -3,7 +3,6 @@ package org.heyner.excelutils.directoryparser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExitCodes;
 import org.heyner.excelutils.directoryparser.processors.FileProcessor;
@@ -21,6 +20,7 @@ import java.util.List;
 public class DirectoryParser implements CommandService<DirectoryParserArgs> {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
+    private final FileClassifier classifier;
     private Path[] listPaths;
 
     private static final String BEGIN_FUNCTION_LOG = "Beginning function: {}";
@@ -34,23 +34,21 @@ public class DirectoryParser implements CommandService<DirectoryParserArgs> {
 
     @Override
     public void execute(DirectoryParserArgs args) throws IOException {
-        String directoryToProcess = args.directory().toString();
+        String directoryToProcess = args
+                .directory().toString();
         log.debug(BEGIN_FUNCTION_LOG,
                 this.getClass().getSimpleName());
         log.info(PROCESSING_LOG,directoryToProcess);
-        listPaths = lister.listXlsx(directoryToProcess).toArray(new Path[0]);
+        List<Path> paths = lister.listXlsx(args.directory().toString());
 
-        if (isListFilesEmpty()) {
+        if (paths.isEmpty()) {
             throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
         }
-        processList();
+        listPaths = paths.toArray(new Path[0]);
+        processList(paths);
     }
 
-    public boolean isListFilesEmpty() {
-        return listPaths == null || listPaths.length == 0;
-    }
-
-    public void processList() {
+    public void processList(List<Path> paths) {
         for (Path p : listPaths) {
             log.info(PROCESS_FILE_LOG, p.getFileName());
             processWithProcessors(p);
@@ -58,19 +56,20 @@ public class DirectoryParser implements CommandService<DirectoryParserArgs> {
     }
 
     private void processWithProcessors(Path filePath) {
+        FileType type = classifier.classify(filePath);
 
-        for (FileProcessor processor : processors) {
-            if (processor.supports(filePath)) {
-                try {
-                    processor.process(filePath);
-                } catch (IOException e) {
-                    throw new FileProcessorException(
-                            processor.getClass().getSimpleName(),
-                            e,
-                            ExitCodes.FILE_PROCESSING_ERROR
-                    );
-                }
-            }
-        }
+        processors.stream()
+                .filter(p-> p.getSupportedFileType()==type)
+                .forEach(p-> {
+                    try {
+                        p.process(filePath);
+                    } catch (IOException e) {
+                        throw new FileProcessorException(
+                                p.getClass().getSimpleName(),
+                                e,
+                                ExitCodes.FILE_PROCESSING_ERROR
+                        );
+                    }
+                });
     }
 }

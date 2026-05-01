@@ -22,8 +22,8 @@ public class CorrectionImputationProcessor implements FileProcessor {
     private final CorrectionImputation correctionImputation;
 
     @Override
-    public boolean supports(Path file) {
-        return classifier.classify(file) == FileType.TRX;
+    public FileType getSupportedFileType() {
+        return FileType.TRX;
     }
 
     @Override

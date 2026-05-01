@@ -21,8 +21,8 @@ public class RenameRegisterLnProcessor implements FileProcessor{
     private final ResultNamer renamer;
 
     @Override
-    public boolean supports(Path file) {
-        return classifier.classify(file) == FileType.INV_REGISTER_LN;
+    public FileType getSupportedFileType() {
+        return FileType.INV_REGISTER_LN;
     }
 
     @Override
