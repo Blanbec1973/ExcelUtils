@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 @Service
 @Slf4j
-public class FormatTRX implements CommandService {
+public class FormatTRX implements CommandService<FormatTRXArgs> {
 
     private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
@@ -21,14 +21,13 @@ public class FormatTRX implements CommandService {
     }
 
     @Override
-    public void execute(CommandArgs args) throws IOException {
-        FormatTRXArgs parsed = (FormatTRXArgs) args;
-        log.info(FILE_TO_PROCESS_LOG, parsed.inputFile());
-        try (ExcelFile fichierExcel = ExcelFile.open(parsed.inputFile().toString())) {
+    public void execute(FormatTRXArgs args) throws IOException {
+        log.info(FILE_TO_PROCESS_LOG, args.inputFile());
+        try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"Transaction analysis");
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, parsed.inputFile(), e);
+            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
             throw e;
         }
     }

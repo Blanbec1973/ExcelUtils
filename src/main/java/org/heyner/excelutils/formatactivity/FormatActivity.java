@@ -14,15 +14,14 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 @Slf4j
 @Service
-public class FormatActivity implements CommandService {
+public class FormatActivity implements CommandService<FormatActivityArgs> {
 
     private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
-    public void execute(CommandArgs args) throws IOException {
-        FormatActivityArgs parsed = (FormatActivityArgs) args;
-        try(ExcelFile fichierExcel = ExcelFile.open(parsed.inputFile().toString())) {
-            log.info(FILE_TO_PROCESS_LOG, parsed.inputFile());
+    public void execute(FormatActivityArgs args) throws IOException {
+        try(ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
+            log.info(FILE_TO_PROCESS_LOG, args.inputFile());
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
             hideUnusefulColumns(dataSheet);
@@ -34,7 +33,7 @@ public class FormatActivity implements CommandService {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,ExcelConstants.AR_HISTORIC_HEADER);
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, parsed.inputFile(), e);
+            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
         }
     }
 

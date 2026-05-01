@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DirectoryParser implements CommandService {
+public class DirectoryParser implements CommandService<DirectoryParserArgs> {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
     private Path[] listPaths;
@@ -33,9 +33,8 @@ public class DirectoryParser implements CommandService {
     }
 
     @Override
-    public void execute(CommandArgs args) throws IOException {
-        DirectoryParserArgs parsed = (DirectoryParserArgs) args;
-        String directoryToProcess = parsed.directory().toString();
+    public void execute(DirectoryParserArgs args) throws IOException {
+        String directoryToProcess = args.directory().toString();
         log.debug(BEGIN_FUNCTION_LOG,
                 this.getClass().getSimpleName());
         log.info(PROCESSING_LOG,directoryToProcess);

@@ -14,7 +14,7 @@ import java.nio.file.Path;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AnalyzeTRX implements CommandService {
+public class AnalyzeTRX implements CommandService<AnalyzeTRXArgs> {
     private final AnalyzeTRXConfig analyzeTRXConfig;
     private final DateTemplateExpander dateTemplateExpander;
     private final ModelCloner modelCloner;
@@ -30,9 +30,8 @@ public class AnalyzeTRX implements CommandService {
     }
 
     @Override
-    public void execute(CommandArgs args) {
-        AnalyzeTRXArgs parsed = (AnalyzeTRXArgs) args;
-        Path pathInput = parsed.inputFile();
+    public void execute(AnalyzeTRXArgs args) {
+        Path pathInput = args.inputFile();
         Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
         Path pathResultFile = Path.of(dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile()));
         String sheetIn = analyzeTRXConfig.getSheetIn();

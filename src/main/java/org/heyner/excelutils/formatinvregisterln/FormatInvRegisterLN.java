@@ -17,16 +17,15 @@ import java.util.stream.IntStream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FormatInvRegisterLN implements CommandService {
+public class FormatInvRegisterLN implements CommandService<FormatInvRegisterLNArgs> {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
 
     private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
-    public void execute(CommandArgs args) throws IOException {
-        FormatInvRegisterLNArgs parsed = (FormatInvRegisterLNArgs) args;
-        try(ExcelFile fichierExcel = ExcelFile.open(parsed.inputFile().toString())) {
-            log.info(FILE_TO_PROCESS_LOG, parsed.inputFile());
+    public void execute(FormatInvRegisterLNArgs args) throws IOException {
+        try(ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
+            log.info(FILE_TO_PROCESS_LOG, args.inputFile());
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"MS Invoice Register-LN detail");
@@ -43,7 +42,7 @@ public class FormatInvRegisterLN implements CommandService {
 
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, parsed.inputFile(), e);
+            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
             throw e;
         }
     }
