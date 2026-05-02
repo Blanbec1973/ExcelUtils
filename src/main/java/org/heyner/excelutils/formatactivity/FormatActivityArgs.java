@@ -1,7 +1,7 @@
 package org.heyner.excelutils.formatactivity;
 
 import lombok.Builder;
-import org.heyner.excelutils.CommandArgs;
+import org.heyner.excelutils.commands.CommandArgs;
 
 import java.nio.file.Path;
 

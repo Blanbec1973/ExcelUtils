@@ -1,6 +1,6 @@
 package org.heyner.excelutils.directoryparser;
 
-import org.heyner.excelutils.CommandArgs;
+import org.heyner.excelutils.commands.CommandArgs;
 
 import java.nio.file.Path;
 

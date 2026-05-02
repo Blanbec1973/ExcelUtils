@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.commands.CommandService;
 import org.heyner.excelutils.excel.CorrectionImputationPort;
 import org.springframework.stereotype.Service;
 

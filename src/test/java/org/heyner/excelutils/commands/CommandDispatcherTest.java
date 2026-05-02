@@ -1,5 +1,6 @@
-package org.heyner.excelutils;
+package org.heyner.excelutils.commands;
 
+import org.heyner.excelutils.*;
 import org.heyner.excelutils.commands.commandParser.CommandParser;
 import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.heyner.excelutils.exitcode.ExitCodeHandler;

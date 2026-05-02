@@ -1,8 +1,8 @@
 package org.heyner.excelutils.commands.commandParser;
 
 import lombok.RequiredArgsConstructor;
-import org.heyner.excelutils.CommandArgs;
-import org.heyner.excelutils.CommandRegistry;
+import org.heyner.excelutils.commands.CommandArgs;
+import org.heyner.excelutils.commands.CommandRegistry;
 import org.heyner.excelutils.analyzetrx.AnalyzeTRXArgs;
 import org.heyner.excelutils.directoryparser.DirectoryParserArgs;
 import org.heyner.excelutils.format_trx.FormatTRXArgs;

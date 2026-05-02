@@ -3,7 +3,7 @@ package org.heyner.excelutils.directoryparser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.commands.CommandService;
 import org.heyner.excelutils.ExitCodes;
 import org.heyner.excelutils.directoryparser.processors.FileProcessor;
 import org.heyner.excelutils.exceptions.FileProcessorException;

@@ -1,6 +1,5 @@
-package org.heyner.excelutils;
+package org.heyner.excelutils.commands;
 
-import org.heyner.excelutils.commands.CommandProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
