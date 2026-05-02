@@ -1,43 +1,36 @@
 package org.heyner.excelutils.application.commands.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class CommandRegistry {
-    private final Map<String, CommandService> commandMap;
+    private final Map<String, Command<?>> commands;
 
-    @Autowired
-    public CommandRegistry(List<CommandService> services) {
 
-        this.commandMap = Map.copyOf(services.stream()
+    public CommandRegistry(List<Command<?>> commands) {
+        this.commands = commands.stream()
                 .collect(Collectors.toMap(
-                        CommandService::getCommandName,
-                        s -> s,
-                        (s1, s2) -> { // merge function if duplicate
-                            throw new IllegalStateException(
-                                    "Duplicate command name: " + s1.getCommandName());
-                        })));
+                        cmd -> cmd.name().toLowerCase(),
+                        cmd -> cmd));
 
-        log.debug("Available commands : {}", commandMap.keySet());
+        log.debug("Available commands : {}", commands);
     }
 
 
     /** Lookup encapsulé, pour éviter d’exposer la map */
-    public Optional<CommandService> find(String name) {
-        return Optional.ofNullable(commandMap.get(name.toLowerCase()));
+    public Command<?> find(String name) {
+        return commands.get(name.toLowerCase());
     }
 
     /** Optionnel : utile pour messages d’aide/logs */
     public List<String> getCommandNames() {
-        return commandMap.keySet().stream().sorted().toList();
+        return commands.keySet().stream().sorted().toList();
     }
 
 }

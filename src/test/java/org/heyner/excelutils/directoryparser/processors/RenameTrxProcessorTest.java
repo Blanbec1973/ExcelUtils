@@ -1,6 +1,5 @@
 package org.heyner.excelutils.directoryparser.processors;
 
-import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
 import org.heyner.excelutils.application.commands.directoryparser.processors.RenameTrxProcessor;
 import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
 

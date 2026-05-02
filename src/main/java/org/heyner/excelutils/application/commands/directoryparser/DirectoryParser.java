@@ -3,9 +3,9 @@ package org.heyner.excelutils.application.commands.directoryparser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.application.commands.core.CommandService;
-import org.heyner.excelutils.shared.constants.ExitCodes;
+import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.commands.directoryparser.processors.FileProcessor;
+import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.heyner.excelutils.shared.exceptions.FileProcessorException;
 import org.heyner.excelutils.shared.exceptions.GracefulExitException;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DirectoryParser implements CommandService<DirectoryParserArgs> {
+public class DirectoryParser implements Command<DirectoryParserArgs> {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
     private final FileClassifier classifier;
@@ -27,8 +27,13 @@ public class DirectoryParser implements CommandService<DirectoryParserArgs> {
     private static final String PROCESS_FILE_LOG = "ProcessList file: {}";
 
     @Override
-    public String getCommandName() {
+    public String name() {
         return "directoryparser";
+    }
+
+    @Override
+    public DirectoryParserArgs parse(String[] args) {
+        return new DirectoryParserArgs(Path.of(args[1]));
     }
 
     @Override

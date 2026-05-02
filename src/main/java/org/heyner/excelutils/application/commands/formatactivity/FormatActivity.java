@@ -6,14 +6,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.application.commands.core.CommandService;
+import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Path;
+
 @Slf4j
 @Service
-public class FormatActivity implements CommandService<FormatActivityArgs> {
+public class FormatActivity implements Command<FormatActivityArgs> {
 
     private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
@@ -75,7 +77,12 @@ public class FormatActivity implements CommandService<FormatActivityArgs> {
         }
     }
     @Override
-    public String getCommandName() {
+    public String name() {
         return "formatactivity";
+    }
+
+    @Override
+    public FormatActivityArgs parse(String[] args) {
+        return new FormatActivityArgs(Path.of(args[1]));
     }
 }

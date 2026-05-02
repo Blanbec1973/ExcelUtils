@@ -1,8 +1,8 @@
 package org.heyner.excelutils;
 
-import org.heyner.excelutils.bootstrap.ArgsChecker;
 import org.heyner.excelutils.application.commands.core.CommandSpec;
 import org.heyner.excelutils.application.commands.core.CommandSpecCatalog;
+import org.heyner.excelutils.bootstrap.ArgsChecker;
 import org.heyner.excelutils.shared.exceptions.InvalidArgumentCountException;
 import org.heyner.excelutils.shared.exceptions.InvalidFunctionException;
 import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;

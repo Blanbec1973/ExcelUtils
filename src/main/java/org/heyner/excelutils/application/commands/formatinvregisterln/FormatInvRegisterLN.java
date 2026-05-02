@@ -6,18 +6,19 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.application.commands.core.CommandService;
+import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.stream.IntStream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FormatInvRegisterLN implements CommandService<FormatInvRegisterLNArgs> {
+public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
 
     private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
@@ -86,7 +87,12 @@ public class FormatInvRegisterLN implements CommandService<FormatInvRegisterLNAr
     }
 
     @Override
-    public String getCommandName() {
+    public String name() {
         return "formatinvregisterln";
+    }
+
+    @Override
+    public FormatInvRegisterLNArgs parse(String[] args) {
+        return new FormatInvRegisterLNArgs(Path.of(args[1]));
     }
 }

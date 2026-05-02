@@ -2,7 +2,6 @@ package org.heyner.excelutils.application.commands.core;
 
 import lombok.RequiredArgsConstructor;
 import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.application.commands.core.commandparser.CommandParser;
 import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
 import org.springframework.stereotype.Component;
 
@@ -11,19 +10,21 @@ import org.springframework.stereotype.Component;
 public class CommandExecutor {
 
     private final CommandRegistry registry;
-    private final CommandParser parser;
 
     public void execute(String[] args) throws Exception {
-        String command = args[0].toLowerCase();
+        String commandName = args[0];
 
-        CommandService service = registry.find(command)
-                .orElseThrow(() -> new MissingConfigurationException(
-                        "Unable to load command : " + command,
-                        ExitCodes.MISSING_CONFIGURATION
-                ));
+        Command command = registry.find(commandName);
 
-        CommandArgs commandArgs = parser.parse(args);
+        if (command == null) {
+            throw  new MissingConfigurationException(
+                    "Unable to load command : " + commandName,
+                    ExitCodes.MISSING_CONFIGURATION
+            );
+        }
 
-        service.execute(commandArgs);
+        CommandArgs parsed = command.parse(args);
+
+        command.execute(parsed);
     }
 }

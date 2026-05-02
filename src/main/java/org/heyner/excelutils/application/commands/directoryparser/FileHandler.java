@@ -2,7 +2,6 @@ package org.heyner.excelutils.application.commands.directoryparser;
 
 
 import java.io.File;
-import java.io.IOException;
 
 @FunctionalInterface
 interface FileHandler {

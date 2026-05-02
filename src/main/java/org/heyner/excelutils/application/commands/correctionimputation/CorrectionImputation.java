@@ -6,17 +6,20 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.heyner.common.excelfile.ExcelConstants;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.application.commands.core.CommandService;
+import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
 import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Path;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CorrectionImputation implements CommandService<CorrectionImputationArgs> {
+public class CorrectionImputation implements Command<CorrectionImputationArgs> {
     private final CorrectionImputationConfig correctionImputationConfig;
     private final CorrectionImputationPort service;
 
@@ -57,7 +60,12 @@ public class CorrectionImputation implements CommandService<CorrectionImputation
     }
 
     @Override
-    public String getCommandName() {
+    public String name() {
         return "correctionimputation";
+    }
+
+    @Override
+    public CorrectionImputationArgs parse(String[] args) {
+        return new CorrectionImputationArgs(Path.of(args[1]), ExcelConstants.DEFAULT_SHEET);
     }
 }

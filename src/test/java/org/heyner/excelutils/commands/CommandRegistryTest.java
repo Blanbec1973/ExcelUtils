@@ -1,45 +1,51 @@
 package org.heyner.excelutils.commands;
 
+import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.commands.core.CommandArgs;
 import org.heyner.excelutils.application.commands.core.CommandRegistry;
-import org.heyner.excelutils.application.commands.core.CommandService;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommandRegistryTest {
 
-    private static class DummyService implements CommandService {
-        private final String name;
-        DummyService(String name) { this.name = name; }
-        @Override public String getCommandName() { return name; }
-        @Override public void execute(CommandArgs args) { /* no-op */ }
+    private static class DummyCommand implements Command<CommandArgs> {
+        private String name;
+
+        DummyCommand(String name) { this.name = name; }
+
+        @Override
+        public String name() { return name; }
+
+        @Override
+        public CommandArgs parse(String [] args) {
+            return null;
+        }
+
+        @Override public void execute(CommandArgs args) {}
     }
 
     @Test
-    void shouldBuildRegistryAndFindByName_caseInsensitive() {
-        CommandService s1 = new DummyService("formatactivity");
-        CommandService s2 = new DummyService("fusiontrx");
+    void should_find_command_by_name_case_insensitive() {
+        Command<?> c1 = new DummyCommand("formatactivity");
+        Command<?> c2 = new DummyCommand("fusiontrx");
 
-        CommandRegistry registry = new CommandRegistry(List.of(s1, s2));
+        CommandRegistry registry = new CommandRegistry(List.of(c1, c2));
 
-        assertTrue(registry.find("formatactivity").isPresent());
-        assertTrue(registry.find("FORMATActivity").isPresent()); // case insensitive si tu lowercases
-        assertTrue(registry.find("fusiontrx").isPresent());
-        assertFalse(registry.find("unknown").isPresent());
-
-        assertTrue(registry.getCommandNames().containsAll(List.of("formatactivity", "fusiontrx")));
+        assertNotNull(registry.find("formatactivity"));
+        assertNotNull(registry.find("FORMATActivity"));
+        assertNotNull(registry.find("fusiontrx"));
+        assertNull(registry.find("unknown"));
     }
 
     @Test
-    void shouldFailOnDuplicateCommand() {
-        CommandService s1 = new DummyService("formatactivity");
-        CommandService s2 = new DummyService("formatactivity");
-        List<CommandService> myList = List.of(s1, s2);
+    void should_fail_on_duplicate_command() {
+        Command<?> c1 = new DummyCommand("formatactivity");
+        Command<?> c2 = new DummyCommand("formatactivity");
 
-        assertThrows(IllegalStateException.class, () -> new CommandRegistry(myList));
+        assertThrows(IllegalStateException.class,
+                () -> new CommandRegistry(List.of(c1, c2)));
     }
 }

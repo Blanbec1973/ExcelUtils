@@ -1,10 +1,10 @@
 package org.heyner.excelutils.formatactivity;
 
 import org.heyner.common.excelfile.ExcelFile;
+import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivity;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
-import org.heyner.excelutils.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -36,6 +36,6 @@ class FormatActivityTest {
     @Test
     void getCommandName() {
         FormatActivity formatActivity = new FormatActivity();
-        assertEquals("formatactivity",formatActivity.getCommandName());
+        assertEquals("formatactivity",formatActivity.name());
     }
 }
