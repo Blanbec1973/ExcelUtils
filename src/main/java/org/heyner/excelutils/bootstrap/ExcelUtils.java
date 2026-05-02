@@ -5,11 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Arrays;
 
 @SpringBootApplication
-@ConfigurationPropertiesScan
+@ComponentScan("org.heyner.excelutils")
+@ConfigurationPropertiesScan("org.heyner.excelutils")
 @Slf4j
 public class ExcelUtils {
 

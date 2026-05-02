@@ -1,5 +1,7 @@
 package org.heyner.excelutils;
 
+import org.heyner.excelutils.bootstrap.ArgsChecker;
+import org.heyner.excelutils.bootstrap.ExcelUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(
-        classes = {ExcelUtils.class, ServiceTest.class, ApplicationProperties.class},
+        classes = ExcelUtils.class,
         args = {"servicetest", "arg1", "arg2"}
 )
 @ExtendWith(OutputCaptureExtension.class)
@@ -36,5 +38,3 @@ class ExcelUtilsIntegrationTest {
         assertThat(output.getOut()).contains("servicetest");
     }
 }
-
-

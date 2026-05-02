@@ -1,6 +1,8 @@
 
-package org.heyner.excelutils.bootstrap;
+package org.heyner.excelutils;
 
+import org.heyner.excelutils.bootstrap.ArgsChecker;
+import org.heyner.excelutils.bootstrap.ExcelUtils;
 import org.heyner.excelutils.shared.config.ApplicationProperties;
 import org.heyner.excelutils.shared.utils.DateTemplateExpander;
 import org.junit.jupiter.api.BeforeEach;
