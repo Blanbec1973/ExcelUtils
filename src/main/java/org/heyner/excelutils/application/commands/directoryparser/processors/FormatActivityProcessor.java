@@ -2,7 +2,6 @@ package org.heyner.excelutils.application.commands.directoryparser.processors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
 import org.heyner.excelutils.application.commands.directoryparser.FileType;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivity;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
@@ -18,7 +17,6 @@ import java.nio.file.Path;
 @RequiredArgsConstructor
 public class FormatActivityProcessor implements FileProcessor {
 
-    private final FileClassifier classifier;
     private final FormatActivity formatActivity;
 
     @Override

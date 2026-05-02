@@ -2,7 +2,6 @@ package org.heyner.excelutils.application.commands.directoryparser.processors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
 import org.heyner.excelutils.application.commands.directoryparser.FileType;
 import org.heyner.excelutils.application.commands.format_trx.FormatTRX;
 import org.heyner.excelutils.application.commands.format_trx.FormatTRXArgs;
@@ -17,7 +16,6 @@ import java.nio.file.Path;
 @Order(30)
 @Slf4j
 public class FormatTrxProcessor implements FileProcessor {
-    private final FileClassifier classifier;
     private final FormatTRX formatTRX;
 
     @Override

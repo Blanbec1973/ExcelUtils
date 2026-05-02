@@ -14,7 +14,7 @@ class FormatInvRegisterLnProcessorTest
 
     @Override
     protected FormatInvRegisterLnProcessor newProcessor() {
-        return new FormatInvRegisterLnProcessor(new FileClassifier(), mock(FormatInvRegisterLN.class));
+        return new FormatInvRegisterLnProcessor(mock(FormatInvRegisterLN.class));
     }
 
     @Override

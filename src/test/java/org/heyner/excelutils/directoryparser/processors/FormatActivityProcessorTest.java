@@ -14,7 +14,7 @@ class FormatActivityProcessorTest
 
     @Override
     protected RenameActivityProcessor newProcessor() {
-        return new RenameActivityProcessor(new FileClassifier(), mock(ResultNamer.class));
+        return new RenameActivityProcessor(mock(ResultNamer.class));
     }
 
     @Override

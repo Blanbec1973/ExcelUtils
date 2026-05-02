@@ -14,7 +14,7 @@ class RenameTrxProcessorTest
 
         @Override
         protected RenameTrxProcessor newProcessor() {
-            return new RenameTrxProcessor(new FileClassifier(), mock(ResultNamer.class));
+            return new RenameTrxProcessor(mock(ResultNamer.class));
         }
 
         @Override
