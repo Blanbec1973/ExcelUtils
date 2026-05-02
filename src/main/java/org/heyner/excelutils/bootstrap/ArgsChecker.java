@@ -11,6 +11,8 @@ import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Locale;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class ArgsChecker {
         }
 
         // Check function (first argument) :
-        String cmd = args[0].toLowerCase();
+        String cmd = args[0].toLowerCase(Locale.ROOT);
         CommandSpec spec = catalog.find(cmd)
                 .orElseThrow(() -> new InvalidFunctionException("Unknown function: " + cmd, ExitCodes.FUNCTIONAL_ERROR));
 

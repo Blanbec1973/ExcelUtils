@@ -2,48 +2,39 @@ package org.heyner.excelutils.application.commands.core.commandparser;
 
 import lombok.RequiredArgsConstructor;
 import org.heyner.excelutils.application.commands.core.CommandArgs;
-import org.heyner.excelutils.application.commands.core.CommandRegistry;
-import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRXArgs;
-import org.heyner.excelutils.application.commands.directoryparser.DirectoryParserArgs;
-import org.heyner.excelutils.application.commands.format_trx.FormatTRXArgs;
-import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
-import org.heyner.excelutils.application.commands.formatinvregisterln.FormatInvRegisterLNArgs;
-import org.heyner.excelutils.application.commands.fusiontrx.FusionTRXArgs;
+import org.heyner.excelutils.application.commands.core.CommandArgsMapper;
+import org.heyner.excelutils.shared.constants.ExitCodes;
+import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 public class DefaultCommandParser implements CommandParser {
 
-    private final CommandRegistry registry;
+    private final Map<String, CommandArgsMapper> mapperMap;
+
+    public DefaultCommandParser(List<CommandArgsMapper> mappers) {
+        this.mapperMap = mappers.stream()
+                .collect(Collectors.toMap(
+                        m -> m.supports().toLowerCase(Locale.ROOT),
+                        m -> m
+                ));
+    }
 
     @Override
     public CommandArgs parse(String[] args) {
-        String command = args[0].toLowerCase();
-
-        return switch (command) {
-            case "analyzetrx" -> new AnalyzeTRXArgs(
-                    Path.of(args[1])
+        String command = args[0].toLowerCase(Locale.ROOT);
+        CommandArgsMapper mapper = mapperMap.get(command);
+        if (mapper == null) {
+            throw new MissingConfigurationException(
+                    "Unknown command: " + command,
+                    ExitCodes.MISSING_CONFIGURATION
             );
-            case "formattrx" -> new FormatTRXArgs(
-                    Path.of(args[1])
-            );
-            case "formatactivity" -> new FormatActivityArgs(
-                    Path.of(args[1])
-            );
-            case "formatinvregisterln" -> new FormatInvRegisterLNArgs(
-                    Path.of(args[1])
-            );
-            case "directoryparser" -> new DirectoryParserArgs(
-                    Path.of(args[1])
-            );
-            case "fusiontrx" -> new FusionTRXArgs(
-                    Path.of(args[1]),
-                    Path.of(args[2])
-            );
-            default -> throw new IllegalArgumentException("Unknown command: " + command);
-        };
+        }
+        return mapper.map(args);
     }
 }
