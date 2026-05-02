@@ -28,10 +28,10 @@ abstract class AbstractFileProcessorContractTest<P extends FileProcessor> {
         P p = newProcessor();
 
         for (Path f : matchingSamples()) {
-            assertEquals(p.getSupportedFileType(), classifier.classify(f), () -> "Expected type match for: " + f.toString());
+            assertEquals(p.getSupportedFileType(), classifier.classify(f), () -> "Expected type match for: " + f);
         }
         for (Path f : nonMatchingSamples()) {
-            assertNotEquals(p.getSupportedFileType(), classifier.classify(f), () -> "Expected type not match for: " + f.toString());
+            assertNotEquals(p.getSupportedFileType(), classifier.classify(f), () -> "Expected type not match for: " + f);
         }
     }
 }

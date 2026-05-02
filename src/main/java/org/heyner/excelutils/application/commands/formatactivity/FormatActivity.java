@@ -18,7 +18,7 @@ public class FormatActivity implements CommandService<FormatActivityArgs> {
     private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
-    public void execute(FormatActivityArgs args) throws IOException {
+    public void execute(FormatActivityArgs args) {
         try(ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
             log.info(FILE_TO_PROCESS_LOG, args.inputFile());
 

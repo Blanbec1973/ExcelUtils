@@ -8,7 +8,7 @@ import java.io.IOException;
 interface FileHandler {
     boolean supports(File file);
 
-    default void run(File file) throws IOException {
+    default void run(File file) {
         // action par défaut : rien
     }
 }

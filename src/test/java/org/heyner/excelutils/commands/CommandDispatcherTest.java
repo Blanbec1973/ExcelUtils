@@ -47,7 +47,7 @@ class CommandDispatcherTest {
     }
 
     @Test
-    void shouldDelegateToExitHandlerOnGracefulExit() throws Exception {
+    void shouldDelegateToExitHandlerOnGracefulExit() {
         String[] args = {"test"};
         CommandArgs commandArgs = mock(CommandArgs.class);
 

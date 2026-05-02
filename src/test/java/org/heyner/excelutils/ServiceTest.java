@@ -18,7 +18,7 @@ public class ServiceTest implements CommandService<CommandArgs> {
     }
 
     @Override
-    public void execute(CommandArgs args) throws IOException {
+    public void execute(CommandArgs args) {
         log.info("Test Service executed with args: " + args);
     }
 }

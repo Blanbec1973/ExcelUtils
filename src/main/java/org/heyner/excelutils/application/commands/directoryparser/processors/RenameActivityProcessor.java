@@ -26,7 +26,7 @@ public class RenameActivityProcessor implements FileProcessor{
     }
 
     @Override
-    public void process(Path file) throws IOException {
+    public void process(Path file) {
         log.info("Process rename activity file : {}", file);
         renamer.renameIfNeeded(file, ExcelConstants.DEFAULT_SHEET, ExcelConstants.ACTIVITY_CONTRACT_CELL);
     }
