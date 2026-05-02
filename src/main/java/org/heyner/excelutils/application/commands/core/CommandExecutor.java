@@ -2,7 +2,7 @@ package org.heyner.excelutils.application.commands.core;
 
 import lombok.RequiredArgsConstructor;
 import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.application.commands.core.commandParser.CommandParser;
+import org.heyner.excelutils.application.commands.core.commandparser.CommandParser;
 import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
 import org.springframework.stereotype.Component;
 

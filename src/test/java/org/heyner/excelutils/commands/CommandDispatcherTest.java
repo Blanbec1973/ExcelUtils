@@ -36,7 +36,7 @@ class CommandDispatcherTest {
     @Test
     void shouldExecuteCommandWhenValid() throws Exception {
         String[] args = {"test", "arg1"};
-        CommandArgs commandArgs = mock(CommandArgs.class);
+        mock(CommandArgs.class);
 
         when(argsChecker.validateOrThrow(args)).thenReturn(true);
 
@@ -49,7 +49,7 @@ class CommandDispatcherTest {
     @Test
     void shouldDelegateToExitHandlerOnGracefulExit() {
         String[] args = {"test"};
-        CommandArgs commandArgs = mock(CommandArgs.class);
+        mock(CommandArgs.class);
 
         doThrow(new GracefulExitException("bye", 0))
                 .when(argsChecker).validateOrThrow(any());

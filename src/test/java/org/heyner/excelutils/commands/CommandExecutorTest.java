@@ -5,7 +5,7 @@ import org.heyner.excelutils.application.commands.core.CommandExecutor;
 import org.heyner.excelutils.application.commands.core.CommandRegistry;
 import org.heyner.excelutils.application.commands.core.CommandService;
 import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.application.commands.core.commandParser.CommandParser;
+import org.heyner.excelutils.application.commands.core.commandparser.CommandParser;
 import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

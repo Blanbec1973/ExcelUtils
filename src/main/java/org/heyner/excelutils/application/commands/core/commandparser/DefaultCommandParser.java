@@ -1,4 +1,4 @@
-package org.heyner.excelutils.application.commands.core.commandParser;
+package org.heyner.excelutils.application.commands.core.commandparser;
 
 import lombok.RequiredArgsConstructor;
 import org.heyner.excelutils.application.commands.core.CommandArgs;
