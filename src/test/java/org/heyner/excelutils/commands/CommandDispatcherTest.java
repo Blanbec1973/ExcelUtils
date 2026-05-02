@@ -1,13 +1,10 @@
 package org.heyner.excelutils.commands;
 
 import org.heyner.excelutils.*;
-import org.heyner.excelutils.commands.commandParser.CommandParser;
 import org.heyner.excelutils.exceptions.GracefulExitException;
 import org.heyner.excelutils.exitcode.ExitCodeHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -15,24 +12,21 @@ class CommandDispatcherTest {
 
     private ArgsChecker argsChecker;
     private ExitCodeHandler exitHandler;
-    private CommandService service;
-    private CommandParser parser;
     private CommandDispatcher dispatcher;
+    private CommandExecutor commandExecutor;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         ApplicationProperties props = mock(ApplicationProperties.class);
         when(props.getProjectName()).thenReturn("ExcelUtils");
         when(props.getVersion()).thenReturn("1.0.0");
 
         argsChecker = mock(ArgsChecker.class);
         exitHandler = mock(ExitCodeHandler.class);
-        service = mock(CommandService.class);
-        when(service.getCommandName()).thenReturn("test");
-        parser = mock(CommandParser.class);
 
-        CommandRegistry registry = new CommandRegistry(List.of(service));
-        dispatcher = new CommandDispatcher(props, argsChecker, registry, exitHandler, parser);
+        commandExecutor = mock(CommandExecutor.class);
+        doNothing().when(commandExecutor).execute(any());
+        dispatcher = new CommandDispatcher(props, argsChecker, exitHandler, commandExecutor);
     }
 
     @Test
@@ -41,12 +35,10 @@ class CommandDispatcherTest {
         CommandArgs commandArgs = mock(CommandArgs.class);
 
         when(argsChecker.validateOrThrow(args)).thenReturn(true);
-        when(parser.parse(args)).thenReturn(commandArgs);
-        doNothing().when(service).execute(commandArgs);
 
         dispatcher.run(args);
 
-        verify(service).execute(commandArgs);
+        verify(commandExecutor).execute(any());
         verifyNoInteractions(exitHandler);
     }
 
@@ -55,10 +47,8 @@ class CommandDispatcherTest {
         String[] args = {"test"};
         CommandArgs commandArgs = mock(CommandArgs.class);
 
-        when(argsChecker.validateOrThrow(args)).thenReturn(true);
-        when(parser.parse(args)).thenReturn(commandArgs);
         doThrow(new GracefulExitException("bye", 0))
-                .when(service).execute(commandArgs);
+                .when(argsChecker).validateOrThrow(any());
 
         dispatcher.run(args);
 
