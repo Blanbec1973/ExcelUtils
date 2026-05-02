@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
 import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.excel.ExcelTransferPort;
 import org.heyner.excelutils.utils.DateTemplateExpander;
 import org.heyner.excelutils.utils.filenaming.ResultNamer;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class AnalyzeTRX implements CommandService<AnalyzeTRXArgs> {
     private final AnalyzeTRXConfig analyzeTRXConfig;
     private final DateTemplateExpander dateTemplateExpander;
     private final ModelCloner modelCloner;
-    private final TrxDataTransfer trxDataTransfer;
+    private final ExcelTransferPort excelTransfer;
     private final ResultNamer resultNamer;
 
     private static final String BEGINNING_LOG = "Beginning {}";
@@ -39,7 +40,7 @@ public class AnalyzeTRX implements CommandService<AnalyzeTRXArgs> {
 
         modelCloner.copy(pathModel, pathResultFile);
 
-        int rowCount = trxDataTransfer.transfer(pathInput, pathResultFile, sheetIn, sheetOut);
+        int rowCount = excelTransfer.transfer(pathInput, pathResultFile, sheetIn, sheetOut);
 
         log.info(TRANSFERRED_ROWS_LOG, rowCount);
 

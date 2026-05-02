@@ -1,4 +1,3 @@
-
 package org.heyner.excelutils.analyzetrx;
 
 import org.heyner.common.excelfile.ExcelFile;
@@ -39,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                 ApachePoiConfigurer.class,
                 ModelClonerImpl.class,
                 TrxDataTransfer.class,
+                org.heyner.excelutils.excel.ExcelTransferAdapter.class,
                 ResultNamer.class,
                 ExcelPrefixReader.class,
                 FsRenamer.class,

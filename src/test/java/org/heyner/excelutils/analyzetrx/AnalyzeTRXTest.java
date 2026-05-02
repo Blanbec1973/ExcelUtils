@@ -1,6 +1,7 @@
 package org.heyner.excelutils.analyzetrx;
 
 import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.excel.ExcelTransferPort;
 import org.heyner.excelutils.utils.DateTemplateExpander;
 import org.heyner.excelutils.utils.filenaming.ResultNamer;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class AnalyzeTRXTest {
     @Mock private AnalyzeTRXConfig cfg;
     @Mock private DateTemplateExpander expander;
     @Mock private ModelCloner cloner;
-    @Mock private TrxDataTransfer transfer;
+    @Mock private ExcelTransferPort excelTransfer;
     @Mock private ResultNamer namer;
 
     @InjectMocks
@@ -38,18 +39,18 @@ class AnalyzeTRXTest {
 
         when(expander.expand("target/out/Analyze TRX-aaaa-mm-jj.xlsm"))
                 .thenReturn("target/out/Analyze TRX-2026-01-23.xlsm");
-        when(transfer.transfer(any(), any(), any(), any())).thenReturn(56);
+        when(excelTransfer.transfer(any(), any(), any(), any())).thenReturn(56);
 
         // Act
         sut.execute(new AnalyzeTRXArgs(Path.of("C:/tmp/input.xlsx")));
 
         // Assert – ordre
-        InOrder inOrder = inOrder(cloner, transfer, namer);
+        InOrder inOrder = inOrder(cloner, excelTransfer, namer);
         inOrder.verify(cloner).copy(
                 Paths.get("model/model Analyze TRX.xlsm"),
                 Paths.get("target/out/Analyze TRX-2026-01-23.xlsm")
         );
-        inOrder.verify(transfer).transfer(
+        inOrder.verify(excelTransfer).transfer(
                 Path.of("C:/tmp/input.xlsx"),
                 Path.of("target/out/Analyze TRX-2026-01-23.xlsm"),
                 "sheet1",
@@ -62,7 +63,7 @@ class AnalyzeTRXTest {
         );
 
         // Pas d'autres interactions
-        verifyNoMoreInteractions(cloner, transfer, namer);
+        verifyNoMoreInteractions(cloner, excelTransfer, namer);
     }
 
     @Test
