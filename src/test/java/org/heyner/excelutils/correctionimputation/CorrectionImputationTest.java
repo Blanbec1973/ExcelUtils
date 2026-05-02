@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.excel.CorrectionImputationAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -32,7 +33,7 @@ class CorrectionImputationTest {
         CorrectionImputationConfig correctionImputationConfig = mock(CorrectionImputationConfig.class);
         when(correctionImputationConfig.isCorrectionImputationActionEnabled()).thenReturn(true);
 
-        CorrectionImputationService service = new CorrectionImputationService();
+        CorrectionImputationAdapter service = new CorrectionImputationAdapter(new CorrectionImputationService());
         CorrectionImputationArgs args = CorrectionImputationArgs.builder()
                 .inputFile(Path.of("target/test/correctionImputation/TrxToCorrect.xlsx"))
                 .sheetName(ExcelConstants.DEFAULT_SHEET)
@@ -53,7 +54,7 @@ class CorrectionImputationTest {
         when(configMock.isCorrectionImputationActionEnabled()).thenReturn(false);
 
         // Mock du service
-        CorrectionImputationService serviceMock = mock(CorrectionImputationService.class);
+        CorrectionImputationAdapter serviceMock = mock(CorrectionImputationAdapter.class);
 
         CorrectionImputation correctionImputation = new CorrectionImputation(configMock, serviceMock);
 

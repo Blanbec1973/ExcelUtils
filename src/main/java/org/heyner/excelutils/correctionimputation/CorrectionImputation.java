@@ -7,8 +7,8 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.CommandArgs;
 import org.heyner.excelutils.CommandService;
+import org.heyner.excelutils.excel.CorrectionImputationPort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CorrectionImputation implements CommandService<CorrectionImputationArgs> {
     private final CorrectionImputationConfig correctionImputationConfig;
-    private final CorrectionImputationService service;
+    private final CorrectionImputationPort service;
 
     private static final String CORRECTION_DISABLED_LOG = "CorrectionImputation is disabled by configuration. Skipping execution.";
     private static final String BEGINNING_CORRECTION_LOG = "Beginning Timesheet correction, file to proceed: {}";
