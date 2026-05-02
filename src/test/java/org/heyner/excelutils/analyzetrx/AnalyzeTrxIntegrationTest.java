@@ -1,14 +1,20 @@
 package org.heyner.excelutils.analyzetrx;
 
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.ApachePoiConfigurer;
-import org.heyner.excelutils.ExcelConstants;
-import org.heyner.excelutils.utils.DateTemplateExpander;
-import org.heyner.excelutils.utils.ExcelPrefixReader;
-import org.heyner.excelutils.utils.PrefixReader;
-import org.heyner.excelutils.utils.filenaming.FsRenamePort;
-import org.heyner.excelutils.utils.filenaming.FsRenamer;
-import org.heyner.excelutils.utils.filenaming.ResultNamer;
+import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRX;
+import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRXArgs;
+import org.heyner.excelutils.application.commands.analyzetrx.ModelClonerImpl;
+import org.heyner.excelutils.application.commands.analyzetrx.TrxDataTransfer;
+import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
+import org.heyner.excelutils.infrastructure.excel.ExcelTransferAdapter;
+import org.heyner.excelutils.shared.config.ApachePoiConfigurer;
+import org.heyner.excelutils.shared.constants.ExcelConstants;
+import org.heyner.excelutils.shared.utils.DateTemplateExpander;
+import org.heyner.excelutils.shared.utils.ExcelPrefixReader;
+import org.heyner.excelutils.shared.utils.PrefixReader;
+import org.heyner.excelutils.infrastructure.filesystem.FsRenamePort;
+import org.heyner.excelutils.infrastructure.filesystem.FsRenamer;
+import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -38,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                 ApachePoiConfigurer.class,
                 ModelClonerImpl.class,
                 TrxDataTransfer.class,
-                org.heyner.excelutils.excel.ExcelTransferAdapter.class,
+                ExcelTransferAdapter.class,
                 ResultNamer.class,
                 ExcelPrefixReader.class,
                 FsRenamer.class,

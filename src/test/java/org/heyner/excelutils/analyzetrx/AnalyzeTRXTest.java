@@ -1,9 +1,13 @@
 package org.heyner.excelutils.analyzetrx;
 
-import org.heyner.excelutils.ExcelConstants;
-import org.heyner.excelutils.excel.ExcelTransferPort;
-import org.heyner.excelutils.utils.DateTemplateExpander;
-import org.heyner.excelutils.utils.filenaming.ResultNamer;
+import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRX;
+import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRXArgs;
+import org.heyner.excelutils.application.commands.analyzetrx.ModelCloner;
+import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
+import org.heyner.excelutils.shared.constants.ExcelConstants;
+import org.heyner.excelutils.application.ports.ExcelTransferPort;
+import org.heyner.excelutils.shared.utils.DateTemplateExpander;
+import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;

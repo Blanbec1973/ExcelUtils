@@ -1,5 +1,8 @@
 package org.heyner.excelutils.fusiontrx;
 
+import org.heyner.excelutils.application.commands.fusiontrx.FusionProcessor;
+import org.heyner.excelutils.application.commands.fusiontrx.FusionTRX;
+import org.heyner.excelutils.application.commands.fusiontrx.FusionTRXArgs;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;

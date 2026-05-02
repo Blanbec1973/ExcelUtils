@@ -1,5 +1,6 @@
 package org.heyner.excelutils.formatinvregisterln;
 
+import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

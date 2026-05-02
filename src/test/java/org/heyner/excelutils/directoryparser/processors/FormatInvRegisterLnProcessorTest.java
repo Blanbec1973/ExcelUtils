@@ -1,7 +1,8 @@
 package org.heyner.excelutils.directoryparser.processors;
 
-import org.heyner.excelutils.directoryparser.FileClassifier;
-import org.heyner.excelutils.formatinvregisterln.FormatInvRegisterLN;
+import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
+import org.heyner.excelutils.application.commands.formatinvregisterln.FormatInvRegisterLN;
+import org.heyner.excelutils.application.commands.directoryparser.processors.FormatInvRegisterLnProcessor;
 
 import java.nio.file.Path;
 import java.util.List;

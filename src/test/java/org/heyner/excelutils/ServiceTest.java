@@ -1,8 +1,8 @@
 package org.heyner.excelutils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.heyner.excelutils.commands.CommandArgs;
-import org.heyner.excelutils.commands.CommandService;
+import org.heyner.excelutils.application.commands.core.CommandArgs;
+import org.heyner.excelutils.application.commands.core.CommandService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

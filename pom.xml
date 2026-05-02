@@ -124,7 +124,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>org.heyner.excelutils.ExcelUtils</mainClass>
+                    <mainClass>org.heyner.excelutils.bootstrap.ExcelUtils</mainClass>
                 </configuration>
             </plugin>
             <!-- Tests & coverage -->

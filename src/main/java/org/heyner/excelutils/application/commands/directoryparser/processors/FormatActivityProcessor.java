@@ -1,0 +1,37 @@
+package org.heyner.excelutils.application.commands.directoryparser.processors;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
+import org.heyner.excelutils.application.commands.directoryparser.FileType;
+import org.heyner.excelutils.application.commands.formatactivity.FormatActivity;
+import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
+@Slf4j
+@Component
+@Order(10)
+@RequiredArgsConstructor
+public class FormatActivityProcessor implements FileProcessor {
+
+    private final FileClassifier classifier;
+    private final FormatActivity formatActivity;
+
+    @Override
+    public FileType getSupportedFileType() {
+        return FileType.ACTIVITY;
+    }
+
+    @Override
+    public void process(Path file) throws IOException {
+        log.info("ActivityFormatProcessor: {}", file.toString());
+        FormatActivityArgs args = FormatActivityArgs.builder()
+                .inputFile(file).build();
+        formatActivity.execute(args);
+    }
+}
+

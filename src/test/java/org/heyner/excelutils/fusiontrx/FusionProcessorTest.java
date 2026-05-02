@@ -4,9 +4,10 @@ package org.heyner.excelutils.fusiontrx;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.ExcelConstants;
+import org.heyner.excelutils.application.commands.fusiontrx.FusionProcessor;
+import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.TestInitializerFactory;
-import org.heyner.excelutils.exceptions.GracefulExitException;
+import org.heyner.excelutils.shared.exceptions.GracefulExitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

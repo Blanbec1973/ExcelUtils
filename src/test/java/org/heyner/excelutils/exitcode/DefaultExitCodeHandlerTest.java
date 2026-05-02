@@ -1,9 +1,10 @@
 package org.heyner.excelutils.exitcode;
 
-import org.heyner.excelutils.CustomExitCodeGenerator;
-import org.heyner.excelutils.exceptions.FatalApplicationException;
-import org.heyner.excelutils.exceptions.FunctionalException;
-import org.heyner.excelutils.exceptions.GracefulExitException;
+import org.heyner.excelutils.shared.constants.CustomExitCodeGenerator;
+import org.heyner.excelutils.shared.constants.DefaultExitCodeHandler;
+import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
+import org.heyner.excelutils.shared.exceptions.FunctionalException;
+import org.heyner.excelutils.shared.exceptions.GracefulExitException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

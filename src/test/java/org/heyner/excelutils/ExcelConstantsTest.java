@@ -1,5 +1,6 @@
 package org.heyner.excelutils;
 
+import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

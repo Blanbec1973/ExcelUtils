@@ -1,5 +1,8 @@
 package org.heyner.excelutils.commands;
 
+import org.heyner.excelutils.application.commands.core.CommandSpec;
+import org.heyner.excelutils.application.commands.core.PropertiesBackedCommandSpecCatalog;
+import org.heyner.excelutils.infrastructure.config.CommandProperties;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

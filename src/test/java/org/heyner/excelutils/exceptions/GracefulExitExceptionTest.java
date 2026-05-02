@@ -1,5 +1,6 @@
 package org.heyner.excelutils.exceptions;
 
+import org.heyner.excelutils.shared.exceptions.GracefulExitException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

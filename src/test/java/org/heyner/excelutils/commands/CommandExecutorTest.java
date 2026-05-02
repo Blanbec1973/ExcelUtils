@@ -1,8 +1,12 @@
 package org.heyner.excelutils.commands;
 
-import org.heyner.excelutils.ExitCodes;
-import org.heyner.excelutils.commands.commandParser.CommandParser;
-import org.heyner.excelutils.exceptions.MissingConfigurationException;
+import org.heyner.excelutils.application.commands.core.CommandArgs;
+import org.heyner.excelutils.application.commands.core.CommandExecutor;
+import org.heyner.excelutils.application.commands.core.CommandRegistry;
+import org.heyner.excelutils.application.commands.core.CommandService;
+import org.heyner.excelutils.shared.constants.ExitCodes;
+import org.heyner.excelutils.application.commands.core.commandParser.CommandParser;
+import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;

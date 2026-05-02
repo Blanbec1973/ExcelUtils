@@ -1,6 +1,8 @@
 package org.heyner.excelutils.utils.filenaming;
 
-import org.heyner.excelutils.utils.PrefixReader;
+import org.heyner.excelutils.infrastructure.filesystem.FsRenamePort;
+import org.heyner.excelutils.shared.utils.PrefixReader;
+import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

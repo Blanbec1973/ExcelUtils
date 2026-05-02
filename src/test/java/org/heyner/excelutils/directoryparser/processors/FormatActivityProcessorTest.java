@@ -1,7 +1,8 @@
 package org.heyner.excelutils.directoryparser.processors;
 
-import org.heyner.excelutils.directoryparser.FileClassifier;
-import org.heyner.excelutils.utils.filenaming.ResultNamer;
+import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
+import org.heyner.excelutils.application.commands.directoryparser.processors.RenameActivityProcessor;
+import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
 
 import java.nio.file.Path;
 import java.util.List;

@@ -1,6 +1,7 @@
 package org.heyner.excelutils.directoryparser.processors;
 
-import org.heyner.excelutils.directoryparser.FileClassifier;
+import org.heyner.excelutils.application.commands.directoryparser.FileClassifier;
+import org.heyner.excelutils.application.commands.directoryparser.processors.FileProcessor;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
