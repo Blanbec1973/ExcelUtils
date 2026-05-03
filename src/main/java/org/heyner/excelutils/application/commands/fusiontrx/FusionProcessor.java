@@ -58,7 +58,7 @@ public class FusionProcessor {
             }
             fusion.writeFichierExcel();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(), -1);
+            throw new FatalApplicationException(e.getMessage(), e, -1);
         }
     }
 
@@ -69,7 +69,7 @@ public class FusionProcessor {
                     .filter(p -> p.getFileName().toString().toLowerCase().endsWith(".xlsx"))
                     .toList();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(), -1);
+            throw new FatalApplicationException(e.getMessage(), e, -1);
         }
     }
 
@@ -99,7 +99,7 @@ public class FusionProcessor {
             log.warn("Skipping file {} due to missing sheet 'sheet1'", file);
             return rowOffset;
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(),-1);
+            throw new FatalApplicationException(e.getMessage(),e,-1);
         }
     }
 

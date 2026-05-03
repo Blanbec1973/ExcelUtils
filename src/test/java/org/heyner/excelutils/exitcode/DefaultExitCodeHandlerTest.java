@@ -37,7 +37,7 @@ class DefaultExitCodeHandlerTest {
         CustomExitCodeGenerator gen = new CustomExitCodeGenerator();
         DefaultExitCodeHandler handler = new DefaultExitCodeHandler(gen);
 
-        handler.handle(new FatalApplicationException("fatal", 9));
+        handler.handle(new FatalApplicationException("fatal", null, 9));
 
         assertEquals(9, gen.getExitCode());
     }

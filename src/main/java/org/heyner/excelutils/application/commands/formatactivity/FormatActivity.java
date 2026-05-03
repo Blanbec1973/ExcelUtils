@@ -8,6 +8,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
+import org.heyner.excelutils.shared.constants.ExitCodes;
+import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,6 +37,11 @@ public class FormatActivity implements Command<FormatActivityArgs> {
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
+            throw new FatalApplicationException(
+                    "Unable to process file: " + args.inputFile(),
+                    e,
+                    ExitCodes.FILE_PROCESSING_ERROR
+            );
         }
     }
 
