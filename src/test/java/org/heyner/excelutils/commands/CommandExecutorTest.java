@@ -59,7 +59,7 @@ class CommandExecutorTest {
         );
 
         // Vérifier que le message et le code sont corrects
-        assert exception.getExitCode() == ExitCodes.MISSING_CONFIGURATION;
+        assert exception.getExitCode() == ExitCodes.CONFIG_ERROR;
         assert exception.getMessage().contains("unknowncommand");
 
         verify(registry).find("unknowncommand");

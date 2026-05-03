@@ -19,7 +19,7 @@ public class CommandExecutor {
         if (command == null) {
             throw  new MissingConfigurationException(
                     "Unable to load command : " + commandName,
-                    ExitCodes.MISSING_CONFIGURATION
+                    ExitCodes.CONFIG_ERROR
             );
         }
 

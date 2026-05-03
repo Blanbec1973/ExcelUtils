@@ -31,7 +31,7 @@ public class PropertiesBackedCommandSpecCatalog implements CommandSpecCatalog {
         if (name == null || name.isBlank()) {
             throw new MissingConfigurationException(
                     "Unknown command: " + name,
-                    ExitCodes.MISSING_CONFIGURATION
+                    ExitCodes.CONFIG_ERROR
             );
         }
         return name.toLowerCase(Locale.ROOT);
@@ -40,7 +40,7 @@ public class PropertiesBackedCommandSpecCatalog implements CommandSpecCatalog {
     private static CommandSpec toSpec(String rawName, Integer args) {
         if (args == null || args < 1) {
             throw new MissingConfigurationException(
-                "counterarguments must be >= 1 for command: " + rawName, ExitCodes.MISSING_CONFIGURATION
+                "counterarguments must be >= 1 for command: " + rawName, ExitCodes.CONFIG_ERROR
             );
         }
         return new CommandSpec(rawName, args);

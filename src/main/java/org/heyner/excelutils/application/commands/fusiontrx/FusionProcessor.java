@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
+import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
 import org.heyner.excelutils.shared.exceptions.FusionSheetMissingException;
 import org.heyner.excelutils.shared.exceptions.GracefulExitException;
@@ -35,7 +36,8 @@ public class FusionProcessor {
 
         List<Path> trxFiles = listTrxFiles(dir);
         if (trxFiles.isEmpty()) {
-            throw new GracefulExitException("No file to process in "+ directoryToProcess,0);
+            throw new GracefulExitException("No file to process in "+ directoryToProcess,
+                    ExitCodes.SUCCESS);
         }
 
         createFusionFile(outputPath, trxFiles);

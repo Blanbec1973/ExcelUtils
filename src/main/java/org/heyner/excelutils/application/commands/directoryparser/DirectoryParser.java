@@ -46,7 +46,8 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
         List<Path> paths = lister.listXlsx(args.directory());
 
         if (paths.isEmpty()) {
-            throw new GracefulExitException("No file to process in " + directoryToProcess, 0);
+            throw new GracefulExitException("No file to process in " + directoryToProcess,
+                    ExitCodes.SUCCESS);
         }
         processList(paths);
     }
