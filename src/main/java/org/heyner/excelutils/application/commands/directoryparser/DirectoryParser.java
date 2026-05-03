@@ -55,11 +55,11 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
     public void processList(List<Path> paths) {
         for (Path p : paths) {
             log.info(PROCESS_FILE_LOG, p.getFileName());
-            processWithProcessors(p);
+            dispatchToProcessors(p); //Order from Spring
         }
     }
 
-    private void processWithProcessors(Path filePath) {
+    private void dispatchToProcessors(Path filePath) {
         FileType type = classifier.classify(filePath);
 
         processors.stream()
