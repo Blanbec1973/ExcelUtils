@@ -20,7 +20,7 @@ class CommandDispatcherTest {
     private CommandExecutor commandExecutor;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp()  {
         ApplicationProperties props = mock(ApplicationProperties.class);
         when(props.getProjectName()).thenReturn("ExcelUtils");
         when(props.getVersion()).thenReturn("1.0.0");
@@ -34,7 +34,7 @@ class CommandDispatcherTest {
     }
 
     @Test
-    void shouldExecuteCommandWhenValid() throws Exception {
+    void shouldExecuteCommandWhenValid() {
         String[] args = {"test", "arg1"};
         mock(CommandArgs.class);
 

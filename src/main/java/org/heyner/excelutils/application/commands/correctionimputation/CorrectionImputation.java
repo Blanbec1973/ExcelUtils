@@ -27,28 +27,6 @@ public class CorrectionImputation implements Command<CorrectionImputationArgs> {
         log.info("Beginning Timesheet correction, file to proceed: {}", args.inputFile());
         port.correct(args.inputFile(), args.sheetName());
         log.info("CorrectionImputation completed for {}", args.inputFile());
-//        try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())){
-
-//
-//            int rowNum = 0;
-//            Sheet dataSheet = fichierExcel.getWorkBook().getSheet(args.sheetName());
-//            fichierExcel.getWorkBook().setMissingCellPolicy(Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-//            //Get iterator to all the rows in current sheet Iterator<Row> rowIterator = dataSheet.iterator()
-//            for (Row row : dataSheet) {
-//               Cell cell = row.getCell(56);
-//               if (cell != null && cell.getCellType() == CellType.STRING) {
-//                   log.info(PROCESSING_ROW_LOG, rowNum, cell.getStringCellValue());
-//                   service.processRow(row, fichierExcel);
-//                }
-//
-//                rowNum = rowNum + 1;
-//            }
-//            fichierExcel.writeFichierExcel();
-//        } catch (IOException e) {
-//            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
-//            throw new FatalApplicationException("Error processing file: " + args.inputFile(),
-//                    e, ExitCodes.FILE_PROCESSING_ERROR);
-//        }
     }
 
     @Override

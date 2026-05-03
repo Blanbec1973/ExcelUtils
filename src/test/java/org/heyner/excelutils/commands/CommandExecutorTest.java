@@ -28,7 +28,7 @@ class CommandExecutorTest {
     private CommandExecutor sut;
 
     @Test
-    void execute_happy_path_parses_and_executes_command_in_order() throws Exception {
+    void execute_happy_path_parses_and_executes_command_in_order() {
         // Arrange
         String[] args = {"analyzetrx", "input.xlsx"};
         Command command = mock(Command.class);
