@@ -3,6 +3,7 @@ package org.heyner.excelutils.application.commands.analyzetrx;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
+import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.heyner.excelutils.shared.exceptions.TransferDataException;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +36,7 @@ public class TrxDataTransfer {
             excelOut.writeFichierExcel();
             return rowCount;
         } catch (IOException e) {
-            throw new TransferDataException(e.getMessage(), e, -1);
+            throw new TransferDataException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 }

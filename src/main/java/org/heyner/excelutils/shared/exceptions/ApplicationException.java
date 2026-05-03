@@ -16,7 +16,4 @@ public abstract class ApplicationException extends RuntimeException {
         this.exitCode = exitCode;
     }
 
-    public int getExitCode() {
-        return exitCode;
-    }
 }

@@ -58,7 +58,7 @@ public class FusionProcessor {
             }
             fusion.writeFichierExcel();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(), e, -1);
+            throw new FatalApplicationException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 
@@ -69,7 +69,7 @@ public class FusionProcessor {
                     .filter(p -> p.getFileName().toString().toLowerCase().endsWith(".xlsx"))
                     .toList();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(), e, -1);
+            throw new FatalApplicationException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 
@@ -92,14 +92,14 @@ public class FusionProcessor {
             log.info("File {} opened.",file);
             Sheet sheetIn = excelIn.getWorkBook().getSheet(ExcelConstants.DEFAULT_SHEET);
             if (sheetIn == null) {
-                throw new FusionSheetMissingException(file.toString(),-1);
+                throw new FusionSheetMissingException(file.toString(), ExitCodes.FILE_PROCESSING_ERROR);
             }
             return excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
         } catch (FusionSheetMissingException e) {
             log.warn("Skipping file {} due to missing sheet 'sheet1'", file);
             return rowOffset;
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(),e,-1);
+            throw new FatalApplicationException(e.getMessage(),e,ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 
