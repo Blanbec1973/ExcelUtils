@@ -6,7 +6,6 @@ import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
-import org.heyner.excelutils.shared.exceptions.FileProcessorException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.nio.file.Path;
 @Slf4j
 public class FormatTRX implements Command<FormatTRXArgs> {
 
-    private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
+    private static final String FORMATTING_TRX_FILE_LOG = "Formatting TRX file : {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
     @Override
@@ -31,10 +30,13 @@ public class FormatTRX implements Command<FormatTRXArgs> {
 
     @Override
     public void execute(FormatTRXArgs args) {
-        log.info(FILE_TO_PROCESS_LOG, args.inputFile());
+        log.info(FORMATTING_TRX_FILE_LOG, args.inputFile());
         try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
+            log.debug("Opening workbook {}", args.inputFile());
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"Transaction analysis");
+            log.debug("Deleting header '{}' from sheet {}", "Transaction analysis", ExcelConstants.DEFAULT_SHEET);
             fichierExcel.writeFichierExcel();
+            log.info("TRX file formatted successfully: {}", args.inputFile());
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
             throw new FatalApplicationException(

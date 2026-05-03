@@ -36,9 +36,12 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
 
     @Override
     public void execute(AnalyzeTRXArgs args) {
+        log.info("Analyzing TRX file {}", args.inputFile());
         Path pathInput = args.inputFile();
         Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
+        log.debug("Model file: {}", pathModel);
         Path pathResultFile = Path.of(dateTemplateExpander.expand(analyzeTRXConfig.getPathResultFile()));
+        log.debug("Result file before expansion: {}", analyzeTRXConfig.getPathResultFile());
         String sheetIn = analyzeTRXConfig.getSheetIn();
         String sheetOut = analyzeTRXConfig.getSheetOut();
 
@@ -49,6 +52,7 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
         log.info(TRANSFERRED_ROWS_LOG, rowCount);
 
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
+        log.info("TRX analysis completed successfully for {}", args.inputFile());
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
 
-    private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
+    private static final String FILE_TO_PROCESS_LOG = "Formatting invoice register LN file : {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
     public void execute(FormatInvRegisterLNArgs args) {
@@ -33,17 +33,19 @@ public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"MS Invoice Register-LN detail");
 
-            log.debug("Last column *"+formatInvRegisterLnConfig.getLastcolumn()+"*");
+            log.debug("Configuration: lastcolumn={}, nohidecolumns={}", formatInvRegisterLnConfig.getLastcolumn(), formatInvRegisterLnConfig.getNohidecolumns());
 
 
             IntStream.rangeClosed(0, formatInvRegisterLnConfig.getLastcolumn())
                     .filter(i -> !formatInvRegisterLnConfig.getNoHideSet().contains(i))
                             .forEach(i -> dataSheet.setColumnHidden(i, true));
 
+            log.debug("Creating 'Libellé facture' and 'InvoiceNumber' columns");
             createColumnLibelle(fichierExcel, dataSheet);
             createColumnInvReference(fichierExcel,dataSheet);
 
             fichierExcel.writeFichierExcel();
+            log.info("Invoice register LN file formatted successfully: {}", args.inputFile());
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
             throw new FatalApplicationException("Error processing file: " + args.inputFile(),

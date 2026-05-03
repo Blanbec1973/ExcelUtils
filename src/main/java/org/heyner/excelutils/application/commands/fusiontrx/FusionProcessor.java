@@ -31,7 +31,7 @@ public class FusionProcessor {
      * @throws FatalApplicationException en cas d’erreur technique lors de la fusion
      */
     public void process(String directoryToProcess, String outputPath) {
-
+        log.info("Fusioning TRX files from {}", directoryToProcess);
         Path dir = Path.of(directoryToProcess);
 
         List<Path> trxFiles = listTrxFiles(dir);
@@ -39,12 +39,14 @@ public class FusionProcessor {
             throw new GracefulExitException("No file to process in "+ directoryToProcess,
                     ExitCodes.SUCCESS);
         }
+        log.debug("Found {} TRX file(s)", trxFiles.size());
 
         createFusionFile(outputPath, trxFiles);
 
     }
 
     private void createFusionFile(String outputPath, List<Path> trxFiles) {
+        log.info("Creating fusion file {}", outputPath);
         Path out = Path.of(outputPath).resolve("FusionTRX.xlsx");
         try (ExcelFile fusion = ExcelFile.create(out.toString())) {
 
@@ -88,6 +90,7 @@ public class FusionProcessor {
      * @throws FusionSheetMissingException si la feuille "sheet1" est absente
      */
     private int mergeFile(Path file, Sheet sheetFusion, boolean ignoreFirstLine, int rowOffset) {
+        log.info("Merging file {} into fusion sheet", file);
         try (ExcelFile excelIn = ExcelFile.open(file.toString())) {
             log.info("File {} opened.",file);
             Sheet sheetIn = excelIn.getWorkBook().getSheet(ExcelConstants.DEFAULT_SHEET);
@@ -96,7 +99,7 @@ public class FusionProcessor {
             }
             return excelIn.copySheet(sheetIn, sheetFusion, ignoreFirstLine,rowOffset);
         } catch (FusionSheetMissingException e) {
-            log.warn("Skipping file {} due to missing sheet 'sheet1'", file);
+            log.warn("Skipping file {} due to missing sheet '{}}'", file, ExcelConstants.DEFAULT_SHEET);
             return rowOffset;
         } catch (IOException e) {
             throw new FatalApplicationException(e.getMessage(),e,ExitCodes.FILE_PROCESSING_ERROR);

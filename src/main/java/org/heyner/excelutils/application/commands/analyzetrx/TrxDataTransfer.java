@@ -1,5 +1,6 @@
 package org.heyner.excelutils.application.commands.analyzetrx;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
@@ -11,12 +12,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 @Component
+@Slf4j
 public class TrxDataTransfer {
 
     public int transfer(Path inputFileName, Path outputFileName, String sheetIn, String sheetOut) {
+        log.info("Transferring data from {} to {}", inputFileName, outputFileName);
+        log.debug("Source sheet: {}, target sheet: {}", sheetIn, sheetOut);
         try (ExcelFile excelIn = ExcelFile.open(inputFileName.toString());
              ExcelFile excelOut = ExcelFile.open(outputFileName.toString())) {
             Integer rowCount = excelIn.rowCount(sheetIn, 0);
+            log.info("Detected {} row(s) in {}", rowCount, sheetIn);
 
             // Creating Range A2:BB3000)
             excelIn.setTileRange(new CellRangeAddress(1, rowCount - 1, 0, 53));
@@ -34,6 +39,7 @@ public class TrxDataTransfer {
             }
 
             excelOut.writeFichierExcel();
+            log.info("Data transfer completed: {} -> {}", inputFileName, outputFileName);
             return rowCount;
         } catch (IOException e) {
             throw new TransferDataException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);

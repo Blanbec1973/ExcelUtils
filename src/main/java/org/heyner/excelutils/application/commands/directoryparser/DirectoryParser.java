@@ -22,9 +22,9 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
     private final DirectoryLister lister;
     private final FileClassifier classifier;
 
-    private static final String BEGIN_FUNCTION_LOG = "Beginning function: {}";
-    private static final String PROCESSING_LOG = "Processing {}";
-    private static final String PROCESS_FILE_LOG = "ProcessList file: {}";
+    private static final String BEGIN_FUNCTION_LOG = "Beginning function : {}";
+    private static final String PROCESSING_LOG = "Processing : {}";
+    private static final String PROCESS_FILE_LOG = "Processing file {} as {}";
 
     @Override
     public String name() {
@@ -49,18 +49,18 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
             throw new GracefulExitException("No file to process in " + directoryToProcess,
                     ExitCodes.SUCCESS);
         }
-        processList(paths);
+        processFiles(paths);
     }
 
-    public void processList(List<Path> paths) {
+    public void processFiles(List<Path> paths) {
         for (Path p : paths) {
-            log.info(PROCESS_FILE_LOG, p.getFileName());
-            dispatchToProcessors(p); //Order from Spring
+            applyProcessors(p); //Order from Spring
         }
     }
 
-    private void dispatchToProcessors(Path filePath) {
+    private void applyProcessors(Path filePath) {
         FileType type = classifier.classify(filePath);
+        log.info(PROCESS_FILE_LOG, filePath.getFileName(), type);
 
         processors.stream()
                 .filter(p-> p.getSupportedFileType()==type)

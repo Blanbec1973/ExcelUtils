@@ -19,22 +19,25 @@ import java.nio.file.Path;
 @Service
 public class FormatActivity implements Command<FormatActivityArgs> {
 
-    private static final String FILE_TO_PROCESS_LOG = "File to process: {}";
+    private static final String FORMATTING_ACTIVITY_FILE_LOG = "Formatting activity file : {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
     public void execute(FormatActivityArgs args) {
         try(ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
-            log.info(FILE_TO_PROCESS_LOG, args.inputFile());
+            log.info(FORMATTING_ACTIVITY_FILE_LOG, args.inputFile());
 
             Sheet dataSheet = fichierExcel.getWorkBook().getSheetAt(0);
             hideUnusefulColumns(dataSheet);
 
+            log.debug("Creating 'Mt HT' column");
             createColumnNoTax(fichierExcel, dataSheet);
 
+            log.debug("Applying auto filter on sheet {}", ExcelConstants.DEFAULT_SHEET);
             dataSheet.setAutoFilter(new CellRangeAddress(0,0,0,27));
 
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,ExcelConstants.AR_HISTORIC_HEADER);
             fichierExcel.writeFichierExcel();
+            log.info("Activity file formatted successfully: {}", args.inputFile());
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
             throw new FatalApplicationException(
@@ -46,7 +49,7 @@ public class FormatActivity implements Command<FormatActivityArgs> {
     }
 
     private void hideUnusefulColumns(Sheet dataSheet) {
-
+        log.debug("Hiding irrelevant columns in sheet {}", ExcelConstants.DEFAULT_SHEET);
         dataSheet.setColumnHidden(0, true);
         dataSheet.setColumnHidden(1, true);
         dataSheet.setColumnHidden(2, true);

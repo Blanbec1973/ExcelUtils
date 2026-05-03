@@ -19,9 +19,14 @@ public class ResultNamer {
     private static final Pattern NUMERIC_PREFIX_PATTERN = Pattern.compile("^\\d{15}");
 
     public void renameIfNeeded(Path inputName, String sheet, String cell) {
-        if (hasFileNumericPrefix(inputName.getFileName().toString())) return;
+        log.debug("Checking whether file needs prefix-based rename: {}", inputName);
+        if (hasFileNumericPrefix(inputName.getFileName().toString())) {
+            log.debug("File already has numeric prefix: {}", inputName);
+            return;
+        }
 
         String prefix = excelPrefixReader.read(inputName.toString(), sheet, cell);
+        log.info("Read prefix {} from {}:{}{}", prefix, inputName, sheet, cell);
 
         String baseName = inputName.getFileName().toString();
         Path parent = inputName.getParent();
@@ -30,6 +35,7 @@ public class ResultNamer {
                     : Path.of(prefix + "-" + baseName);
 
         fsRenamer.rename(inputName.toString(), target.toString());
+        log.info("Renaming {} to {}", inputName, target);
     }
 
     public boolean hasFileNumericPrefix(String fileName) {
