@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommandRegistryTest {
 
     private static class DummyCommand implements Command<CommandArgs> {
-        private String name;
+        private final String name;
 
         DummyCommand(String name) { this.name = name; }
 
@@ -24,7 +24,9 @@ class CommandRegistryTest {
             return null;
         }
 
-        @Override public void execute(CommandArgs args) {}
+        @Override public void execute(CommandArgs args) {
+            // do nothing
+        }
     }
 
     @Test
@@ -44,8 +46,9 @@ class CommandRegistryTest {
     void should_fail_on_duplicate_command() {
         Command<?> c1 = new DummyCommand("formatactivity");
         Command<?> c2 = new DummyCommand("formatactivity");
+        List<Command<?>> commands = List.of(c1, c2);
 
         assertThrows(IllegalStateException.class,
-                () -> new CommandRegistry(List.of(c1, c2)));
+                () -> new CommandRegistry(commands));
     }
 }

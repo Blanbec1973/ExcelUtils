@@ -3,7 +3,6 @@ package org.heyner.excelutils.directoryparser;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.directoryparser.*;
 import org.heyner.excelutils.application.commands.directoryparser.processors.FileProcessor;
-import org.heyner.excelutils.application.commands.formatinvregisterln.FormatInvRegisterLN;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.exceptions.FileProcessorException;
 import org.heyner.excelutils.shared.exceptions.GracefulExitException;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -30,11 +30,9 @@ class DirectoryParserTest {
     @Mock
     private FileProcessor activityRenameProcessor;
     @Mock
-    private FormatInvRegisterLN formatInvRegisterLN;
-    @Mock
     private FileClassifier classifier;
     private final DirectoryLister lister = new DirectoryLister();
-    private final String pathTest = "target/temp-"+this.getClass().getSimpleName();
+    private final Path pathTest = Path.of("target/temp-"+this.getClass().getSimpleName());
 
     @BeforeAll
     void beforeAll() throws IOException {
@@ -48,7 +46,7 @@ class DirectoryParserTest {
         // 1) getSupportedFileType() -> ACTIVITY
         when(activityRenameProcessor.getSupportedFileType()).thenReturn(FileType.ACTIVITY);
 
-        // 2) classifier retourne ACTIVITY pour les fichiers activity, UNKNOWN sinon
+        // 2) classifier returns ACTIVITY for activity files, otherwise UNKNOWN
         when(classifier.classify(argThat(f ->
                 f != null && f.toString().contains(ExcelConstants.ACTIVITY_SHEET))))
                 .thenReturn(FileType.ACTIVITY);
@@ -66,15 +64,15 @@ class DirectoryParserTest {
                 classifier
         );
 
-        // 4) Compter les fichiers "activity" dans le dossier
+        // Counting files in directory :
         long expectedActivityCount =
-                Arrays.stream(Path.of(pathTest).toFile().listFiles())
+                Arrays.stream(Objects.requireNonNull(pathTest.toFile().listFiles()))
                         .filter(f -> f.toString().endsWith(".xlsx"))
                         .filter(f -> f.toString().contains(ExcelConstants.ACTIVITY_SHEET))
                         .count();
 
         // --- Act
-        parser.execute(new DirectoryParserArgs(Path.of(pathTest)));
+        parser.execute(new DirectoryParserArgs(pathTest));
 
         // --- Assert
         verify(activityRenameProcessor, times((int) expectedActivityCount))
@@ -86,12 +84,14 @@ class DirectoryParserTest {
     void shouldCallGracefulExitWhenEmptyDirectory() {
         File dir = new File("target/empty");
         if (!dir.exists() && !dir.mkdir()) {
-            fail("Impossible de créer le dossier : " + dir.getAbsolutePath());
+            fail("Unable to create the folder : " + dir.getAbsolutePath());
         }
 
         DirectoryParser d1 = new DirectoryParser(List.of(), lister, classifier);
+        Path pathEmpty = Path.of("target/empty/");
+        DirectoryParserArgs args = new DirectoryParserArgs(pathEmpty);
         assertThrows(GracefulExitException.class,
-                () -> d1.execute(new DirectoryParserArgs(Path.of("target/empty/")))
+                () -> d1.execute(args)
         );
     }
 
@@ -101,13 +101,14 @@ class DirectoryParserTest {
         FileProcessor failing = mock(FileProcessor.class);
         when(failing.getSupportedFileType()).thenReturn(FileType.TRX);
         when(classifier.classify(any())).thenReturn(FileType.TRX);
-        doThrow(new IOException("boom")).when(failing).process(any()); // il échoue dès le premier fichier
+        doThrow(new IOException("boom")).when(failing).process(any()); // fails on the very first file
 
         DirectoryParser d1 = new DirectoryParser(List.of(failing), lister, classifier);
+        DirectoryParserArgs args = new DirectoryParserArgs(pathTest);
 
         // Act + Assert
         assertThrows(FileProcessorException.class, () ->
-                d1.execute(new DirectoryParserArgs(Path.of(pathTest))));
+                d1.execute(args));
     }
 
 
