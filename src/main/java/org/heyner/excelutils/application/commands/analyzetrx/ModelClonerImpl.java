@@ -27,7 +27,7 @@ public class ModelClonerImpl implements ModelCloner {
             Files.copy(in, out);
         } catch (IOException e) {
             log.error("Model copy error", e);
-            throw new CloneModelException(e.getMessage(), ExitCodes.FILE_PROCESSING_ERROR);
+            throw new CloneModelException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);
 
         }
     }

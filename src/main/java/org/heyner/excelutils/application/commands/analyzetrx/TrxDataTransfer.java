@@ -35,7 +35,7 @@ public class TrxDataTransfer {
             excelOut.writeFichierExcel();
             return rowCount;
         } catch (IOException e) {
-            throw new TransferDataException(e.getMessage(),-1);
+            throw new TransferDataException(e.getMessage(), e, -1);
         }
     }
 }
