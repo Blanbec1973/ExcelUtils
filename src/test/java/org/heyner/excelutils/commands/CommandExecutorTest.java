@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -32,7 +34,7 @@ class CommandExecutorTest {
         Command command = mock(Command.class);
         CommandArgs parsed = mock(CommandArgs.class);
 
-        when(registry.find("analyzetrx")).thenReturn(command);
+        when(registry.find("analyzetrx")).thenReturn(Optional.ofNullable(command));
         when(command.parse(args)).thenReturn(parsed);
 
         // Act
@@ -50,7 +52,7 @@ class CommandExecutorTest {
     void execute_throws_MissingConfigurationException_when_command_not_found() {
         // Arrange
         String[] args = {"unknowncommand"};
-        when(registry.find("unknowncommand")).thenReturn(null);
+        when(registry.find("unknowncommand")).thenReturn(Optional.empty());
 
         // Act & Assert
         MissingConfigurationException exception = assertThrows(

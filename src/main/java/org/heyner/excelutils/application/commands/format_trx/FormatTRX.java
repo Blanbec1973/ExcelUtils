@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
+import org.heyner.excelutils.shared.constants.ExitCodes;
+import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
+import org.heyner.excelutils.shared.exceptions.FileProcessorException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,14 +30,18 @@ public class FormatTRX implements Command<FormatTRXArgs> {
     }
 
     @Override
-    public void execute(FormatTRXArgs args) throws IOException {
+    public void execute(FormatTRXArgs args) {
         log.info(FILE_TO_PROCESS_LOG, args.inputFile());
         try (ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
             fichierExcel.deleteFirstLineContaining(ExcelConstants.DEFAULT_SHEET,"Transaction analysis");
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
-            throw e;
+            throw new FatalApplicationException(
+                    "Unable to format TRX file.",
+                    e,
+                    ExitCodes.FILE_PROCESSING_ERROR
+            );
         }
     }
 }

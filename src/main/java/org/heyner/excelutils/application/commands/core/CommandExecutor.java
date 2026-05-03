@@ -11,20 +11,20 @@ public class CommandExecutor {
 
     private final CommandRegistry registry;
 
-    public void execute(String[] args) throws Exception {
+    public void execute(String[] args) {
         String commandName = args[0];
 
-        Command command = registry.find(commandName);
+        Command<? extends CommandArgs> command = registry.find(commandName)
+                .orElseThrow(() -> new MissingConfigurationException(
+                        "Unable to load command : " + commandName,
+                        ExitCodes.CONFIG_ERROR
+                ));
 
-        if (command == null) {
-            throw  new MissingConfigurationException(
-                    "Unable to load command : " + commandName,
-                    ExitCodes.CONFIG_ERROR
-            );
-        }
+        executeCommand(command, args);
+    }
 
-        CommandArgs parsed = command.parse(args);
-
+    private <T extends CommandArgs> void executeCommand(Command<T> command, String[] args) {
+        T parsed = command.parse(args);
         command.execute(parsed);
     }
 }

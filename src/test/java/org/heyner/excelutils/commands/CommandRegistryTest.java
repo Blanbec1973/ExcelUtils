@@ -6,6 +6,7 @@ import org.heyner.excelutils.application.commands.core.CommandRegistry;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +40,7 @@ class CommandRegistryTest {
         assertNotNull(registry.find("formatactivity"));
         assertNotNull(registry.find("FORMATActivity"));
         assertNotNull(registry.find("fusiontrx"));
-        assertNull(registry.find("unknown"));
+        assertEquals(Optional.empty(), registry.find("unknown"));
     }
 
     @Test

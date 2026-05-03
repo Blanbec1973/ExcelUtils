@@ -37,7 +37,7 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
     }
 
     @Override
-    public void execute(DirectoryParserArgs args) throws IOException {
+    public void execute(DirectoryParserArgs args) {
         String directoryToProcess = args
                 .directory().toString();
         log.debug(BEGIN_FUNCTION_LOG,

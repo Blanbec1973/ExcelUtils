@@ -11,6 +11,8 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
 import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
+import org.heyner.excelutils.shared.constants.ExitCodes;
+import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,7 +32,7 @@ public class CorrectionImputation implements Command<CorrectionImputationArgs> {
     private static final String INSERTED_FORMULA_LOG = "Inserted formula {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
 
-    public void execute(CorrectionImputationArgs args) throws IOException {
+    public void execute(CorrectionImputationArgs args) {
         if (!correctionImputationConfig.isCorrectionImputationActionEnabled()) {
             log.info(CORRECTION_DISABLED_LOG);
             return;
@@ -55,7 +57,8 @@ public class CorrectionImputation implements Command<CorrectionImputationArgs> {
             fichierExcel.writeFichierExcel();
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
-            throw e;
+            throw new FatalApplicationException("Error processing file: " + args.inputFile(),
+                    e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 
