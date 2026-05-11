@@ -4,11 +4,16 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivity;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
+import org.heyner.excelutils.infrastructure.config.FormatActivityConfig;
 import org.heyner.excelutils.infrastructure.excel.FormatActivityAdapter;
+import org.heyner.excelutils.shared.config.ApachePoiConfigurer;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,9 +21,13 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SpringBootTest(classes = {FormatActivity.class, ApachePoiConfigurer.class, FormatActivityAdapter.class})
+@EnableConfigurationProperties(FormatActivityConfig.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FormatActivityTest {
     private final String fileName = "target/temp-"+this.getClass().getSimpleName()+"/UC_AR_ITEM_ACTIVITY_V1_03_1790667600.xlsx";
+    @Autowired
+    private FormatActivity formatActivity;
 
     @BeforeAll
     void beforeAll() throws IOException {
@@ -26,7 +35,6 @@ class FormatActivityTest {
     }
     @Test
     void execute() {
-        FormatActivity formatActivity = new FormatActivity(new FormatActivityAdapter());
         formatActivity.execute(FormatActivityArgs.builder().inputFile(Path.of(fileName)).build());
 
         try (ExcelFile fichierExcel = ExcelFile.open(fileName)) {
@@ -40,7 +48,6 @@ class FormatActivityTest {
 
     @Test
     void getCommandName() {
-        FormatActivity formatActivity = new FormatActivity(new FormatActivityAdapter());
         assertEquals("formatactivity",formatActivity.name());
     }
 }

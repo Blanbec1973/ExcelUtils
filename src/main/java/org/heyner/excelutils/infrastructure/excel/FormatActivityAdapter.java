@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.ports.FormatActivityPort;
+import org.heyner.excelutils.infrastructure.config.FormatActivityConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
@@ -20,9 +21,9 @@ import java.nio.file.Path;
 @RequiredArgsConstructor
 @Slf4j
 public class FormatActivityAdapter implements FormatActivityPort {
+    private final FormatActivityConfig  formatActivityConfig;
     private static final String FORMATTING_ACTIVITY_FILE_LOG = "Formatting activity file : {}";
     private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
-    private static final int[] HIDDEN_COLUMNS = {0, 1, 2, 3, 4, 5, 8, 9, 12, 15, 16, 17, 20, 21, 22, 23, 24, 25, 26};
     private static final int HEADER_ROW_INDEX = 0;
     private static final int HEADER_COLUMN_INDEX = 0;
     private static final int DATA_START_ROW_INDEX = 1;
@@ -58,7 +59,7 @@ public class FormatActivityAdapter implements FormatActivityPort {
     }
 
     private void hideUnusedColumns(Sheet dataSheet) {
-        for (int columnIndex : HIDDEN_COLUMNS) {
+        for (int columnIndex : formatActivityConfig.getHideColumnsSet()) {
             dataSheet.setColumnHidden(columnIndex, true);
         }
     }
