@@ -4,6 +4,7 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.format_trx.FormatTRX;
 import org.heyner.excelutils.application.commands.format_trx.FormatTRXArgs;
+import org.heyner.excelutils.infrastructure.excel.FormatTRXAdapter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FormatTRXTest {
@@ -24,13 +26,14 @@ class FormatTRXTest {
     }
 
     @Test
-    void testFormatTrxMain() throws IOException {
-        FormatTRX formatTRX = new FormatTRX();
+    void testFormatTrxMain() {
+        FormatTRX formatTRX = new FormatTRX(new FormatTRXAdapter());
         formatTRX.execute(new FormatTRXArgs(Path.of(fileName)));
 
-        ExcelFile fichierExcel = ExcelFile.open(fileName);
-        assertEquals("Business Unit",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
+        try (ExcelFile fichierExcel = ExcelFile.open(fileName)) {
+            assertEquals("Business Unit", fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET, 0, 0));
+        } catch (IOException e) {
+            fail("Error reading the formatted file: " + fileName, e);
+        }
     }
-
-
 }
