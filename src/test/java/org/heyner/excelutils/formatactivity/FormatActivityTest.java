@@ -4,6 +4,7 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivity;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
+import org.heyner.excelutils.infrastructure.excel.FormatActivityAdapter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FormatActivityTest {
@@ -23,19 +25,22 @@ class FormatActivityTest {
         TestInitializerFactory.action(this.getClass().getSimpleName());
     }
     @Test
-    void execute() throws IOException {
-        FormatActivity formatActivity = new FormatActivity();
+    void execute() {
+        FormatActivity formatActivity = new FormatActivity(new FormatActivityAdapter());
         formatActivity.execute(FormatActivityArgs.builder().inputFile(Path.of(fileName)).build());
 
-        ExcelFile fichierExcel = ExcelFile.open(fileName);
-        assertEquals("From Date",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
-        assertEquals(15, fichierExcel.rowCount(ExcelConstants.DEFAULT_SHEET,0));
-        assertEquals("Mt HT", fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,"AB1"));
+        try (ExcelFile fichierExcel = ExcelFile.open(fileName)) {
+            assertEquals("From Date",fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,0,0));
+            assertEquals(15, fichierExcel.rowCount(ExcelConstants.DEFAULT_SHEET,0));
+            assertEquals("Mt HT", fichierExcel.getCellValue(ExcelConstants.DEFAULT_SHEET,"AB1"));
+        } catch (IOException e) {
+            fail("Error reading the formatted file: " + e.getMessage());
+        }
     }
 
     @Test
     void getCommandName() {
-        FormatActivity formatActivity = new FormatActivity();
+        FormatActivity formatActivity = new FormatActivity(new FormatActivityAdapter());
         assertEquals("formatactivity",formatActivity.name());
     }
 }
