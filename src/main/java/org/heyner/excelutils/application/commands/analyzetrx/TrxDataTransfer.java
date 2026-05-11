@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.analyzetrx;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
@@ -34,8 +35,15 @@ public class TrxDataTransfer {
             excelIn.copyRange(excelOut, sheetIn, sheetOut);
 
             for (Row row : excelOut.getWorkBook().getSheet(sheetOut)) {
-                excelOut.evaluateFormulaCell(row.getCell(54));
-                excelOut.evaluateFormulaCell(row.getCell(55));
+                Cell c54 = row.getCell(54);
+                if (c54 != null) {
+                    excelOut.evaluateFormulaCell(c54);
+                }
+
+                Cell c55 = row.getCell(55);
+                if (c55 != null) {
+                    excelOut.evaluateFormulaCell(c55);
+                }
             }
 
             excelOut.writeFichierExcel();

@@ -94,6 +94,10 @@ class AnalyzeTrxIntegrationTest {
         // Arrange
         String input = "target/temp-AnalyzeTRXIT/UC_PCB_PROJ_TRX_03_1265199083.xlsx";
 
+        System.out.println("user.dir= " + System.getProperty("user.dir"));
+        System.out.println("classpath= " + System.getProperty("java.class.path"));
+        System.out.println("out exists= " + Files.exists(Path.of("target/temp-AnalyzeTRXIT")));
+
         // Act
         analyzeTRX.execute(new AnalyzeTRXArgs(Path.of(input)));
 
