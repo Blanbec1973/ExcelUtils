@@ -7,13 +7,15 @@ package org.heyner.excelutils.shared.constants;
 public final class ExcelConstants {
 
     private ExcelConstants() {
-        // Classe utilitaire, pas d’instanciation
+        // Classe utilitaire, pas d'instanciation
     }
 
     // Noms de feuilles
     public static final String DEFAULT_SHEET = "sheet1";
     public static final String FUSION_SHEET = "Fusion";
     public static final String DATAS_SHEET = "Datas";
+    public static final String LISSAGE_EXT_REV_SHEET = "Ext Rev";
+    public static final String LISSAGE_BILLING_SHEET = "Billing";
 
     // Cellules spécifiques
     public static final String TRX_CONTRACT_CELL = "B3";
@@ -23,6 +25,17 @@ public final class ExcelConstants {
 
     // Colonnes utilisées
     public static final int FOREIGN_AMOUNT_COLUMN = 29;
+    public static final int LISSAGE_EXT_REV_CURRENT_MONTH_COST_COLUMN = 6; // G
+    public static final int LISSAGE_EXT_REV_NEXT_MONTH_START_COLUMN = 7; // H
+    public static final int LISSAGE_EXT_REV_NEXT_MONTH_END_COLUMN = 18; // S
+    public static final int LISSAGE_EXT_REV_COST_START_ROW = 51;
+    public static final int LISSAGE_EXT_REV_COST_END_ROW = 53;
+    public static final int LISSAGE_EXT_REV_PAST_CUMULATED_COLUMN = 4; // E
+    public static final int LISSAGE_EXT_REV_PAST_CUMULATED_ROW = 50;
+    public static final int LISSAGE_BILLING_CURRENT_MONTH_COLUMN = 7; // H
+    public static final int LISSAGE_BILLING_NEXT_MONTH_START_COLUMN = 9; // J
+    public static final int LISSAGE_BILLING_NEXT_MONTH_END_COLUMN = 20; // U
+    public static final int LISSAGE_BILLING_BALANCE_COLUMN = 21; // V
 
     // Formats
     public static final String DATE_TEMPLATE = "aaaa-mm-jj";
