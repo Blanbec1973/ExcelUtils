@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -33,7 +34,22 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
 
     @Override
     public DirectoryParserArgs parse(String[] args) {
+        validate(args);
         return new DirectoryParserArgs(Path.of(args[1]));
+    }
+
+    private void validate(String[] args) {
+        if (args[1] == null || args[1].isBlank()) {
+            throw new IllegalArgumentException("Directory path must not be blank");
+        }
+
+        Path directory = Path.of(args[1]);
+        if (!Files.exists(directory)) {
+            throw new IllegalArgumentException("Directory does not exist: " + directory);
+        }
+        if (!Files.isDirectory(directory)) {
+            throw new IllegalArgumentException("Path is not a directory: " + directory);
+        }
     }
 
     @Override

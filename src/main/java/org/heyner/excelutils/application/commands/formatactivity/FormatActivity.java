@@ -7,6 +7,7 @@ import org.heyner.excelutils.application.ports.FormatActivityPort;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.nio.file.Files;
 
 @Slf4j
 @Service
@@ -25,6 +26,21 @@ public class FormatActivity implements Command<FormatActivityArgs> {
 
     @Override
     public FormatActivityArgs parse(String[] args) {
+        validate(args);
         return new FormatActivityArgs(Path.of(args[1]));
+    }
+
+    private void validate(String[] args) {
+        if (args[1] == null || args[1].isBlank()) {
+            throw new IllegalArgumentException("Input file path must not be blank");
+        }
+
+        Path inputFile = Path.of(args[1]);
+        if (!Files.exists(inputFile)) {
+            throw new IllegalArgumentException("Input file does not exist: " + inputFile);
+        }
+        if (!Files.isRegularFile(inputFile)) {
+            throw new IllegalArgumentException("Input path is not a file: " + inputFile);
+        }
     }
 }

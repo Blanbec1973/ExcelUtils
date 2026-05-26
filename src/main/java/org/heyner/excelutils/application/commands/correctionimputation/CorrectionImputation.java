@@ -9,6 +9,7 @@ import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.nio.file.Files;
 
 @Slf4j
 @Service
@@ -36,6 +37,21 @@ public class CorrectionImputation implements Command<CorrectionImputationArgs> {
 
     @Override
     public CorrectionImputationArgs parse(String[] args) {
+        validate(args);
         return new CorrectionImputationArgs(Path.of(args[1]), ExcelConstants.DEFAULT_SHEET);
+    }
+
+    private void validate(String[] args) {
+        if (args[1] == null || args[1].isBlank()) {
+            throw new IllegalArgumentException("Input file path must not be blank");
+        }
+
+        Path inputFile = Path.of(args[1]);
+        if (!Files.exists(inputFile)) {
+            throw new IllegalArgumentException("Input file does not exist: " + inputFile);
+        }
+        if (!Files.isRegularFile(inputFile)) {
+            throw new IllegalArgumentException("Input path is not a file: " + inputFile);
+        }
     }
 }
