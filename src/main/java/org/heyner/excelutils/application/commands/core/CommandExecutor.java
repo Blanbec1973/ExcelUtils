@@ -2,7 +2,7 @@ package org.heyner.excelutils.application.commands.core;
 
 import lombok.RequiredArgsConstructor;
 import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
+import org.heyner.excelutils.shared.exceptions.CatalogConfigurationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,8 +15,8 @@ public class CommandExecutor {
         String commandName = args[0];
 
         Command<? extends CommandArgs> command = registry.find(commandName)
-                .orElseThrow(() -> new MissingConfigurationException(
-                        "Unable to load command : " + commandName,
+                .orElseThrow(() -> new CatalogConfigurationException(
+                        "Command not registered: " + commandName,
                         ExitCodes.CONFIG_ERROR
                 ));
 

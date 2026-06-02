@@ -29,7 +29,7 @@ public class DirectoryLister {
             return result;
         } catch (IOException e) {
             throw new FatalApplicationException(
-                    "Error processing file: " + directory,
+                    "ERROR: Fatal error while processing " + directory,
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );

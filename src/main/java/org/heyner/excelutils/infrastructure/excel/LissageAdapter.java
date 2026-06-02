@@ -73,7 +73,7 @@ public class LissageAdapter implements LissagePort {
             log.info(DONE_LOG, inputFile, lissageRow);
         } catch (IOException e) {
             throw new FatalApplicationException(
-                    "Error processing file: " + inputFile,
+                    "ERROR: Fatal error while processing " + inputFile,
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );

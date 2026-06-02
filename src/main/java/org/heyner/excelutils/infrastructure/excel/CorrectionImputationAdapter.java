@@ -46,7 +46,7 @@ public class CorrectionImputationAdapter implements CorrectionImputationPort {
             excelFile.writeFichierExcel();
         } catch (IOException e) {
             throw new FatalApplicationException(
-                    "Error processing file: " + inputFile,
+                    "ERROR: Fatal error while processing " + inputFile,
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );

@@ -2,7 +2,7 @@ package org.heyner.excelutils.application.commands.core;
 
 import org.heyner.excelutils.infrastructure.config.CommandProperties;
 import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
+import org.heyner.excelutils.shared.exceptions.CatalogConfigurationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
@@ -29,8 +29,8 @@ public class PropertiesBackedCommandSpecCatalog implements CommandSpecCatalog {
 
     private static String normalize(String name) {
         if (name == null || name.isBlank()) {
-            throw new MissingConfigurationException(
-                    "Unknown command: " + name,
+            throw new CatalogConfigurationException(
+                    "Command name is null or blank",
                     ExitCodes.CONFIG_ERROR
             );
         }
@@ -39,8 +39,9 @@ public class PropertiesBackedCommandSpecCatalog implements CommandSpecCatalog {
 
     private static CommandSpec toSpec(String rawName, Integer args) {
         if (args == null || args < 1) {
-            throw new MissingConfigurationException(
-                "counterarguments must be >= 1 for command: " + rawName, ExitCodes.CONFIG_ERROR
+            throw new CatalogConfigurationException(
+                    "counterarguments must be >= 1 for command: " + rawName,
+                    ExitCodes.CONFIG_ERROR
             );
         }
         return new CommandSpec(rawName, args);

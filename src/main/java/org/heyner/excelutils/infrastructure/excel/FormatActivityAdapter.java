@@ -51,7 +51,7 @@ public class FormatActivityAdapter implements FormatActivityPort {
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, inputFile, e);
             throw new FatalApplicationException(
-                    "Unable to process file: " + inputFile,
+                    "ERROR: Fatal error while processing " + inputFile,
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );

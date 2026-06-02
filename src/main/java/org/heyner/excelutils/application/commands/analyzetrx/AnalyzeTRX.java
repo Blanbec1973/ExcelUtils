@@ -68,7 +68,7 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
         log.info(TRANSFERRED_ROWS_LOG, rowCount);
 
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
-        log.info("TRX analysis completed successfully for {}", args.inputFile());
+        log.info("SUCCESS - TRX analysis completed successfully for {}", args.inputFile());
     }
 
 }

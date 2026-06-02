@@ -15,5 +15,4 @@ public abstract class FunctionalException extends RuntimeException {
         super(message, cause);
         this.exitCode = exitCode;
     }
-
 }

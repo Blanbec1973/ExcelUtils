@@ -12,7 +12,7 @@
 
     <groupId>org.heyner</groupId>
     <artifactId>ExcelUtils</artifactId>
-    <version>5.2.0</version>
+    <version>5.3.0</version>
     <description>Tools for financial Excel files</description>
 
     <properties>
@@ -56,6 +56,21 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

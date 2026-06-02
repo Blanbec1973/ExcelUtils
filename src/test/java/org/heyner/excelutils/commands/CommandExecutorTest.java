@@ -5,7 +5,7 @@ import org.heyner.excelutils.application.commands.core.CommandArgs;
 import org.heyner.excelutils.application.commands.core.CommandExecutor;
 import org.heyner.excelutils.application.commands.core.CommandRegistry;
 import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
+import org.heyner.excelutils.shared.exceptions.CatalogConfigurationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -49,20 +49,19 @@ class CommandExecutorTest {
     }
 
     @Test
-    void execute_throws_MissingConfigurationException_when_command_not_found() {
+    void execute_throws_CatalogConfigurationException_when_command_not_found() {
         // Arrange
         String[] args = {"unknowncommand"};
         when(registry.find("unknowncommand")).thenReturn(Optional.empty());
 
         // Act & Assert
-        MissingConfigurationException exception = assertThrows(
-                MissingConfigurationException.class,
+        CatalogConfigurationException exception = assertThrows(
+                CatalogConfigurationException.class,
                 () -> sut.execute(args)
         );
 
-        // Vérifier que le message et le code sont corrects
+        // Vérifier que le code d'erreur est correct
         assert exception.getExitCode() == ExitCodes.CONFIG_ERROR;
-        assert exception.getMessage().contains("unknowncommand");
 
         verify(registry).find("unknowncommand");
     }

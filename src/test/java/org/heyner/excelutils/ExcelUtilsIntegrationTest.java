@@ -6,12 +6,11 @@ import org.heyner.excelutils.application.commands.core.CommandArgs;
 import org.heyner.excelutils.bootstrap.ArgsChecker;
 import org.heyner.excelutils.bootstrap.ExcelUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.system.CapturedOutput;
-import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.context.annotation.Bean;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,8 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
         args = {"servicetest", "arg1", "arg2"}
 )
 @Slf4j
-@ExtendWith(OutputCaptureExtension.class)
 class ExcelUtilsIntegrationTest {
+
+    private static final AtomicReference<String> EXECUTED_COMMAND = new AtomicReference<>();
 
     @TestConfiguration
     static class TestConfig {
@@ -50,6 +50,7 @@ class ExcelUtilsIntegrationTest {
 
                 @Override
                 public void execute(CommandArgs args) {
+                    EXECUTED_COMMAND.set(((CommandTestArgs) args).value());
                     log.info("Test command executed with args: {}", args);
                 }
             };
@@ -57,9 +58,8 @@ class ExcelUtilsIntegrationTest {
     }
 
     @Test
-    void testMainRunsSuccessfully(CapturedOutput output) {
-        assertThat(output.getOut()).contains("Beginning");
-        assertThat(output.getOut()).contains("servicetest");
+    void testMainRunsSuccessfully() {
+        assertThat(EXECUTED_COMMAND.get()).isEqualTo("servicetest");
     }
 }
 

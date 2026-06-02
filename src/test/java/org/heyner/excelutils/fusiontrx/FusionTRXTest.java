@@ -4,24 +4,22 @@ import org.heyner.excelutils.application.commands.fusiontrx.FusionProcessor;
 import org.heyner.excelutils.application.commands.fusiontrx.FusionTRX;
 import org.heyner.excelutils.application.commands.fusiontrx.FusionTRXArgs;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.boot.test.system.CapturedOutput;
-import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import java.nio.file.Path;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-@ExtendWith(OutputCaptureExtension.class)
+import static org.mockito.Mockito.verify;
+
 class FusionTRXTest {
     private final FusionProcessor fusionProcessorMock =  Mockito.mock(FusionProcessor.class);
+
     @Test
-    void fusionTrxTest(CapturedOutput output) {
+    void fusionTrxTest() {
         FusionTRX fusionTRX = new FusionTRX(fusionProcessorMock);
         doNothing().when(fusionProcessorMock).process(any(),any());
         fusionTRX.execute(new FusionTRXArgs(Path.of("arg2"), Path.of("arg3")));
-        assertThat(output.getOut()).contains("FusionTRX completed successfully.");
+        verify(fusionProcessorMock).process("arg2", "arg3");
     }
 }

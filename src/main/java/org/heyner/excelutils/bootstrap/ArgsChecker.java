@@ -27,19 +27,22 @@ public class ArgsChecker {
 
         //Check argument present :
         if (args == null || args.length == 0) {
-            throw new MissingConfigurationException("No argument, end of program.", ExitCodes.USAGE_ERROR);
+            throw new MissingConfigurationException(ExitCodes.USAGE_ERROR);
         }
 
         // Check function (first argument) :
         String cmd = args[0].toLowerCase(Locale.ROOT);
+        if ("help".equals(cmd) || "--help".equals(cmd)) {
+            return true;
+        }
         CommandSpec spec = catalog.find(cmd)
-                .orElseThrow(() -> new InvalidFunctionException("Unknown function: " + cmd, ExitCodes.USAGE_ERROR));
+                .orElseThrow(() -> new InvalidFunctionException(cmd, ExitCodes.USAGE_ERROR));
 
         int expected = spec.expectedArgs();
         int actual = args.length;
 
         if (actual != expected) {
-            throw new InvalidArgumentCountException(expected, actual, ExitCodes.USAGE_ERROR);
+            throw new InvalidArgumentCountException(cmd, expected, actual, ExitCodes.USAGE_ERROR);
         }
         return true;
     }

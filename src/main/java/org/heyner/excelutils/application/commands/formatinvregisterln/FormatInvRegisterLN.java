@@ -49,7 +49,7 @@ public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
             log.info("Invoice register LN file formatted successfully: {}", args.inputFile());
         } catch (IOException e) {
             log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
-            throw new FatalApplicationException("Error processing file: " + args.inputFile(),
+            throw new FatalApplicationException("ERROR: Fatal error while processing " + args.inputFile(),
                     e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }

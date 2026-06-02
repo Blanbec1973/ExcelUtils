@@ -1,19 +1,33 @@
 configuration:
   status: warn
+
   appenders:
     Console:
       name: ConsoleAppender
       target: SYSTEM_OUT
       PatternLayout:
-        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        pattern: "%msg%n"
     File:
       name: FileAppender
       fileName: logs/ExcelUtils.log
       PatternLayout:
         pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
   loggers:
+    logger:
+      - name: org.heyner.excelutils.cli
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: ConsoleAppender
+
+      - name: org.springframework
+        level: warn
+        additivity: false
+        AppenderRef:
+          - ref: FileAppender
+
     root:
       level: info
       AppenderRef:
-        - ref: ConsoleAppender
         - ref: FileAppender

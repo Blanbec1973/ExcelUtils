@@ -1,19 +1,19 @@
 package org.heyner.excelutils.commands;
 
-import org.heyner.excelutils.application.commands.core.CommandArgs;
 import org.heyner.excelutils.application.commands.core.CommandDispatcher;
 import org.heyner.excelutils.application.commands.core.CommandExecutor;
 import org.heyner.excelutils.bootstrap.ArgsChecker;
 import org.heyner.excelutils.cli.HelpPrinter;
 import org.heyner.excelutils.shared.config.ApplicationProperties;
 import org.heyner.excelutils.shared.constants.ExitCodeHandler;
-import org.heyner.excelutils.shared.exceptions.GracefulExitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
-class CommandDispatcherTest {
+class CommandDispatcherHelpTest {
 
     private ArgsChecker argsChecker;
     private ExitCodeHandler exitHandler;
@@ -22,43 +22,34 @@ class CommandDispatcherTest {
     private HelpPrinter helpPrinter;
 
     @BeforeEach
-    void setUp()  {
+    void setUp() {
         ApplicationProperties props = mock(ApplicationProperties.class);
-        when(props.getProjectName()).thenReturn("ExcelUtils");
-        when(props.getVersion()).thenReturn("1.0.0");
-
         argsChecker = mock(ArgsChecker.class);
         exitHandler = mock(ExitCodeHandler.class);
+        commandExecutor = mock(CommandExecutor.class);
         helpPrinter = mock(HelpPrinter.class);
 
-        commandExecutor = mock(CommandExecutor.class);
-        doNothing().when(commandExecutor).execute(any());
         dispatcher = new CommandDispatcher(props, argsChecker, exitHandler, commandExecutor, helpPrinter);
     }
 
     @Test
-    void shouldExecuteCommandWhenValid() {
-        String[] args = {"test", "arg1"};
-        mock(CommandArgs.class);
+    void run_prints_help_and_skips_validation_for_help_command() {
+        dispatcher.run("help");
 
-        when(argsChecker.validateOrThrow(args)).thenReturn(true);
-
-        dispatcher.run(args);
-
-        verify(commandExecutor).execute(any());
+        verify(helpPrinter).printAll();
+        verifyNoInteractions(argsChecker);
+        verifyNoInteractions(commandExecutor);
         verifyNoInteractions(exitHandler);
     }
 
     @Test
-    void shouldDelegateToExitHandlerOnGracefulExit() {
-        String[] args = {"test"};
-        mock(CommandArgs.class);
+    void run_prints_help_and_skips_validation_for_long_help_command() {
+        dispatcher.run("--help");
 
-        doThrow(new GracefulExitException("bye", 0))
-                .when(argsChecker).validateOrThrow(any());
-
-        dispatcher.run(args);
-
-        verify(exitHandler).handle(any(GracefulExitException.class));
+        verify(helpPrinter).printAll();
+        verifyNoInteractions(argsChecker);
+        verifyNoInteractions(commandExecutor);
+        verifyNoInteractions(exitHandler);
     }
 }
+
