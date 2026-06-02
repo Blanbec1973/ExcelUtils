@@ -1,6 +1,5 @@
 package org.heyner.excelutils.cli;
 
-import org.heyner.excelutils.shared.config.ApplicationProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class HelpServiceTest {
-    private ApplicationProperties properties;
     private Slf4jCliPrinter cliPrinter;
     private CommandHelpCatalog catalog;
     private HelpPrinter helpPrinter;
@@ -21,8 +19,7 @@ class HelpServiceTest {
     void setUp() {
         cliPrinter = mock(Slf4jCliPrinter.class);
         catalog = mock(CommandHelpCatalog.class);
-        properties = mock(ApplicationProperties.class);
-        helpPrinter = new HelpPrinter(properties, cliPrinter, catalog);
+        helpPrinter = new HelpPrinter(cliPrinter, catalog);
     }
 
     @Test
@@ -30,13 +27,10 @@ class HelpServiceTest {
         CommandHelpEntry first = new CommandHelpEntry("analyzetrx", "desc1", "usage1", "example1");
         CommandHelpEntry second = new CommandHelpEntry("lissage", "desc2", "usage2", "example2");
         when(catalog.all()).thenReturn(List.of(first, second));
-        when(properties.getProjectName()).thenReturn("ExcelUtils");
-        when(properties.getVersion()).thenReturn("test");
 
         helpPrinter.printAll();
 
         var order = inOrder(cliPrinter);
-        order.verify(cliPrinter).info("ExcelUtils test");
         order.verify(cliPrinter).blankLine();
 
         order.verify(cliPrinter).info("analyzetrx");
@@ -72,7 +66,10 @@ class HelpServiceTest {
 
         helpPrinter.printCommand("unknown");
 
-        verify(cliPrinter).error("Unknown command: unknown");
+        verify(cliPrinter).error("""
+            ERROR: unknown command: unknown
+            Usage: excelutils help
+            """);
     }
 }
 

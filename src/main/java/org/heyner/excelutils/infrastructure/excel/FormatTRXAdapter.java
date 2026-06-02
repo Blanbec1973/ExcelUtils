@@ -16,7 +16,7 @@ import java.nio.file.Path;
 @Slf4j
 public class FormatTRXAdapter implements FormatTRXPort {
     private static final String FORMATTING_TRX_FILE_LOG = "Formatting TRX file : {}";
-    private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
+    private static final String FATAL_ERROR_PROCESSING_LOG = "ERROR: Fatal error while processing {}";
 
     @Override
     public void deleteFirstLineContaining(Path inputFile, String sheet, String header) {
@@ -28,9 +28,9 @@ public class FormatTRXAdapter implements FormatTRXPort {
             fichierExcel.writeFichierExcel();
             log.info("TRX file formatted successfully: {}", inputFile);
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, inputFile, e);
+            log.error(FATAL_ERROR_PROCESSING_LOG, inputFile, e);
             throw new FatalApplicationException(
-                    "ERROR: Fatal error while processing " + inputFile,
+                    inputFile.toString(),
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR);
 

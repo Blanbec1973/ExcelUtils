@@ -28,8 +28,9 @@ public class DirectoryLister {
 
             return result;
         } catch (IOException e) {
+            log.error("ERROR: Fatal error while processing {}", directory, e);
             throw new FatalApplicationException(
-                    "ERROR: Fatal error while processing " + directory,
+                    directory.toString(),
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );

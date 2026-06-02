@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class FusionProcessor {
+    private static final String FATAL_ERROR_PROCESSING_LOG = "ERROR: Fatal error while processing {}";
+
     /**
      * Exécute la commande de fusion des fichiers TRX.
      * <p>
@@ -60,7 +62,8 @@ public class FusionProcessor {
             }
             fusion.writeFichierExcel();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);
+            log.error(FATAL_ERROR_PROCESSING_LOG, out, e);
+            throw new FatalApplicationException(out.toString(), e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 
@@ -71,7 +74,8 @@ public class FusionProcessor {
                     .filter(p -> p.getFileName().toString().toLowerCase().endsWith(".xlsx"))
                     .toList();
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(), e, ExitCodes.FILE_PROCESSING_ERROR);
+            log.error(FATAL_ERROR_PROCESSING_LOG, dir, e);
+            throw new FatalApplicationException(dir.toString(), e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 
@@ -102,7 +106,8 @@ public class FusionProcessor {
             log.warn("Skipping file {} due to missing sheet '{}}'", file, ExcelConstants.DEFAULT_SHEET);
             return rowOffset;
         } catch (IOException e) {
-            throw new FatalApplicationException(e.getMessage(),e,ExitCodes.FILE_PROCESSING_ERROR);
+            log.error(FATAL_ERROR_PROCESSING_LOG, file, e);
+            throw new FatalApplicationException(file.toString(),e,ExitCodes.FILE_PROCESSING_ERROR);
         }
     }
 

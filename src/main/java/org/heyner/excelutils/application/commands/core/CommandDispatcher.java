@@ -2,6 +2,7 @@ package org.heyner.excelutils.application.commands.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.bootstrap.ArgsChecker;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.cli.HelpPrinter;
 import org.heyner.excelutils.shared.config.ApplicationProperties;
 import org.heyner.excelutils.shared.constants.ExitCodeHandler;
@@ -18,6 +19,7 @@ public class CommandDispatcher implements CommandLineRunner {
     private final ExitCodeHandler exitCodeHandler;
     private final CommandExecutor commandExecutor;
     private final HelpPrinter helpService;
+    private final CliPrinter cliPrinter;
 
     private static final String BEGINNING_LOG = "Starting {} {}";
 
@@ -48,6 +50,7 @@ public class CommandDispatcher implements CommandLineRunner {
         String projectName = applicationProperties.getProjectName();
         String version = applicationProperties.getVersion();
         log.info(BEGINNING_LOG, projectName, version);
+        cliPrinter.info(projectName + " " + version);
     }
 
     private boolean isGlobalHelp(String[] args) {

@@ -25,7 +25,7 @@ public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
 
     private static final String FILE_TO_PROCESS_LOG = "Formatting invoice register LN file : {}";
-    private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
+    private static final String FATAL_ERROR_PROCESSING_LOG = "ERROR: Fatal error while processing {}";
 
     public void execute(FormatInvRegisterLNArgs args) {
         try(ExcelFile fichierExcel = ExcelFile.open(args.inputFile().toString())) {
@@ -48,8 +48,8 @@ public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
             fichierExcel.writeFichierExcel();
             log.info("Invoice register LN file formatted successfully: {}", args.inputFile());
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, args.inputFile(), e);
-            throw new FatalApplicationException("ERROR: Fatal error while processing " + args.inputFile(),
+            log.error(FATAL_ERROR_PROCESSING_LOG, args.inputFile(), e);
+            throw new FatalApplicationException(args.inputFile().toString(),
                     e, ExitCodes.FILE_PROCESSING_ERROR);
         }
     }

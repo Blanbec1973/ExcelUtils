@@ -3,6 +3,7 @@ package org.heyner.excelutils.commands;
 import org.heyner.excelutils.application.commands.core.CommandDispatcher;
 import org.heyner.excelutils.application.commands.core.CommandExecutor;
 import org.heyner.excelutils.bootstrap.ArgsChecker;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.cli.HelpPrinter;
 import org.heyner.excelutils.shared.config.ApplicationProperties;
 import org.heyner.excelutils.shared.constants.ExitCodeHandler;
@@ -20,6 +21,7 @@ class CommandDispatcherHelpTest {
     private CommandDispatcher dispatcher;
     private CommandExecutor commandExecutor;
     private HelpPrinter helpPrinter;
+    private CliPrinter cliPrinter;
 
     @BeforeEach
     void setUp() {
@@ -28,8 +30,9 @@ class CommandDispatcherHelpTest {
         exitHandler = mock(ExitCodeHandler.class);
         commandExecutor = mock(CommandExecutor.class);
         helpPrinter = mock(HelpPrinter.class);
+        cliPrinter = mock(CliPrinter.class);
 
-        dispatcher = new CommandDispatcher(props, argsChecker, exitHandler, commandExecutor, helpPrinter);
+        dispatcher = new CommandDispatcher(props, argsChecker, exitHandler, commandExecutor, helpPrinter, cliPrinter);
     }
 
     @Test

@@ -18,7 +18,6 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
     private final CliPrinter cliPrinter;
 
     private static final String PROGRAM_ENDS_NORMALLY_LOG = "SUCCESS - {}";
-    private static final String FATAL_ERROR_LOG = "ERROR: Fatal Error";
     private static final String UNEXPECTED_ERROR_LOG = "ERROR: Unexpected error";
 
     @Override
@@ -44,16 +43,21 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
                         .orElse("excelutils help");
 
                 log.error("""
+                ERROR: invalid number of arguments
+                Command: {}
+                Expected: {}
+                Received: {}
+                """, e.getCommandName(), e.getExpected(), e.getActual());
+                    cliPrinter.error("""
             ERROR: invalid number of arguments
             Command: {}
             Expected: {}
             Received: {}
             Usage: {}
-            """,
-                        e.getCommandName(),
+            """.formatted(e.getCommandName(),
                         e.getExpected(),
                         e.getActual(),
-                        usage);
+                        usage));
 
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
@@ -66,16 +70,27 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
                 Usage: excelutils help""".formatted(e.getFunctionName()));
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
+            case MissingConfigurationException e -> {
+                cliPrinter.error("""
+            ERROR: missing command
+            Usage: excelutils help
+            """);
+                log.error("ERROR: missing command");
+                exitCodeGenerator.setExitCode(e.getExitCode());
+            }
             case FunctionalException e -> {
                 log.error(e.getMessage());
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             case FatalApplicationException e -> {
-                log.error(FATAL_ERROR_LOG, e);
+                cliPrinter.error("""
+                        ERROR: Fatal error while processing {}
+                        """.formatted(e.getRessource()));
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             default -> {
-                log.error(UNEXPECTED_ERROR_LOG, t);
+                cliPrinter.error("ERROR: unexpected error");
+                log.error("{} - {}", UNEXPECTED_ERROR_LOG, t.getClass().getName(), t);
                 exitCodeGenerator.setExitCode(ExitCodes.UNEXPECTED_ERROR);
             }
         }

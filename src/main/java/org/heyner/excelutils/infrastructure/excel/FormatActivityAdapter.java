@@ -23,7 +23,7 @@ import java.nio.file.Path;
 public class FormatActivityAdapter implements FormatActivityPort {
     private final FormatActivityConfig  formatActivityConfig;
     private static final String FORMATTING_ACTIVITY_FILE_LOG = "Formatting activity file : {}";
-    private static final String ERROR_PROCESSING_FILE_LOG = "Error processing file: {}";
+    private static final String FATAL_ERROR_PROCESSING_LOG = "ERROR: Fatal error while processing {}";
     private static final int HEADER_ROW_INDEX = 0;
     private static final int HEADER_COLUMN_INDEX = 0;
     private static final int DATA_START_ROW_INDEX = 1;
@@ -49,9 +49,9 @@ public class FormatActivityAdapter implements FormatActivityPort {
             fichierExcel.writeFichierExcel();
             log.info("Activity file formatted successfully: {}", inputFile);
         } catch (IOException e) {
-            log.error(ERROR_PROCESSING_FILE_LOG, inputFile, e);
+            log.error(FATAL_ERROR_PROCESSING_LOG, inputFile, e);
             throw new FatalApplicationException(
-                    "ERROR: Fatal error while processing " + inputFile,
+                    inputFile.toString(),
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );

@@ -72,8 +72,9 @@ public class LissageAdapter implements LissagePort {
             excelFile.writeFichierExcel();
             log.info(DONE_LOG, inputFile, lissageRow);
         } catch (IOException e) {
+            log.error("ERROR: Fatal error while processing {}", inputFile, e);
             throw new FatalApplicationException(
-                    "ERROR: Fatal error while processing " + inputFile,
+                    inputFile.toString(),
                     e,
                     ExitCodes.FILE_PROCESSING_ERROR
             );
