@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.analyzetrx;
 
 import org.heyner.excelutils.application.ports.ExcelTransferPort;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
 import org.heyner.excelutils.shared.utils.DateTemplateExpander;
 import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
@@ -29,7 +30,8 @@ class AnalyzeTRXValidationTest {
             mock(DateTemplateExpander.class),
             mock(ModelCloner.class),
             mock(ExcelTransferPort.class),
-            mock(ResultNamer.class)
+            mock(ResultNamer.class),
+            mock(Slf4jCliPrinter.class)
         );
     }
 

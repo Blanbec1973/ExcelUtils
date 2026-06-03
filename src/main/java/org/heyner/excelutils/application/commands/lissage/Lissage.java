@@ -33,36 +33,40 @@ public class Lissage implements Command<LissageArgs> {
 
     private void validate(String[] args) {
         if (args[1] == null || args[1].isBlank()) {
-            throw new IllegalArgumentException("Input file path must not be blank");
+            throw new IllegalArgumentException("ERROR: input file is required");
         }
 
         Path inputFile = Path.of(args[1]);
         if (!Files.exists(inputFile)) {
-            throw new IllegalArgumentException("Input file does not exist: " + inputFile);
+            throw new IllegalArgumentException("ERROR: file not found: " + inputFile);
         }
         if (!Files.isRegularFile(inputFile)) {
-            throw new IllegalArgumentException("Input path is not a file: " + inputFile);
+            throw new IllegalArgumentException("ERROR: expected a file: " + inputFile);
         }
 
         int lissageRow;
         try {
             lissageRow = Integer.parseInt(args[2]);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Lissage row must be an integer", e);
+            throw new IllegalArgumentException("ERROR: row must be an integer", e);
         }
         if (lissageRow < 1) {
-            throw new IllegalArgumentException("Lissage row must be >= 1");
+            throw new IllegalArgumentException("ERROR: row must be greater than or equal to 1");
         }
 
         double targetMargin;
         try {
             targetMargin = Double.parseDouble(args[3].replace(',', '.'));
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Target margin must be a decimal number", e);
+            throw new IllegalArgumentException("ERROR: target margin must be a decimal number", e);
+        }
+        if (targetMargin == 1.0) {
+            throw new IllegalArgumentException("ERROR: target margin cannot be 1.0");
         }
         if (targetMargin <= 0.0 || targetMargin >= 1.0) {
-            throw new IllegalArgumentException("Target margin must be > 0 and < 1");
+            throw new IllegalArgumentException("ERROR: target margin must be between 0 and 1");
         }
+
     }
 
     @Override

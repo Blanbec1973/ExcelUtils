@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.formatactivity;
 
 import org.heyner.excelutils.application.ports.FormatActivityPort;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -21,7 +22,8 @@ class FormatActivityValidationTest {
 
     @BeforeEach
     void setUp() {
-        formatActivity = new FormatActivity(mock(FormatActivityPort.class));
+        formatActivity = new FormatActivity(mock(FormatActivityPort.class),
+                mock(Slf4jCliPrinter.class));
     }
 
     @Test

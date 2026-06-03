@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.ports.ExcelTransferPort;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.utils.DateTemplateExpander;
@@ -22,6 +23,7 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
     private final ModelCloner modelCloner;
     private final ExcelTransferPort excelTransfer;
     private final ResultNamer resultNamer;
+    private final CliPrinter cliPrinter;
 
     private static final String TRANSFERRED_ROWS_LOG = "Number of transferred rows: {}";
 
@@ -38,21 +40,22 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
 
     private void validate(String[] args) {
         if (args[1] == null || args[1].isBlank()) {
-            throw new IllegalArgumentException("Input file path must not be blank");
+            throw new IllegalArgumentException("ERROR: input file is required");
         }
 
         Path inputFile = Path.of(args[1]);
         if (!Files.exists(inputFile)) {
-            throw new IllegalArgumentException("Input file does not exist: " + inputFile);
+            throw new IllegalArgumentException("ERROR: file not found: " + inputFile);
         }
         if (!Files.isRegularFile(inputFile)) {
-            throw new IllegalArgumentException("Input path is not a file: " + inputFile);
+            throw new IllegalArgumentException("ERROR: expected a file: " + inputFile);
         }
     }
 
     @Override
     public void execute(AnalyzeTRXArgs args) {
         log.info("Analyzing TRX file {}", args.inputFile());
+        cliPrinter.info("Analyzing TRX file...");
         Path pathInput = args.inputFile();
         Path pathModel = Path.of(analyzeTRXConfig.getPathModel());
         log.debug("Model file: {}", pathModel);
@@ -66,9 +69,11 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
         int rowCount = excelTransfer.transfer(pathInput, pathResultFile, sheetIn, sheetOut);
 
         log.info(TRANSFERRED_ROWS_LOG, rowCount);
+        cliPrinter.info("Rows transferred: %d".formatted(rowCount));
 
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
         log.info("SUCCESS - TRX analysis completed successfully for {}", args.inputFile());
+        cliPrinter.info("SUCCESS: analysis completed");
     }
 
 }

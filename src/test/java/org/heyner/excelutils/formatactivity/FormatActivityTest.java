@@ -4,6 +4,7 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivity;
 import org.heyner.excelutils.application.commands.formatactivity.FormatActivityArgs;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.config.FormatActivityConfig;
 import org.heyner.excelutils.infrastructure.excel.FormatActivityAdapter;
 import org.heyner.excelutils.shared.config.ApachePoiConfigurer;
@@ -21,7 +22,10 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SpringBootTest(classes = {FormatActivity.class, ApachePoiConfigurer.class, FormatActivityAdapter.class})
+@SpringBootTest(classes = {FormatActivity.class,
+                           ApachePoiConfigurer.class,
+                           FormatActivityAdapter.class,
+                           Slf4jCliPrinter.class})
 @EnableConfigurationProperties(FormatActivityConfig.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FormatActivityTest {

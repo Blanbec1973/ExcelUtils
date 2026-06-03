@@ -4,6 +4,7 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.format_trx.FormatTRX;
 import org.heyner.excelutils.application.commands.format_trx.FormatTRXArgs;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.excel.FormatTRXAdapter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,6 +16,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FormatTRXTest {
@@ -27,7 +29,7 @@ class FormatTRXTest {
 
     @Test
     void testFormatTrxMain() {
-        FormatTRX formatTRX = new FormatTRX(new FormatTRXAdapter());
+        FormatTRX formatTRX = new FormatTRX(new FormatTRXAdapter(), mock(Slf4jCliPrinter.class));
         formatTRX.execute(new FormatTRXArgs(Path.of(fileName)));
 
         try (ExcelFile fichierExcel = ExcelFile.open(fileName)) {

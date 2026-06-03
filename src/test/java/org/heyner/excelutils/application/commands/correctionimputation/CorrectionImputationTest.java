@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.correctionimputation;
 
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,9 @@ class CorrectionImputationTest {
 
         // Mock du port
         CorrectionImputationPort portMock = mock(CorrectionImputationPort.class);
+        CliPrinter printer  = mock(CliPrinter.class);
 
-        CorrectionImputation correctionImputation = new CorrectionImputation(configMock, portMock);
+        CorrectionImputation correctionImputation = new CorrectionImputation(configMock, portMock, printer);
 
         // Appel de la méthode avec des arguments fictifs
         CorrectionImputationArgs args = CorrectionImputationArgs.builder()
@@ -41,8 +43,9 @@ class CorrectionImputationTest {
 
         // Mock du port
         CorrectionImputationPort portMock = mock(CorrectionImputationPort.class);
+        CliPrinter printer  = mock(CliPrinter.class);
 
-        CorrectionImputation correctionImputation = new CorrectionImputation(configMock, portMock);
+        CorrectionImputation correctionImputation = new CorrectionImputation(configMock, portMock, printer);
 
         // Appel de la méthode avec des arguments fictifs
         CorrectionImputationArgs args = CorrectionImputationArgs.builder()

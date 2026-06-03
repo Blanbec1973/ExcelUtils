@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.ports.FormatTRXPort;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 public class FormatTRX implements Command<FormatTRXArgs> {
 
     private final FormatTRXPort formatTRXPort;
+    private final CliPrinter cliPrinter;
 
     @Override
     public String name() {
@@ -30,15 +32,15 @@ public class FormatTRX implements Command<FormatTRXArgs> {
 
     private void validate(String[] args) {
         if (args[1] == null || args[1].isBlank()) {
-            throw new IllegalArgumentException("Input file path must not be blank");
+            throw new IllegalArgumentException("ERROR: input file is required");
         }
 
         Path inputFile = Path.of(args[1]);
         if (!Files.exists(inputFile)) {
-            throw new IllegalArgumentException("Input file does not exist: " + inputFile);
+            throw new IllegalArgumentException("ERROR: file not found: " + inputFile);
         }
         if (!Files.isRegularFile(inputFile)) {
-            throw new IllegalArgumentException("Input path is not a file: " + inputFile);
+            throw new IllegalArgumentException("ERROR: expected a file: " + inputFile);
         }
     }
 
@@ -47,5 +49,6 @@ public class FormatTRX implements Command<FormatTRXArgs> {
         formatTRXPort.deleteFirstLineContaining(args.inputFile(),
                                                 ExcelConstants.DEFAULT_SHEET,
                                          "Transaction analysis");
+        cliPrinter.info("SUCCESS: formatting completed");
     }
 }

@@ -40,15 +40,15 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
 
     private void validate(String[] args) {
         if (args[1] == null || args[1].isBlank()) {
-            throw new IllegalArgumentException("Directory path must not be blank");
+            throw new IllegalArgumentException("ERROR: directory is required: ");
         }
 
         Path directory = Path.of(args[1]);
         if (!Files.exists(directory)) {
-            throw new IllegalArgumentException("Directory does not exist: " + directory);
+            throw new IllegalArgumentException("ERROR: directory not found: " + directory);
         }
         if (!Files.isDirectory(directory)) {
-            throw new IllegalArgumentException("Path is not a directory: " + directory);
+            throw new IllegalArgumentException("ERROR: expected a directory: " + directory);
         }
     }
 
@@ -62,8 +62,10 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
         List<Path> paths = lister.listXlsx(args.directory());
 
         if (paths.isEmpty()) {
-            throw new GracefulExitException("No file to process in " + directoryToProcess,
-                    ExitCodes.SUCCESS);
+            throw new GracefulExitException(
+                    "No file found to process in " + directoryToProcess,
+                    ExitCodes.SUCCESS
+            );
         }
         processFiles(paths);
     }

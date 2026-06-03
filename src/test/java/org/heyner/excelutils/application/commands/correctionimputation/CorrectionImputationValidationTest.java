@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.correctionimputation;
 
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,8 @@ class CorrectionImputationValidationTest {
     void setUp() {
         correctionImputation = new CorrectionImputation(
                 mock(CorrectionImputationConfig.class),
-                mock(CorrectionImputationPort.class)
+                mock(CorrectionImputationPort.class),
+                mock(Slf4jCliPrinter.class)
         );
     }
 

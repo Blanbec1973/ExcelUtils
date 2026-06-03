@@ -15,8 +15,8 @@ import java.nio.file.Files;
 public class FusionTRX implements Command<FusionTRXArgs> {
     private final FusionProcessor fusionProcessor;
 
-    private static final String STARTING_FUSION_LOG = "Starting FusionTRX with directory: {} and output path: {}";
-    private static final String FUSION_COMPLETED_LOG = "FusionTRX completed successfully.";
+    private static final String STARTING_FUSION_LOG = "Processing TRX files in directory: {} and output path: {}";
+    private static final String FUSION_COMPLETED_LOG = "SUCCESS : fusion completed";
 
     @Override
     public void execute(FusionTRXArgs args) {
@@ -40,27 +40,27 @@ public class FusionTRX implements Command<FusionTRXArgs> {
 
     private void validate(String[] args) {
         if (args[1] == null || args[1].isBlank()) {
-            throw new IllegalArgumentException("Input directory path must not be blank");
+            throw new IllegalArgumentException("ERROR: input directory is required");
         }
 
         Path inputDir = Path.of(args[1]);
         if (!Files.exists(inputDir)) {
-            throw new IllegalArgumentException("Input directory does not exist: " + inputDir);
+            throw new IllegalArgumentException("ERROR: directory not found: " + inputDir);
         }
         if (!Files.isDirectory(inputDir)) {
-            throw new IllegalArgumentException("Input path is not a directory: " + inputDir);
+            throw new IllegalArgumentException("ERROR: expected a directory: " + inputDir);
         }
 
         if (args[2] == null || args[2].isBlank()) {
-            throw new IllegalArgumentException("Output directory path must not be blank");
+            throw new IllegalArgumentException("ERROR: output directory is required");
         }
 
         Path outputDir = Path.of(args[2]);
         if (!Files.exists(outputDir)) {
-            throw new IllegalArgumentException("Output directory does not exist: " + outputDir);
+            throw new IllegalArgumentException("ERROR: directory not found: " + outputDir);
         }
         if (!Files.isDirectory(outputDir)) {
-            throw new IllegalArgumentException("Output path is not a directory: " + outputDir);
+            throw new IllegalArgumentException("ERROR: expected a directory: " + outputDir);
         }
     }
 }

@@ -4,6 +4,7 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.formatinvregisterln.FormatInvRegisterLN;
 import org.heyner.excelutils.application.commands.formatinvregisterln.FormatInvRegisterLNArgs;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
 import org.heyner.excelutils.shared.config.ApachePoiConfigurer;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
@@ -19,7 +20,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {FormatInvRegisterLN.class, ApachePoiConfigurer.class})
+@SpringBootTest(classes = {FormatInvRegisterLN.class, ApachePoiConfigurer.class, Slf4jCliPrinter.class})
 @EnableConfigurationProperties(FormatInvRegisterLnConfig.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FormatInvRegisterLNTest {

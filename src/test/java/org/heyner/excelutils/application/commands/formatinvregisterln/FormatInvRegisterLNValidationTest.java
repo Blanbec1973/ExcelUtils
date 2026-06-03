@@ -1,5 +1,7 @@
 package org.heyner.excelutils.application.commands.formatinvregisterln;
 
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
+import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -20,7 +22,7 @@ class FormatInvRegisterLNValidationTest {
 
     @BeforeEach
     void setUp() {
-        formatInvLN = new FormatInvRegisterLN(mock(org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig.class));
+        formatInvLN = new FormatInvRegisterLN(mock(FormatInvRegisterLnConfig.class), mock(Slf4jCliPrinter.class));
     }
 
     @Test

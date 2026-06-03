@@ -5,6 +5,7 @@ import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRX;
 import org.heyner.excelutils.application.commands.analyzetrx.AnalyzeTRXArgs;
 import org.heyner.excelutils.application.commands.analyzetrx.ModelClonerImpl;
 import org.heyner.excelutils.application.commands.analyzetrx.TrxDataTransfer;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
 import org.heyner.excelutils.infrastructure.excel.ExcelTransferAdapter;
 import org.heyner.excelutils.infrastructure.filesystem.FsRenamePort;
@@ -48,7 +49,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
                 ResultNamer.class,
                 ExcelPrefixReader.class,
                 FsRenamer.class,
-                AnalyzeTrxIntegrationTest.TestConfig.class
+                AnalyzeTrxIntegrationTest.TestConfig.class,
+                Slf4jCliPrinter.class
         }
 )
 @ActiveProfiles("catalog-it") // <-- active uniquement pour CET IT

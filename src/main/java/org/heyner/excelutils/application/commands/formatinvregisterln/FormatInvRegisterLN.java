@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.core.Command;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.constants.ExitCodes;
@@ -23,6 +24,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
     private final FormatInvRegisterLnConfig formatInvRegisterLnConfig;
+    private final CliPrinter cliPrinter;
 
     private static final String FILE_TO_PROCESS_LOG = "Formatting invoice register LN file : {}";
     private static final String FATAL_ERROR_PROCESSING_LOG = "ERROR: Fatal error while processing {}";
@@ -47,6 +49,7 @@ public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
 
             fichierExcel.writeFichierExcel();
             log.info("Invoice register LN file formatted successfully: {}", args.inputFile());
+            cliPrinter.info("SUCCESS: formatting completed");
         } catch (IOException e) {
             log.error(FATAL_ERROR_PROCESSING_LOG, args.inputFile(), e);
             throw new FatalApplicationException(args.inputFile().toString(),
@@ -105,15 +108,15 @@ public class FormatInvRegisterLN implements Command<FormatInvRegisterLNArgs> {
 
     private void validate(String[] args) {
         if (args[1] == null || args[1].isBlank()) {
-            throw new IllegalArgumentException("Input file path must not be blank");
+            throw new IllegalArgumentException("ERROR: input file is required");
         }
 
         Path inputFile = Path.of(args[1]);
         if (!Files.exists(inputFile)) {
-            throw new IllegalArgumentException("Input file does not exist: " + inputFile);
+            throw new IllegalArgumentException("ERROR: file not found: " + inputFile);
         }
         if (!Files.isRegularFile(inputFile)) {
-            throw new IllegalArgumentException("Input path is not a file: " + inputFile);
+            throw new IllegalArgumentException("ERROR: expected a file: " + inputFile);
         }
     }
 }

@@ -38,8 +38,10 @@ public class FusionProcessor {
 
         List<Path> trxFiles = listTrxFiles(dir);
         if (trxFiles.isEmpty()) {
-            throw new GracefulExitException("No file to process in "+ directoryToProcess,
-                    ExitCodes.SUCCESS);
+            throw new GracefulExitException(
+                    "No TRX file found in " + directoryToProcess,
+                    ExitCodes.SUCCESS
+            );
         }
         log.debug("Found {} TRX file(s)", trxFiles.size());
 

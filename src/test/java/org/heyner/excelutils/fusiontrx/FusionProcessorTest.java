@@ -64,7 +64,7 @@ class FusionProcessorTest {
                 () -> fusionProcessor.process(emptyDirAboslutePath, "target/test/fusiontrx/output/")
         );
 
-        assertTrue(exception.getMessage().contains("No file to process"));
+        assertTrue(exception.getMessage().contains("No TRX file found in"));
         assertEquals(0, exception.getExitCode());
     }
 

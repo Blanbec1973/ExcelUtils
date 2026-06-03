@@ -21,7 +21,7 @@ class FormatTRXValidationTest {
 
     @BeforeEach
     void setUp() {
-        formatTRX = new FormatTRX(mock(FormatTRXPort.class));
+        formatTRX = new FormatTRX(mock(FormatTRXPort.class), null);
     }
 
     @Test
