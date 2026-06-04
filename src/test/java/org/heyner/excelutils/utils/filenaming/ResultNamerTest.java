@@ -52,4 +52,61 @@ class ResultNamerTest {
         assertFalse(resultNamer.hasFileNumericPrefix("toto.com"));
         assertTrue(resultNamer.hasFileNumericPrefix("300000000073657-toto.com"));
     }
+
+    @Test
+    void fileWithExactly15DigitsHasNumericPrefix() {
+        assertTrue(resultNamer.hasFileNumericPrefix("300000000073657"));
+    }
+
+    @Test
+    void fileWithFewerThan15DigitsDoesNotHaveNumericPrefix() {
+        assertFalse(resultNamer.hasFileNumericPrefix("30000000007365"));
+    }
+
+    @Test
+    void emptyFileNameDoesNotHaveNumericPrefix() {
+        assertFalse(resultNamer.hasFileNumericPrefix(""));
+    }
+
+    @Test
+    void fileStartingWithLettersThenDigitsDoesNotHaveNumericPrefix() {
+        assertFalse(resultNamer.hasFileNumericPrefix("abc300000000073657.xlsx"));
+    }
+
+    @Test
+    void renameIfNeededWithParentDirectoryPreservesParentInTarget() {
+        Path inputName = Path.of("some", "dir", "report.xlsx");
+        when(prefixReader.read(String.valueOf(inputName), "Sheet1", "A1")).thenReturn("300000000073657");
+
+        resultNamer.renameIfNeeded(inputName, "Sheet1", "A1");
+
+        verify(fsRenamer, times(1)).rename(
+                String.valueOf(inputName),
+                Path.of("some", "dir", "300000000073657-report.xlsx").toString()
+        );
+    }
+
+    @Test
+    void renameIfNeededDoesNotReadPrefixWhenFileAlreadyHasNumericPrefix() {
+        Path inputName = Path.of("some", "dir", "300000000073657-report.xlsx");
+
+        resultNamer.renameIfNeeded(inputName, "Sheet1", "A1");
+
+        verify(prefixReader, never()).read(any(), any(), any());
+    }
+
+    @Test
+    void fileWith15DigitPrefixFollowedByTextHasNumericPrefix() {
+        assertTrue(resultNamer.hasFileNumericPrefix("300000000073657report.xlsx"));
+    }
+
+    @Test
+    void renameBuildsTargetNameWithPrefixDashFileName() {
+        Path inputName = Path.of("activity.xlsx");
+        when(prefixReader.read(String.valueOf(inputName), "Data", "B2")).thenReturn("123456789012345");
+
+        resultNamer.renameIfNeeded(inputName, "Data", "B2");
+
+        verify(fsRenamer).rename(String.valueOf(inputName), "123456789012345-activity.xlsx");
+    }
 }
