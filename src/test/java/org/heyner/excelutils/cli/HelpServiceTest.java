@@ -71,5 +71,43 @@ class HelpServiceTest {
             Usage: excelutils help
             """);
     }
+
+    @Test
+    void printAll_prints_nothing_except_header_when_catalog_is_empty() {
+        when(catalog.all()).thenReturn(List.of());
+
+        helpPrinter.printAll();
+
+        var order = inOrder(cliPrinter);
+        order.verify(cliPrinter).blankLine();
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    void printCommand_prints_all_fields_in_order() {
+        CommandHelpEntry entry = new CommandHelpEntry("analyzetrx", "Analyze TRX file", "analyzetrx <file>", "analyzetrx C:\\data.xlsx");
+        when(catalog.find("analyzetrx")).thenReturn(java.util.Optional.of(entry));
+
+        helpPrinter.printCommand("analyzetrx");
+
+        var order = inOrder(cliPrinter);
+        order.verify(cliPrinter).info("analyzetrx");
+        order.verify(cliPrinter).info("  Analyze TRX file");
+        order.verify(cliPrinter).info("  Usage: analyzetrx <file>");
+        order.verify(cliPrinter).info("  Example: analyzetrx C:\\data.xlsx");
+        order.verify(cliPrinter).blankLine();
+    }
+
+    @Test
+    void printCommand_error_message_contains_the_unknown_command_name() {
+        when(catalog.find("badcmd")).thenReturn(java.util.Optional.empty());
+
+        helpPrinter.printCommand("badcmd");
+
+        verify(cliPrinter).error("""
+            ERROR: unknown command: badcmd
+            Usage: excelutils help
+            """);
+    }
 }
 
