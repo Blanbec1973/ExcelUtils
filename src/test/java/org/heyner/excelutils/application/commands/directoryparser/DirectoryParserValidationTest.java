@@ -1,5 +1,6 @@
 package org.heyner.excelutils.application.commands.directoryparser;
 
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -21,7 +22,10 @@ class DirectoryParserValidationTest {
 
     @BeforeEach
     void setUp() {
-        parser = new DirectoryParser(Collections.emptyList(), mock(DirectoryLister.class), mock(FileClassifier.class));
+        parser = new DirectoryParser(Collections.emptyList(),
+                mock(DirectoryLister.class),
+                mock(FileClassifier.class),
+                mock(Slf4jCliPrinter.class));
     }
 
     @Test

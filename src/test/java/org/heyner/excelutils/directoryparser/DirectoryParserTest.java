@@ -3,6 +3,7 @@ package org.heyner.excelutils.directoryparser;
 import org.heyner.excelutils.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.directoryparser.*;
 import org.heyner.excelutils.application.commands.directoryparser.processors.FileProcessor;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.exceptions.FileProcessorException;
 import org.heyner.excelutils.shared.exceptions.GracefulExitException;
@@ -31,6 +32,8 @@ class DirectoryParserTest {
     private FileProcessor activityRenameProcessor;
     @Mock
     private FileClassifier classifier;
+    @Mock
+    private Slf4jCliPrinter printer;
     private final DirectoryLister lister = new DirectoryLister();
     private final Path pathTest = Path.of("target/temp-"+this.getClass().getSimpleName());
 
@@ -61,7 +64,8 @@ class DirectoryParserTest {
         DirectoryParser parser = new DirectoryParser(
                 List.of(activityRenameProcessor),
                 lister,
-                classifier
+                classifier,
+                printer
         );
 
         // Counting files in directory :
@@ -87,7 +91,7 @@ class DirectoryParserTest {
             fail("Unable to create the folder : " + dir.getAbsolutePath());
         }
 
-        DirectoryParser d1 = new DirectoryParser(List.of(), lister, classifier);
+        DirectoryParser d1 = new DirectoryParser(List.of(), lister, classifier, printer);
         Path pathEmpty = Path.of("target/empty/");
         DirectoryParserArgs args = new DirectoryParserArgs(pathEmpty);
         assertThrows(GracefulExitException.class,
@@ -103,7 +107,7 @@ class DirectoryParserTest {
         when(classifier.classify(any())).thenReturn(FileType.TRX);
         doThrow(new IOException("boom")).when(failing).process(any()); // fails on the very first file
 
-        DirectoryParser d1 = new DirectoryParser(List.of(failing), lister, classifier);
+        DirectoryParser d1 = new DirectoryParser(List.of(failing), lister, classifier, printer);
         DirectoryParserArgs args = new DirectoryParserArgs(pathTest);
 
         // Act + Assert
