@@ -17,7 +17,7 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
     private final CommandHelpCatalog helpCatalog;
     private final CliPrinter cliPrinter;
 
-    private static final String PROGRAM_ENDS_NORMALLY_LOG = "SUCCESS - {}";
+    private static final String PROGRAM_ENDS_NORMALLY_LOG = "SUCCESS - %s";
     private static final String UNEXPECTED_ERROR_LOG = "ERROR: Unexpected error";
 
     @Override
@@ -25,7 +25,6 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
         switch (t) {
             case GracefulExitException e -> {
                 cliPrinter.info(PROGRAM_ENDS_NORMALLY_LOG.formatted(e.getMessage()));
-                log.info(PROGRAM_ENDS_NORMALLY_LOG, e.getMessage());
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             case CatalogConfigurationException e -> {
@@ -50,10 +49,10 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
                 """, e.getCommandName(), e.getExpected(), e.getActual());
                     cliPrinter.error("""
             ERROR: invalid number of arguments
-            Command: {}
-            Expected: {}
-            Received: {}
-            Usage: {}
+            Command: %s
+            Expected: %s
+            Received: %s
+            Usage: %s
             """.formatted(e.getCommandName(),
                         e.getExpected(),
                         e.getActual(),
@@ -66,7 +65,7 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
                 ERROR: unknown command: {}
                 Usage: excelutils help""".formatted(e.getFunctionName()));
                 cliPrinter.info("""
-                ERROR: unknown command: {}
+                ERROR: unknown command: %s
                 Usage: excelutils help""".formatted(e.getFunctionName()));
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
@@ -84,7 +83,7 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
             }
             case FatalApplicationException e -> {
                 cliPrinter.error("""
-                        ERROR: Fatal error while processing {}
+                        ERROR: Fatal error while processing %s
                         """.formatted(e.getRessource()));
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
