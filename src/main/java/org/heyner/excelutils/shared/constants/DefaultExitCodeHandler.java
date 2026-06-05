@@ -63,7 +63,7 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
             case InvalidFunctionException e -> {
                 log.error("""
                 ERROR: unknown command: {}
-                Usage: excelutils help""".formatted(e.getFunctionName()));
+                Usage: excelutils help""",e.getFunctionName());
                 cliPrinter.info("""
                 ERROR: unknown command: %s
                 Usage: excelutils help""".formatted(e.getFunctionName()));

@@ -78,8 +78,8 @@ class Slf4jCliPrinterTest {
         printer.info("information");
 
         assertEquals(1, events.size());
-        assertEquals(Level.INFO, events.get(0).getLevel());
-        assertEquals("information", events.get(0).getMessage().getFormattedMessage());
+        assertEquals(Level.INFO, events.getFirst().getLevel());
+        assertEquals("information", events.getFirst().getMessage().getFormattedMessage());
     }
 
     @Test
@@ -87,8 +87,8 @@ class Slf4jCliPrinterTest {
         printer.warn("warning");
 
         assertEquals(1, events.size());
-        assertEquals(Level.WARN, events.get(0).getLevel());
-        assertEquals("warning", events.get(0).getMessage().getFormattedMessage());
+        assertEquals(Level.WARN, events.getFirst().getLevel());
+        assertEquals("warning", events.getFirst().getMessage().getFormattedMessage());
     }
 
     @Test
@@ -96,8 +96,8 @@ class Slf4jCliPrinterTest {
         printer.error("failure");
 
         assertEquals(1, events.size());
-        assertEquals(Level.ERROR, events.get(0).getLevel());
-        assertEquals("failure", events.get(0).getMessage().getFormattedMessage());
+        assertEquals(Level.ERROR, events.getFirst().getLevel());
+        assertEquals("failure", events.getFirst().getMessage().getFormattedMessage());
     }
 
     @Test
@@ -105,15 +105,15 @@ class Slf4jCliPrinterTest {
         printer.blankLine();
 
         assertEquals(1, events.size());
-        assertEquals(Level.INFO, events.get(0).getLevel());
-        assertEquals("", events.get(0).getMessage().getFormattedMessage());
+        assertEquals(Level.INFO, events.getFirst().getLevel());
+        assertEquals("", events.getFirst().getMessage().getFormattedMessage());
     }
 
     @Test
     void infoLogsExactMessageContent() {
         printer.info("SUCCESS: operation completed");
 
-        assertEquals("SUCCESS: operation completed", events.get(0).getMessage().getFormattedMessage());
+        assertEquals("SUCCESS: operation completed", events.getFirst().getMessage().getFormattedMessage());
     }
 }
 
