@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.lissage;
 
 import org.heyner.excelutils.application.ports.LissagePort;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -21,12 +22,13 @@ class LissageValidationTest {
 
     private Lissage lissage;
 
+
     @TempDir
     Path tempDir;
 
     @BeforeEach
     void setUp() {
-        lissage = new Lissage(mock(LissagePort.class));
+        lissage = new Lissage(mock(LissagePort.class), mock(CliPrinter.class));
     }
 
     @Test

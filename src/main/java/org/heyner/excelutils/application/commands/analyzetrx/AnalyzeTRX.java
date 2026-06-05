@@ -72,7 +72,6 @@ public class AnalyzeTRX implements Command<AnalyzeTRXArgs> {
         cliPrinter.info("Rows transferred: %d".formatted(rowCount));
 
         resultNamer.renameIfNeeded(pathResultFile, ExcelConstants.DATAS_SHEET, ExcelConstants.TRX_CONTRACT_CELL);
-        log.info("SUCCESS - TRX analysis completed successfully for {}", args.inputFile());
         cliPrinter.info("SUCCESS: analysis completed");
     }
 

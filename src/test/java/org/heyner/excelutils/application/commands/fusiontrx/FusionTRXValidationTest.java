@@ -1,5 +1,6 @@
 package org.heyner.excelutils.application.commands.fusiontrx;
 
+import org.heyner.excelutils.cli.CliPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -24,7 +25,7 @@ class FusionTRXValidationTest {
 
     @BeforeEach
     void setUp() {
-        fusionTRX = new FusionTRX(mock(FusionProcessor.class));
+        fusionTRX = new FusionTRX(mock(FusionProcessor.class), mock(CliPrinter.class));
     }
 
     // --- Tests paramétrés sur le répertoire d'entrée ---

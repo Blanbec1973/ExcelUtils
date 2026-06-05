@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.ports.LissagePort;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 public class Lissage implements Command<LissageArgs> {
 
     private final LissagePort lissagePort;
+    private final CliPrinter cliPrinter;
 
     @Override
     public String name() {
@@ -72,5 +74,6 @@ public class Lissage implements Command<LissageArgs> {
     @Override
     public void execute(LissageArgs args) {
         lissagePort.smooth(args.inputFile(), args.lissageRow(), args.targetMargin());
+        cliPrinter.info("SUCCESS: smooth completed");
     }
 }

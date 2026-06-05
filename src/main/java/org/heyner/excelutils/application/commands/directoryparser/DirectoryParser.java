@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.commands.directoryparser.processors.FileProcessor;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.shared.constants.ExitCodes;
 import org.heyner.excelutils.shared.exceptions.FileProcessorException;
 import org.heyner.excelutils.shared.exceptions.GracefulExitException;
@@ -22,6 +23,7 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
     private final List<FileProcessor> processors;
     private final DirectoryLister lister;
     private final FileClassifier classifier;
+    private final CliPrinter cliPrinter;
 
     private static final String BEGIN_FUNCTION_LOG = "Beginning function : {}";
     private static final String PROCESSING_LOG = "Processing : {}";
@@ -68,6 +70,7 @@ public class DirectoryParser implements Command<DirectoryParserArgs> {
             );
         }
         processFiles(paths);
+        cliPrinter.info("SUCCESS: processing directory completed");
     }
 
     public void processFiles(List<Path> paths) {

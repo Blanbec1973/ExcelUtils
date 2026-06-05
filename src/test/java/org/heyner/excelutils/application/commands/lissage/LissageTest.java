@@ -1,6 +1,7 @@
 package org.heyner.excelutils.application.commands.lissage;
 
 import org.heyner.excelutils.application.ports.LissagePort;
+import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -22,7 +23,7 @@ class LissageTest {
         Files.createFile(inputFile);
 
         LissagePort port = mock(LissagePort.class);
-        Lissage lissage = new Lissage(port);
+        Lissage lissage = new Lissage(port, mock(Slf4jCliPrinter.class));
 
         LissageArgs args = lissage.parse(new String[]{"lissage", inputFile.toString(), "12", "0,30"});
 
@@ -34,7 +35,7 @@ class LissageTest {
     @Test
     void execute_delegates_to_port() {
         LissagePort port = mock(LissagePort.class);
-        Lissage lissage = new Lissage(port);
+        Lissage lissage = new Lissage(port, mock(Slf4jCliPrinter.class));
         Path inputFile = Path.of("input.xlsx");
         LissageArgs args = new LissageArgs(inputFile, 7, 0.15d);
 

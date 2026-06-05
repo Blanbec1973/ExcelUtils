@@ -4,6 +4,7 @@ package org.heyner.excelutils.application.commands.fusiontrx;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.Command;
+import org.heyner.excelutils.cli.CliPrinter;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 @RequiredArgsConstructor
 public class FusionTRX implements Command<FusionTRXArgs> {
     private final FusionProcessor fusionProcessor;
+    private final CliPrinter cliPrinter;
 
     private static final String STARTING_FUSION_LOG = "Processing TRX files in directory: {} and output path: {}";
     private static final String FUSION_COMPLETED_LOG = "SUCCESS : fusion completed";
@@ -24,7 +26,7 @@ public class FusionTRX implements Command<FusionTRXArgs> {
         String pathFusion = args.outputPath().toString();
         log.info(STARTING_FUSION_LOG, directoryToProcess, pathFusion);
         fusionProcessor.process(directoryToProcess,pathFusion);
-        log.info(FUSION_COMPLETED_LOG);
+        cliPrinter.info(FUSION_COMPLETED_LOG);
     }
 
     @Override
