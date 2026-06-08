@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -42,7 +41,7 @@ class FormatTrxProcessorTest
     }
 
     @Test
-    void processDelegatesExecutionToFormatTRX() throws IOException {
+    void processDelegatesExecutionToFormatTRX() {
         Path file = Path.of("UC_PCB_PROJ_TRX_03_1265199083.xlsx");
         FormatTrxProcessor processor = newProcessor();
 
@@ -52,7 +51,7 @@ class FormatTrxProcessorTest
     }
 
     @Test
-    void processPassesCorrectFilePathToFormatTRX() throws IOException {
+    void processPassesCorrectFilePathToFormatTRX() {
         Path file = Path.of("some", "dir", "UC_PCB_PROJ_TRX_03_1265199083.xlsx");
         FormatTrxProcessor processor = newProcessor();
         ArgumentCaptor<FormatTRXArgs> captor = ArgumentCaptor.forClass(FormatTRXArgs.class);

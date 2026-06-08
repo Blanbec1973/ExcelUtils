@@ -8,7 +8,6 @@ import org.heyner.excelutils.application.commands.formattrx.FormatTRXArgs;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 @Component
@@ -24,7 +23,7 @@ public class FormatTrxProcessor implements FileProcessor {
     }
 
     @Override
-    public void process(Path file) throws IOException {
+    public void process(Path file) {
         log.info("Process FormatTRX file : {}", file);
         formatTRX.execute(new FormatTRXArgs(file));
     }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -43,7 +42,7 @@ class CorrectionImputationProcessorTest
     }
 
     @Test
-    void processDelegatesExecutionToCorrectionImputation() throws IOException {
+    void processDelegatesExecutionToCorrectionImputation() {
         Path file = Path.of("UC_PCB_PROJ_TRX_03_1265199083.xlsx");
         CorrectionImputationProcessor processor = newProcessor();
 
@@ -53,7 +52,7 @@ class CorrectionImputationProcessorTest
     }
 
     @Test
-    void processPassesCorrectFilePathToCorrectionImputation() throws IOException {
+    void processPassesCorrectFilePathToCorrectionImputation() {
         Path file = Path.of("some", "dir", "UC_PCB_PROJ_TRX_03_1265199083.xlsx");
         CorrectionImputationProcessor processor = newProcessor();
         ArgumentCaptor<CorrectionImputationArgs> captor = ArgumentCaptor.forClass(CorrectionImputationArgs.class);
@@ -65,7 +64,7 @@ class CorrectionImputationProcessorTest
     }
 
     @Test
-    void processUsesDefaultSheetName() throws IOException {
+    void processUsesDefaultSheetName() {
         Path file = Path.of("UC_PCB_PROJ_TRX_03_1265199083.xlsx");
         CorrectionImputationProcessor processor = newProcessor();
         ArgumentCaptor<CorrectionImputationArgs> captor = ArgumentCaptor.forClass(CorrectionImputationArgs.class);

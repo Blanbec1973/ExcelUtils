@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -42,7 +41,7 @@ class FormatActivityProcessorTest
     }
 
     @Test
-    void processDelegatesExecutionToFormatActivity() throws IOException {
+    void processDelegatesExecutionToFormatActivity() {
         Path file = Path.of("UC_AR_ITEM_ACTIVITY_V1_03.xlsx");
         FormatActivityProcessor processor = newProcessor();
 
@@ -52,7 +51,7 @@ class FormatActivityProcessorTest
     }
 
     @Test
-    void processPassesCorrectFilePathToFormatActivity() throws IOException {
+    void processPassesCorrectFilePathToFormatActivity() {
         Path file = Path.of("some", "dir", "UC_AR_ITEM_ACTIVITY_V1_03.xlsx");
         FormatActivityProcessor processor = newProcessor();
         ArgumentCaptor<FormatActivityArgs> captor = ArgumentCaptor.forClass(FormatActivityArgs.class);

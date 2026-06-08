@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 
 import java.nio.file.Path;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class FusionTRXTest {

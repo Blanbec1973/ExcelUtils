@@ -17,8 +17,6 @@ class CommandDispatcherTest {
     private ExitCodeHandler exitHandler;
     private CommandDispatcher dispatcher;
     private CommandExecutor commandExecutor;
-    private HelpPrinter helpPrinter;
-    private CliPrinter cliPrinter;
 
     @BeforeEach
     void setUp()  {
@@ -28,12 +26,12 @@ class CommandDispatcherTest {
 
         argsChecker = mock(ArgsChecker.class);
         exitHandler = mock(ExitCodeHandler.class);
-        helpPrinter = mock(HelpPrinter.class);
-        cliPrinter = mock(CliPrinter.class);
+        HelpPrinter helpPrinter = mock(HelpPrinter.class);
+        CliPrinter cliPrinter = mock(CliPrinter.class);
 
         commandExecutor = mock(CommandExecutor.class);
         doNothing().when(commandExecutor).execute(any());
-        dispatcher = new CommandDispatcher(props, argsChecker, exitHandler, commandExecutor, helpPrinter,  cliPrinter);
+        dispatcher = new CommandDispatcher(props, argsChecker, exitHandler, commandExecutor, helpPrinter, cliPrinter);
     }
 
     @Test

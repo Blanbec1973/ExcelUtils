@@ -9,7 +9,6 @@ import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 @Component
@@ -25,7 +24,7 @@ public class CorrectionImputationProcessor implements FileProcessor {
     }
 
     @Override
-    public void process(Path file) throws IOException {
+    public void process(Path file) {
         log.info("Process correction imputationTRX file : {}", file);
 
         CorrectionImputationArgs args = CorrectionImputationArgs.builder()

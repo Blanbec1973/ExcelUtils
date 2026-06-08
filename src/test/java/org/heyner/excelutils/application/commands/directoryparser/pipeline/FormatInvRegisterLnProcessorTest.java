@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -42,7 +41,7 @@ class FormatInvRegisterLnProcessorTest
     }
 
     @Test
-    void processDelegatesExecutionToFormatInvRegisterLN() throws IOException {
+    void processDelegatesExecutionToFormatInvRegisterLN() {
         Path file = Path.of("UC_PCB_MS_INV_REGISTER_LN_03_834070930.xlsx");
         FormatInvRegisterLnProcessor processor = newProcessor();
 
@@ -52,7 +51,7 @@ class FormatInvRegisterLnProcessorTest
     }
 
     @Test
-    void processPassesCorrectFilePathToFormatInvRegisterLN() throws IOException {
+    void processPassesCorrectFilePathToFormatInvRegisterLN() {
         Path file = Path.of("some", "dir", "UC_PCB_MS_INV_REGISTER_LN_03_834070930.xlsx");
         FormatInvRegisterLnProcessor processor = newProcessor();
         ArgumentCaptor<FormatInvRegisterLNArgs> captor = ArgumentCaptor.forClass(FormatInvRegisterLNArgs.class);

@@ -8,7 +8,6 @@ import org.heyner.excelutils.application.commands.formatinvregisterln.FormatInvR
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 @Component
@@ -24,7 +23,7 @@ public class FormatInvRegisterLnProcessor implements FileProcessor {
     }
 
     @Override
-    public void process(Path path) throws IOException {
+    public void process(Path path) {
         log.info("Process InvRegisterLN file : {}", path);
         FormatInvRegisterLNArgs args = FormatInvRegisterLNArgs.builder()
                 .inputFile(path).build();

@@ -84,7 +84,7 @@ public class DefaultExitCodeHandler implements ExitCodeHandler {
             case FatalApplicationException e -> {
                 cliPrinter.error("""
                         ERROR: Fatal error while processing %s
-                        """.formatted(e.getRessource()));
+                        """.formatted(e.getResource()));
                 exitCodeGenerator.setExitCode(e.getExitCode());
             }
             default -> {
