@@ -5,8 +5,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.TransferDataException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.TransferDataException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

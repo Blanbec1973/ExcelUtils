@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.ports.FormatTRXPort;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.FatalApplicationException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

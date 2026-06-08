@@ -10,8 +10,8 @@ import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.FatalApplicationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

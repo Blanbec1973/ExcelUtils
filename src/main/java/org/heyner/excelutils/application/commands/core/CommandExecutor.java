@@ -1,8 +1,8 @@
 package org.heyner.excelutils.application.commands.core;
 
 import lombok.RequiredArgsConstructor;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.CatalogConfigurationException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.CatalogConfigurationException;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,0 +1,65 @@
+package org.heyner.excelutils.application.commands.core;
+
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.CatalogConfigurationException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class CommandExecutorTest {
+
+    @Mock
+    private CommandRegistry registry;
+
+    @InjectMocks
+    private CommandExecutor sut;
+
+    @Test
+    void execute_happy_path_parses_and_executes_command_in_order() {
+        // Arrange
+        String[] args = {"analyzetrx", "input.xlsx"};
+        Command command = mock(Command.class);
+        CommandArgs parsed = mock(CommandArgs.class);
+
+        when(registry.find("analyzetrx")).thenReturn(Optional.ofNullable(command));
+        when(command.parse(args)).thenReturn(parsed);
+
+        // Act
+        sut.execute(args);
+
+        // Assert – vérifier l'ordre des appels
+        InOrder inOrder = inOrder(registry, command);
+        inOrder.verify(registry).find("analyzetrx");
+        inOrder.verify(command).parse(args);
+        inOrder.verify(command).execute(parsed);
+        verifyNoMoreInteractions(registry, command);
+    }
+
+    @Test
+    void execute_throws_CatalogConfigurationException_when_command_not_found() {
+        // Arrange
+        String[] args = {"unknowncommand"};
+        when(registry.find("unknowncommand")).thenReturn(Optional.empty());
+
+        // Act & Assert
+        CatalogConfigurationException exception = assertThrows(
+                CatalogConfigurationException.class,
+                () -> sut.execute(args)
+        );
+
+        // Vérifier que le code d'erreur est correct
+        assert exception.getExitCode() == ExitCodes.CONFIG_ERROR;
+
+        verify(registry).find("unknowncommand");
+    }
+
+}

@@ -9,8 +9,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.correctionimputation.CorrectionImputationRule;
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.FatalApplicationException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

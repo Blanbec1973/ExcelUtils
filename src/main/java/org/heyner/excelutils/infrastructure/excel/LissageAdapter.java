@@ -10,8 +10,8 @@ import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.lissage.LissageCalculator;
 import org.heyner.excelutils.application.ports.LissagePort;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.FatalApplicationException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.FatalApplicationException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

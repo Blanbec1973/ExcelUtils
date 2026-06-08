@@ -7,8 +7,8 @@ import org.heyner.excelutils.application.ports.ExcelTransferPort;
 import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
-import org.heyner.excelutils.shared.utils.DateTemplateExpander;
-import org.heyner.excelutils.shared.utils.filenaming.ResultNamer;
+import org.heyner.excelutils.shared.util.DateTemplateExpander;
+import org.heyner.excelutils.shared.util.filenaming.ResultNamer;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;

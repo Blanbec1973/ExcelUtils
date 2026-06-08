@@ -5,7 +5,7 @@ import org.heyner.excelutils.bootstrap.ArgsChecker;
 import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.cli.HelpPrinter;
 import org.heyner.excelutils.shared.config.ApplicationProperties;
-import org.heyner.excelutils.shared.constants.ExitCodeHandler;
+import org.heyner.excelutils.shared.exitcode.ExitCodeHandler;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 

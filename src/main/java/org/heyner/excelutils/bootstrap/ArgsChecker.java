@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.CommandSpec;
 import org.heyner.excelutils.application.commands.core.CommandSpecCatalog;
-import org.heyner.excelutils.shared.constants.ExitCodes;
-import org.heyner.excelutils.shared.exceptions.InvalidArgumentCountException;
-import org.heyner.excelutils.shared.exceptions.InvalidFunctionException;
-import org.heyner.excelutils.shared.exceptions.MissingConfigurationException;
+import org.heyner.excelutils.shared.exitcode.ExitCodes;
+import org.heyner.excelutils.shared.exception.InvalidArgumentCountException;
+import org.heyner.excelutils.shared.exception.InvalidFunctionException;
+import org.heyner.excelutils.shared.exception.MissingConfigurationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
