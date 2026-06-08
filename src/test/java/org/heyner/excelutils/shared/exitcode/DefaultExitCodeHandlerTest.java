@@ -3,7 +3,6 @@ package org.heyner.excelutils.shared.exitcode;
 import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.cli.CommandHelpCatalog;
 import org.heyner.excelutils.cli.CommandHelpEntry;
-import org.heyner.excelutils.shared.constants.CustomExitCodeGenerator;
 import org.heyner.excelutils.shared.exception.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

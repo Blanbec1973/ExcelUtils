@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.cli.CliPrinter;
-import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
+import org.heyner.excelutils.application.config.FormatInvRegisterLnConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.exitcode.ExitCodes;
 import org.heyner.excelutils.shared.exception.FatalApplicationException;

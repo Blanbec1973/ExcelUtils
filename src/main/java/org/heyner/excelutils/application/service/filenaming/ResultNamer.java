@@ -1,4 +1,4 @@
-package org.heyner.excelutils.shared.util.filenaming;
+package org.heyner.excelutils.application.service.filenaming;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

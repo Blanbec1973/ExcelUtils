@@ -2,9 +2,9 @@ package org.heyner.excelutils.application.commands.analyzetrx;
 
 import org.heyner.excelutils.application.ports.ExcelTransferPort;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
-import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
+import org.heyner.excelutils.application.config.AnalyzeTRXConfig;
 import org.heyner.excelutils.shared.util.DateTemplateExpander;
-import org.heyner.excelutils.shared.util.filenaming.ResultNamer;
+import org.heyner.excelutils.application.service.filenaming.ResultNamer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

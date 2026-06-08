@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.cli.CommandHelpCatalog;
 import org.heyner.excelutils.cli.CommandHelpEntry;
-import org.heyner.excelutils.shared.constants.CustomExitCodeGenerator;
 import org.heyner.excelutils.shared.exception.*;
 import org.springframework.stereotype.Component;
 

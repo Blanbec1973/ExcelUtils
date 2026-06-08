@@ -1,4 +1,4 @@
-package org.heyner.excelutils.shared.constants;
+package org.heyner.excelutils.shared.exitcode;
 
 
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package org.heyner.excelutils;
+package org.heyner.excelutils.testsupport;
 
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;

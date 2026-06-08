@@ -6,7 +6,7 @@ import org.heyner.common.excelfile.ExcelConstants;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
 import org.heyner.excelutils.cli.CliPrinter;
-import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
+import org.heyner.excelutils.application.config.CorrectionImputationConfig;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;

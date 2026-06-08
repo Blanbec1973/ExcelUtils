@@ -4,7 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.application.commands.correctionimputation.CorrectionImputationRule;
-import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
+import org.heyner.excelutils.application.config.CorrectionImputationConfig;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

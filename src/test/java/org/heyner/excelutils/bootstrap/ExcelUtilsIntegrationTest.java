@@ -3,6 +3,7 @@ package org.heyner.excelutils.bootstrap;
 import lombok.extern.slf4j.Slf4j;
 import org.heyner.excelutils.application.commands.core.Command;
 import org.heyner.excelutils.application.commands.core.CommandArgs;
+import org.heyner.excelutils.application.service.ArgsChecker;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;

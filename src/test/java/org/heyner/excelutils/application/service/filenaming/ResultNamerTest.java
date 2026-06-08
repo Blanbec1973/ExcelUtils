@@ -1,4 +1,4 @@
-package org.heyner.excelutils.shared.util.filenaming;
+package org.heyner.excelutils.application.service.filenaming;
 
 import org.heyner.excelutils.application.ports.FsRenamePort;
 import org.heyner.excelutils.shared.util.PrefixReader;

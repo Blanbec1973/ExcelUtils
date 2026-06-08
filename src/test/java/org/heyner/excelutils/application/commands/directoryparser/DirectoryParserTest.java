@@ -1,6 +1,6 @@
 package org.heyner.excelutils.application.commands.directoryparser;
 
-import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.testsupport.TestInitializerFactory;
 import org.heyner.excelutils.application.commands.directoryparser.pipeline.FileProcessor;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;

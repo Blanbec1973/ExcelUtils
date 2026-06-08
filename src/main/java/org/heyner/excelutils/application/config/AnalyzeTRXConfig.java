@@ -1,4 +1,4 @@
-package org.heyner.excelutils.infrastructure.config;
+package org.heyner.excelutils.application.config;
 
 import lombok.Getter;
 import lombok.Setter;

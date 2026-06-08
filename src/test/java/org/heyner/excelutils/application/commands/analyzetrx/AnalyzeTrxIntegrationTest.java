@@ -2,7 +2,7 @@ package org.heyner.excelutils.application.commands.analyzetrx;
 
 import org.heyner.common.excelfile.ExcelFile;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
-import org.heyner.excelutils.infrastructure.config.AnalyzeTRXConfig;
+import org.heyner.excelutils.application.config.AnalyzeTRXConfig;
 import org.heyner.excelutils.infrastructure.excel.ExcelTransferAdapter;
 import org.heyner.excelutils.application.ports.FsRenamePort;
 import org.heyner.excelutils.infrastructure.filesystem.FsRenamer;
@@ -11,7 +11,8 @@ import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.heyner.excelutils.shared.util.DateTemplateExpander;
 import org.heyner.excelutils.shared.util.ExcelPrefixReader;
 import org.heyner.excelutils.shared.util.PrefixReader;
-import org.heyner.excelutils.shared.util.filenaming.ResultNamer;
+import org.heyner.excelutils.application.service.filenaming.ResultNamer;
+import org.heyner.excelutils.testsupport.TestInitializerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -84,7 +85,7 @@ class AnalyzeTrxIntegrationTest {
     @BeforeEach
     void setupFs() throws Exception {
         // Copie les fixtures dans target/temp-AnalyzeTRXIT/...
-        org.heyner.excelutils.TestInitializerFactory.action("AnalyzeTRXIT");
+        TestInitializerFactory.action("AnalyzeTRXIT");
     }
 
     @Test

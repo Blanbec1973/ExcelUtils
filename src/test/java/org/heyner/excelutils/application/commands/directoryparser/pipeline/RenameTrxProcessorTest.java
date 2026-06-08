@@ -1,7 +1,7 @@
 package org.heyner.excelutils.application.commands.directoryparser.pipeline;
 
 import org.heyner.excelutils.shared.constants.ExcelConstants;
-import org.heyner.excelutils.shared.util.filenaming.ResultNamer;
+import org.heyner.excelutils.application.service.filenaming.ResultNamer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

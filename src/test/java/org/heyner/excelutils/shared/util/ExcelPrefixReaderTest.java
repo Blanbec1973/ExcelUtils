@@ -1,6 +1,6 @@
 package org.heyner.excelutils.shared.util;
 
-import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.testsupport.TestInitializerFactory;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

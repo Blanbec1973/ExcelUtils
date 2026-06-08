@@ -1,6 +1,6 @@
 package org.heyner.excelutils.application.commands.core;
 
-import org.heyner.excelutils.infrastructure.config.CommandProperties;
+import org.heyner.excelutils.application.config.CommandProperties;
 import org.heyner.excelutils.shared.exitcode.ExitCodes;
 import org.heyner.excelutils.shared.exception.CatalogConfigurationException;
 import org.springframework.stereotype.Component;

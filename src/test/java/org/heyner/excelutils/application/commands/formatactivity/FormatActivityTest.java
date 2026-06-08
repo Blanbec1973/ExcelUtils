@@ -1,9 +1,9 @@
 package org.heyner.excelutils.application.commands.formatactivity;
 
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.testsupport.TestInitializerFactory;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
-import org.heyner.excelutils.infrastructure.config.FormatActivityConfig;
+import org.heyner.excelutils.application.config.FormatActivityConfig;
 import org.heyner.excelutils.infrastructure.excel.FormatActivityAdapter;
 import org.heyner.excelutils.shared.config.ApachePoiConfigurer;
 import org.heyner.excelutils.shared.constants.ExcelConstants;

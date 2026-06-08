@@ -1,9 +1,9 @@
 package org.heyner.excelutils.application.commands.formatinvregisterln;
 
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.testsupport.TestInitializerFactory;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
-import org.heyner.excelutils.infrastructure.config.FormatInvRegisterLnConfig;
+import org.heyner.excelutils.application.config.FormatInvRegisterLnConfig;
 import org.heyner.excelutils.shared.config.ApachePoiConfigurer;
 import org.heyner.excelutils.shared.constants.ExcelConstants;
 import org.junit.jupiter.api.BeforeAll;

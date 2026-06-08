@@ -1,7 +1,7 @@
 package org.heyner.excelutils.application.commands.formattrx;
 
 import org.heyner.common.excelfile.ExcelFile;
-import org.heyner.excelutils.TestInitializerFactory;
+import org.heyner.excelutils.testsupport.TestInitializerFactory;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
 import org.heyner.excelutils.infrastructure.excel.FormatTRXAdapter;
 import org.heyner.excelutils.shared.constants.ExcelConstants;

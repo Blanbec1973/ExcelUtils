@@ -1,6 +1,6 @@
 package org.heyner.excelutils.application.commands.core;
 
-import org.heyner.excelutils.infrastructure.config.CommandProperties;
+import org.heyner.excelutils.application.config.CommandProperties;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

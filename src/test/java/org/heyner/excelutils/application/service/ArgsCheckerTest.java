@@ -1,4 +1,4 @@
-package org.heyner.excelutils.bootstrap;
+package org.heyner.excelutils.application.service;
 
 import org.heyner.excelutils.application.commands.core.CommandSpec;
 import org.heyner.excelutils.application.commands.core.CommandSpecCatalog;

@@ -1,4 +1,4 @@
-package org.heyner.excelutils.infrastructure.config;
+package org.heyner.excelutils.application.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

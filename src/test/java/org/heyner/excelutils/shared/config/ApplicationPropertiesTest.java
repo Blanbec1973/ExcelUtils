@@ -1,6 +1,5 @@
-package org.heyner.excelutils.bootstrap;
+package org.heyner.excelutils.shared.config;
 
-import org.heyner.excelutils.shared.config.ApplicationProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;

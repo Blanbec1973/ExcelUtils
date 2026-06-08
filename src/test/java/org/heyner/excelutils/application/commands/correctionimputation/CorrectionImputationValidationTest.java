@@ -2,7 +2,7 @@ package org.heyner.excelutils.application.commands.correctionimputation;
 
 import org.heyner.excelutils.application.ports.CorrectionImputationPort;
 import org.heyner.excelutils.cli.Slf4jCliPrinter;
-import org.heyner.excelutils.infrastructure.config.CorrectionImputationConfig;
+import org.heyner.excelutils.application.config.CorrectionImputationConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

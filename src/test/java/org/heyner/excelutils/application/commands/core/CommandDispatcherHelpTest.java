@@ -1,6 +1,6 @@
 package org.heyner.excelutils.application.commands.core;
 
-import org.heyner.excelutils.bootstrap.ArgsChecker;
+import org.heyner.excelutils.application.service.ArgsChecker;
 import org.heyner.excelutils.cli.CliPrinter;
 import org.heyner.excelutils.cli.HelpPrinter;
 import org.heyner.excelutils.shared.config.ApplicationProperties;
